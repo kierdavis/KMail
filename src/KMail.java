@@ -1,5 +1,7 @@
 package com.kierdavis.kmail;
 
-public class KMail {
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class KMail extends JavaPlugin {
 
 }
