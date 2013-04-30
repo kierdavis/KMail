@@ -8,13 +8,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class KMail extends JavaPlugin {
     private Map<Player, PartialMessage> partialMessages;
     private Map<String, Mailbox> mailboxes;
-    private Mailbox consoleMailbox;
     private MailDispatcher dispatcher;
     
     public void onEnable() {
         partialMessages = new HashMap<Player, PartialMessage>();
-        playerMailboxes = new HashMap<Player, Mailbox>();
-        consoleMailbox = new Mailbox();
+        mailboxes = new HashMap<Player, Mailbox>();
         dispatcher = new MailDispatcher(this);
         
         new PartialMessageListener(this);
