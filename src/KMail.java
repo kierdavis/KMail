@@ -25,10 +25,10 @@ public class KMail extends JavaPlugin {
     }
     
     public void queueMessage(Message msg) {
-        getLogger().debug("Mail to be queued:");
-        getLogger().debug("  From: " + msg.getSrcAddress().toString());
-        getLogger().debug("  To: " + msg.getDestAddress().toString());
-        getLogger().debug("  Body: " + msg.getBody());
+        getLogger().info("Mail to be queued:");
+        getLogger().info("  From: " + msg.getSrcAddress().toString());
+        getLogger().info("  To: " + msg.getDestAddress().toString());
+        getLogger().info("  Body: " + msg.getBody());
     }
     
     public synchronized PartialMessage getPartialMessage(Player player) {
