@@ -12,7 +12,7 @@ public class KMail extends JavaPlugin {
     
     public void onEnable() {
         partialMessages = new HashMap<Player, PartialMessage>();
-        mailboxes = new HashMap<Player, Mailbox>();
+        mailboxes = new HashMap<String, Mailbox>();
         dispatcher = new MailDispatcher(this);
         
         new PartialMessageListener(this);
