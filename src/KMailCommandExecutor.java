@@ -168,6 +168,7 @@ public class KMailCommandExecutor implements CommandExecutor {
             return false;
         }
         
+        String tag = args[0];
         Mailbox mb = plugin.getMailbox(getUsername(sender));
         Iterator it = mb.iterator();
         
@@ -203,6 +204,6 @@ public class KMailCommandExecutor implements CommandExecutor {
     }
     
     private void displayMessageSummary(CommandSender sender, Message msg) {
-        sender.sendMessage(msg.getLocalID().toString() + " " + msg.getSrcAddress().toString() + ": " + msg.getBody().substring(20));
+        sender.sendMessage(String.toString(msg.getLocalID()) + " " + msg.getSrcAddress().toString() + ": " + msg.getBody().substring(20));
     }
 }
