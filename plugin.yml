@@ -1,3 +1,8 @@
 name: KMail
 main: com.kierdavis.kmail.KMail
 version: 0.1.1
+commands:
+    kmail:
+        description: KMail
+        usage: |
+            /kmail send <address> [message]
