@@ -7,7 +7,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class KMail extends JavaPlugin {
     private Map<Player, PartialMessage> partialMessages;
-    private Map<Player, Mailbox> playerMailboxes;
+    private Map<String, Mailbox> mailboxes;
     private Mailbox consoleMailbox;
     private MailDispatcher dispatcher;
     
@@ -31,22 +31,14 @@ public class KMail extends JavaPlugin {
     }
     
     public Mailbox getMailbox(String username) {
-        username = username.toLowerCase();
+        Mailbox mb = mailboxes.get(username.toLowerCase());
         
-        if (username.equals("console")) {
-            return consoleMailbox;
+        if (mb == null) {
+            mb = new Mailbox();
+            mailboxes.put(username, mb);
         }
         
-        else {
-            Mailbox mb = playerMailboxes.get(username);
-            
-            if (mb == null) {
-                mb = new Mailbox();
-                playerMailboxes.put(username, mb);
-            }
-            
-            return mb;
-        }
+        return mb;
     }
     
     public void receiveMessage(Message msg) {
@@ -54,25 +46,25 @@ public class KMail extends JavaPlugin {
         getMailbox(username).add(msg);
         
         if (username.equalsIgnoreCase("CONSOLE")) {
-            getLogger().info("Incoming mail from " + mb.getSrcAddress().toString() + ".");
+            getLogger().info("Incoming mail from " + msg.getSrcAddress().toString() + ".");
             getLogger().info("Type 'kmail read' to view it.");
         }
         
         else {
-            Player player = server.getPlayer(username);
+            Player player = getServer().getPlayer(username);
             if (player != null) {
-                player.sendMessage("Incoming mail from " + mb.getSrcAddress().toString() + ".");
+                player.sendMessage("Incoming mail from " + msg.getSrcAddress().toString() + ".");
                 player.sendMessage("Type '/kmail read' to view it.");
             }
         }
     }
     
     public synchronized void sendMessage(Message msg) {
-        if (msg.getSrcAddress().getHostName().equals("local")) {
-            msg.getSrcAddress().setHostName(getLocalHostname());
+        if (msg.getSrcAddress().getHostname().equals("local")) {
+            msg.getSrcAddress().setHostname(getLocalHostname());
         }
-        if (msg.getDestAddress().getHostName().equals("local")) {
-            msg.getDestAddress().setHostName(getLocalHostname());
+        if (msg.getDestAddress().getHostname().equals("local")) {
+            msg.getDestAddress().setHostname(getLocalHostname());
         }
         
         if (!dispatcher.queueMessage(msg)) {

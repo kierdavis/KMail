@@ -25,8 +25,10 @@ public class MailDispatcher implements Runnable {
     
     public void run() {
         while (true) {
+            Message msg;
+            
             synchronized(this) {
-                Message msg = queue.poll();
+                msg = queue.poll();
             }
             
             if (msg == null) {
