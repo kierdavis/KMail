@@ -1,13 +1,17 @@
 package com.kierdavis.kmail;
 
+import java.util.Date;
+
 public class Message {
     private final long localID;
     private Address src;
     private Address dest;
     private String body;
+    private Date sentDate;
     
     // Only used in mailboxes
     private boolean read;
+    private Date receivedDate;
     
     private static long nextLocalID = 0;
     
@@ -53,11 +57,27 @@ public class Message {
         body = x;
     }
     
+    public Date getSentDate() {
+        return sentDate;
+    }
+    
+    public void setSentDate(Date x) {
+        sentDate = x;
+    }
+    
     public boolean isRead() {
         return read;
     }
     
     public void setRead(boolean x) {
         read = x;
+    }
+    
+    public Date getReceivedDate() {
+        return receivedDate;
+    }
+    
+    public void setReceivedDate(Date x) {
+        receivedDate = x;
     }
 }

@@ -164,6 +164,8 @@ public class KMailCommandExecutor implements CommandExecutor {
         sender.sendMessage("================================");
         sender.sendMessage("From: " + msg.getSrcAddress().toString());
         sender.sendMessage("To: " + msg.getDestAddress().toString());
+        sender.sendMessage("Sent: " + msg.getSentDate().toString());
+        sender.sendMessage("Recieved: " + msg.getReceivedDate().toString());
         sender.sendMessage("");
         sender.sendMessage(msg.getBody());
         sender.sendMessage("================================");

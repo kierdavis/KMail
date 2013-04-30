@@ -1,5 +1,6 @@
 package com.kierdavis.kmail;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.entity.Player;
@@ -68,6 +69,8 @@ public class KMail extends JavaPlugin {
         if (msg.getDestAddress().getHostname().equals("local")) {
             msg.getDestAddress().setHostname(getLocalHostname());
         }
+        
+        msg.setSentDate(new Date());
         
         if (!dispatcher.queueMessage(msg)) {
             getLogger().severe("Failed to queue message from " + msg.getSrcAddress().toString());
