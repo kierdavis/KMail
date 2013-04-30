@@ -26,7 +26,7 @@ public class PartialMessageListener implements Listener {
                 
                 Message msg = pm.finish();
                 plugin.queueMessage(msg);
-                sender.sendMessage("Mail queued.");
+                player.sendMessage("Mail queued.");
             }
             
             else {
