@@ -203,6 +203,6 @@ public class KMailCommandExecutor implements CommandExecutor {
     }
     
     private void displayMessageSummary(CommandSender sender, Message msg) {
-        sender.sendMessage(msg.getLocalID().toString() + " " + msg.getSrcAddress().toString() + ": " + msg.getBody().substring(20))
+        sender.sendMessage(msg.getLocalID().toString() + " " + msg.getSrcAddress().toString() + ": " + msg.getBody().substring(20));
     }
 }
