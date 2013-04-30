@@ -1,6 +1,7 @@
 package com.kierdavis.kmail;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Mailbox {
@@ -11,6 +12,12 @@ public class Mailbox {
     }
     
     public void add(Message msg) {
+        msg.setRead(false);
+        
         messages.add(msg);
+    }
+    
+    public Iterator<Message> iterator() {
+        return messages.iterator();
     }
 }

@@ -29,6 +29,10 @@ public class KMailCommandExecutor implements CommandExecutor {
             return doSend(sender, args);
         }
         
+        if (subcmd.equalsIgnoreCase("read")) {
+            return doRead(sender, args);
+        }
+        
         sender.sendMessage("Invalid subcommand: " + subcmd);
         return false;
     }
@@ -37,6 +41,7 @@ public class KMailCommandExecutor implements CommandExecutor {
         if (args.length < 1) {
             sender.sendMessage("KMail Help: (<required> [optional])");
             sender.sendMessage("  /kmail send <address> [message]");
+            sender.sendMessage("  /kmail read");
             sender.sendMessage("");
             sender.sendMessage("Do /kmail help <command> for help on any subcommand.");
             sender.sendMessage("Other help topics: addresses");
@@ -49,6 +54,12 @@ public class KMailCommandExecutor implements CommandExecutor {
             sender.sendMessage("/kmail send <address> [message]");
             sender.sendMessage("Send a message to the specified address. If the message is not specified in the command, all future chat messages (until one consisting of a single period ('.') is sent) will be used as the body of the message.");
             sender.sendMessage("See also: /kmail help addresses");
+            return true;
+        }
+        
+        if (topic.equalsIgnoreCase("read")) {
+            sender.sendMessage("/kmail read");
+            sender.sendMessage("Displays the oldest unread message and marks it as read.");
             return true;
         }
         
@@ -119,5 +130,41 @@ public class KMailCommandExecutor implements CommandExecutor {
             
             return true;
         }
+    }
+    
+    private boolean doRead(CommandSender sender, String[] args) {
+        Mailbox mb = plugin.getMailbox(getUsername(sender));
+        Iterator it = mb.iterator();
+        
+        while (it.hasNext()) {
+            Message msg = it.next();
+            
+            if (!msg.isRead()) {
+                displayMessage(msg);
+                msg.setRead(true);
+                return true;
+            }
+        }
+        
+        sender.sendMessage("No unread messages.");
+        return true;
+    }
+    
+    private String getUsername(CommandSender sender) {
+        if (sender instanceof Player) {
+            return ((Player) sender).getName();
+        }
+        else {
+            return "CONSOLE";
+        }
+    }
+    
+    private void displayMessage(Message msg) {
+        sender.sendMessage("================================");
+        sender.sendMessage("From: " + msg.getSrcAddress().toString());
+        sender.sendMessage("To: " + msg.getDestAddress().toString());
+        sender.sendMessage("");
+        sender.sendMessage(msg.getBody());
+        sender.sendMessage("================================");
     }
 }
