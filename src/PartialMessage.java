@@ -9,13 +9,13 @@ public class PartialMessage {
         this.bodyBuilder = new StringBuilder();
     }
     
-    public void append(String s) {
+    public synchronized void append(String s) {
         bodyBuilder.append(s);
         bodyBuilder.append(" ");
     }
     
-    public Message finish() {
-        msg.setBody(bodyBuilder.toString());
+    public synchronized Message finish() {
+        msg.setBody(bodyBuilder.toString().trim());
         return msg;
     }
 }

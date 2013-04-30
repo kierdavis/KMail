@@ -47,7 +47,7 @@ public class KMailCommandExecutor implements CommandExecutor {
         
         if (topic.equalsIgnoreCase("send")) {
             sender.sendMessage("/kmail send <address> [message]");
-            sender.sendMessage("Send a message to the specified address. If the message is not specified in the command, all future chat messages (until one consisting of a single hyphen ('-') is sent) will be used as the body of the message.");
+            sender.sendMessage("Send a message to the specified address. If the message is not specified in the command, all future chat messages (until one consisting of a single period ('.') is sent) will be used as the body of the message.");
             sender.sendMessage("See also: /kmail help addresses");
             return true;
         }
@@ -92,16 +92,14 @@ public class KMailCommandExecutor implements CommandExecutor {
             StringBuilder bodyBuilder = new StringBuilder();
             bodyBuilder.append(args[1]);
             
-            for (int i = 1; i < args.length; i++) {
+            for (int i = 2; i < args.length; i++) {
                 bodyBuilder.append(" ").append(args[i]);
             }
             
             msg.setBody(bodyBuilder.toString());
+            plugin.queueMessage(msg);
             
-            sender.sendMessage("Mail:");
-            sender.sendMessage("  From: " + msg.getSrcAddress().toString());
-            sender.sendMessage("  To: " + msg.getDestAddress().toString());
-            sender.sendMessage("  Body: " + msg.getBody());
+            sender.sendMessage("Mail sent.");
             
             return true;
         }
@@ -115,7 +113,11 @@ public class KMailCommandExecutor implements CommandExecutor {
             Player player = (Player) sender;
             PartialMessage pm = new PartialMessage(msg);
             
-            plugin.partialMessages.put(player, pm);
+            plugin.putPartialMessage(player, pm);
+            
+            sender.sendMessage("Now type your mail message in normal chat (not with commands).");
+            sender.sendMessage("End the message with a single chat message containing a dot (period).");
+            
             return true;
         }
     }
