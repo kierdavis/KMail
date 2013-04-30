@@ -204,7 +204,7 @@ public class KMailCommandExecutor implements CommandExecutor {
     }
     
     private void displayMessageSummary(CommandSender sender, Message msg) {
-        StringBuilder b = new StringBuilder;
+        StringBuilder b = new StringBuilder();
         b.append(msg.getLocalID());
         b.append(" ");
         b.append(msg.getSrcAddress().toString());
