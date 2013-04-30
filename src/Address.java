@@ -13,7 +13,7 @@ public class Address {
         }
         
         else {
-            this.username = s.substring(0, pos)
+            this.username = s.substring(0, pos);
             this.hostname = s.substring(pos + 1);
         }
     }

@@ -16,6 +16,6 @@ public class KMail extends JavaPlugin {
     }
     
     public String getLocalHostname() {
-        return "local.fix.this.net"
+        return "local.fix.this.net";
     }
 }

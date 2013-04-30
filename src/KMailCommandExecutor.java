@@ -56,7 +56,7 @@ public class KMailCommandExecutor implements CommandExecutor {
             sender.sendMessage("  kierdavis");
             sender.sendMessage("    - The username of a player on the local server");
             sender.sendMessage("  kierdavis@mc.example.net");
-            sender.sendMessage("    - A user on another server (replace 'mc.example.net' with the same IP address/domain name used to connect to it from the Minecraft client)")
+            sender.sendMessage("    - A user on another server (replace 'mc.example.net' with the same IP address/domain name used to connect to it from the Minecraft client)");
             sender.sendMessage("  *");
             sender.sendMessage("    - All players on the local server");
             return true;
