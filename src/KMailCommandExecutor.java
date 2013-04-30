@@ -138,7 +138,7 @@ public class KMailCommandExecutor implements CommandExecutor {
         Iterator it = mb.iterator();
         
         while (it.hasNext()) {
-            Message msg = it.next();
+            Message msg = (Message) it.next();
             
             if (!msg.isRead()) {
                 displayMessage(sender, msg);
