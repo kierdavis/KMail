@@ -24,7 +24,7 @@ public class KMail extends JavaPlugin {
         return "local.fix.this.net";
     }
     
-    public void queueMessage(Message msg) {
+    public synchronized void queueMessage(Message msg) {
         getLogger().info("Mail to be queued:");
         getLogger().info("  From: " + msg.getSrcAddress().toString());
         getLogger().info("  To: " + msg.getDestAddress().toString());

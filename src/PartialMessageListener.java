@@ -33,6 +33,8 @@ public class PartialMessageListener implements Listener {
                 player.sendMessage("Message body updated.");
                 pm.append(s);
             }
+            
+            event.setCancelled(true);
         }
     }
 }
