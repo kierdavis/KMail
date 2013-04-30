@@ -23,11 +23,10 @@ public class PartialMessageListener implements Listener {
         if (pm != null) {
             if (s.equals(".")) {
                 plugin.removePartialMessage(player);
-                player.sendMessage("Message body ended.");
                 
                 Message msg = pm.finish();
                 plugin.queueMessage(msg);
-                player.sendMessage("Mail queued for delivery.");
+                sender.sendMessage("Mail queued.");
             }
             
             else {

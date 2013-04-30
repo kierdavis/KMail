@@ -99,7 +99,7 @@ public class KMailCommandExecutor implements CommandExecutor {
             msg.setBody(bodyBuilder.toString());
             plugin.queueMessage(msg);
             
-            sender.sendMessage("Mail sent.");
+            sender.sendMessage("Mail queued.");
             
             return true;
         }
