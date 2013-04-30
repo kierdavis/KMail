@@ -4,5 +4,3 @@ version: 0.1.3
 commands:
     kmail:
         description: KMail
-        usage: |
-            /kmail send <address> [message]
