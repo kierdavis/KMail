@@ -1,6 +1,6 @@
 name: KMail
 main: com.kierdavis.kmail.KMail
-version: 0.1.7
+version: 0.1.8
 commands:
     kmail:
         description: KMail
