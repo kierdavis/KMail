@@ -1,6 +1,7 @@
 package com.kierdavis.kmail;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -140,7 +141,7 @@ public class KMailCommandExecutor implements CommandExecutor {
             Message msg = it.next();
             
             if (!msg.isRead()) {
-                displayMessage(msg);
+                displayMessage(sender, msg);
                 msg.setRead(true);
                 return true;
             }
@@ -159,7 +160,7 @@ public class KMailCommandExecutor implements CommandExecutor {
         }
     }
     
-    private void displayMessage(Message msg) {
+    private void displayMessage(CommandSender sender, Message msg) {
         sender.sendMessage("================================");
         sender.sendMessage("From: " + msg.getSrcAddress().toString());
         sender.sendMessage("To: " + msg.getDestAddress().toString());
