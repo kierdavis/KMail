@@ -1,5 +1,6 @@
 package com.kierdavis.kmail;
 
+import java.lang.InterruptedException;
 import java.lang.Runnable;
 import java.lang.Thread;
 import java.util.LinkedList;
@@ -32,8 +33,14 @@ public class MailDispatcher implements Runnable {
             }
             
             if (msg == null) {
-                Thread.sleep(5000);
+                try {
+                    Thread.sleep(5000);
+                }
+                catch (InterruptedException e) {
+                    
+                }
             }
+            
             else {
                 dispatch(msg);
             }
