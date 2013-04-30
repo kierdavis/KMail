@@ -75,7 +75,6 @@ public class KMailCommandExecutor implements CommandExecutor {
         }
         
         String srcUsername;
-        String srcHostname = plugin.getLocalHostname();
         
         if (sender instanceof Player) {
             srcUsername = ((Player) sender).getName();
@@ -84,7 +83,7 @@ public class KMailCommandExecutor implements CommandExecutor {
             srcUsername = "CONSOLE";
         }
         
-        Address srcAddress = new Address(srcUsername, srcHostname);
+        Address srcAddress = new Address(srcUsername, "local");
         Address destAddress = new Address(args[0]);
         Message msg = new Message(srcAddress, destAddress);
         
@@ -97,7 +96,7 @@ public class KMailCommandExecutor implements CommandExecutor {
             }
             
             msg.setBody(bodyBuilder.toString());
-            plugin.queueMessage(msg);
+            plugin.sendMessage(msg);
             
             sender.sendMessage("Mail queued.");
             
