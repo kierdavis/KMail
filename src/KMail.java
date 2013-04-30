@@ -18,10 +18,14 @@ public class KMail extends JavaPlugin {
         new PartialMessageListener(this);
         
         getCommand("kmail").setExecutor(new KMailCommandExecutor(this));
+        
+        getLogger().info("Starting mail dispatcher");
+        dispatcher.start();
     }
     
     public void onDisable() {
-        
+        getLogger().info("Stopping mail dispatcher");
+        dispatcher.stop();
     }
     
     public String getLocalHostname() {
