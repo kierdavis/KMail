@@ -13,8 +13,9 @@ public class Mailbox {
     }
     
     public void add(Message msg) {
-        msg.setRead(false);
+        msg.initReceived();
         msg.setReceivedDate(new Date());
+        msg.addTag("inbox");
         
         messages.add(msg);
     }

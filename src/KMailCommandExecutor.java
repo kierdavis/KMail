@@ -34,6 +34,10 @@ public class KMailCommandExecutor implements CommandExecutor {
             return doRead(sender, args);
         }
         
+        if (subcmd.equalsIgnoreCase("list")) {
+            return doList(sender, args);
+        }
+        
         sender.sendMessage("Invalid subcommand: " + subcmd);
         return false;
     }
@@ -61,6 +65,12 @@ public class KMailCommandExecutor implements CommandExecutor {
         if (topic.equalsIgnoreCase("read")) {
             sender.sendMessage("/kmail read");
             sender.sendMessage("Displays the oldest unread message and marks it as read.");
+            return true;
+        }
+        
+        if (topic.equalsIgnoreCase("list")) {
+            sender.sendMessage("/kmail list <tag>");
+            sender.sendMessage("Lists messages with the given tag.");
             return true;
         }
         
@@ -151,6 +161,27 @@ public class KMailCommandExecutor implements CommandExecutor {
         return true;
     }
     
+    private boolean doList(CommandSender sender, String[] args) {
+        if (args.length < 1) {
+            sender.sendMessage("Usage: /kmail list <tag>");
+            sender.sendMessage("See /kmail help list for more info.");
+            return false;
+        }
+        
+        Mailbox mb = plugin.getMailbox(getUsername(sender));
+        Iterator it = mb.iterator();
+        
+        while (it.hasNext()) {
+            Message msg = (Message) it.next();
+            
+            if (msg.hasTag(tag)) {
+                displayMessageSummary(sender, msg);
+            }
+        }
+        
+        return true;
+    }
+    
     private String getUsername(CommandSender sender) {
         if (sender instanceof Player) {
             return ((Player) sender).getName();
@@ -169,5 +200,9 @@ public class KMailCommandExecutor implements CommandExecutor {
         sender.sendMessage("");
         sender.sendMessage(msg.getBody());
         sender.sendMessage("================================");
+    }
+    
+    private void displayMessageSummary(CommandSender sender, Message msg) {
+        sender.sendMessage(msg.getLocalID().toString() + " " + msg.getSrcAddress().toString() + ": " + msg.getBody().substring(20))
     }
 }

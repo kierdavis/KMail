@@ -1,6 +1,8 @@
 package com.kierdavis.kmail;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Message {
     private final long localID;
@@ -12,6 +14,7 @@ public class Message {
     // Only used in mailboxes
     private boolean read;
     private Date receivedDate;
+    private Set<String> tags;
     
     private static long nextLocalID = 0;
     
@@ -25,8 +28,13 @@ public class Message {
         this.src = src;
         this.dest = dest;
         this.body = "";
-        
+        this.sentDate = null;
+    }
+    
+    public void initReceived() {
         this.read = false;
+        this.receivedDate = null;
+        this.tags = new HashSet<String>();
     }
     
     public final long getLocalID() {
@@ -79,5 +87,17 @@ public class Message {
     
     public void setReceivedDate(Date x) {
         receivedDate = x;
+    }
+    
+    public void addTag(String tag) {
+        tags.add(tag.toLowerCase());
+    }
+    
+    public boolean hasTag(String tag) {
+        return tags.contains(tag.toLowerCase());
+    }
+    
+    public void removeTag(String tag) {
+        tags.remove(tag.toLowerCase());
     }
 }
