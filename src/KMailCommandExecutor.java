@@ -204,12 +204,23 @@ public class KMailCommandExecutor implements CommandExecutor {
     }
     
     private void displayMessageSummary(CommandSender sender, Message msg) {
+        String bodySummary = msg.getBody();
+        
+        if (bodySummary.length > 18) {
+            bodySummary = bodySummary.substring(15) + "...";
+        }
+        
         StringBuilder b = new StringBuilder();
+        
+        if (!msg.isRead()) {
+            b.append("*");
+        }
+                
         b.append(msg.getLocalID());
         b.append(" ");
         b.append(msg.getSrcAddress().toString());
         b.append(" ");
-        b.append(msg.getBody().substring(20));
+        b.append(bodySummary);
         
         sender.sendMessage(b.toString());
     }
