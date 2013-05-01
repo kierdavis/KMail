@@ -16,7 +16,7 @@ public class WebServer {
             stop();
         }
         
-        server = HttpServer.create(new InetSocketAddress(4880));
+        server = HttpServer.create(new InetSocketAddress(4880), 0);
         server.createContext("/", new WebHandler(plugin));
         server.setExecutor(null);
         server.start();
