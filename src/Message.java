@@ -13,7 +13,7 @@ public class Message implements Serializable {
     private Date sentDate;
     
     // Only used in mailboxes
-    private transient final long localID;
+    private transient long localID;
     private transient Date receivedDate;
     private transient Set<String> tags;
     
