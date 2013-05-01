@@ -56,8 +56,8 @@ public class KMail extends JavaPlugin {
         else {
             Player player = getServer().getPlayer(username);
             if (player != null) {
-                player.sendMessage("\xa7eIncoming mail from " + msg.getSrcAddress().toString() + ".");
-                player.sendMessage("\xa7eType \xa74/kmail read\xa7e to view it.");
+                player.sendMessage("\247eIncoming mail from " + msg.getSrcAddress().toString() + ".");
+                player.sendMessage("\247eType \2474/kmail read\247e to view it.");
             }
         }
     }
