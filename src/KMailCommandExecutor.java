@@ -177,14 +177,16 @@ public class KMailCommandExecutor implements CommandExecutor {
         Set<SearchCriteria> criteria = new HashSet<SearchCriteria>();
         
         int lastArgIndex = args.length - 1;
-        int pageNum;
+        int pageNum = 1;
         
-        try {
-            pageNum = Integer.parseInt(args[lastArgIndex]);
-            args = Arrays.copyOfRange(args, 0, lastArgIndex);
-        }
-        catch (NumberFormatException e) {
-            pageNum = 1;
+        if (lastArgIndex >= 0) {
+            try {
+                pageNum = Integer.parseInt(args[lastArgIndex]);
+                args = Arrays.copyOfRange(args, 0, lastArgIndex);
+            }
+            catch (NumberFormatException e) {
+                pageNum = 1;
+            }
         }
         
         int startIndex = (pageNum - 1) * ITEMS_PER_PAGE;
