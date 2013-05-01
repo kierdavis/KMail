@@ -11,7 +11,7 @@ public interface SearchCriteria {
         char c = s.charAt(0);
         String arg = s.substring(2);
         
-        switch c {
+        switch (c) {
         case 't':
             return TagSearchCriteria(arg);
         default:
