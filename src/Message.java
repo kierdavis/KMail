@@ -4,8 +4,10 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Message {
-    private final long localID;
+import java.io.Serializable;
+
+public class Message implements Serializable {
+    private transient final long localID;
     private Address src;
     private Address dest;
     private String body;

@@ -257,16 +257,16 @@ public class KMailCommandExecutor implements CommandExecutor {
         
         StringBuilder b = new StringBuilder();
         
-        b.append("  \247c");
+        b.append("\247c  ");
         b.append(msg.getLocalID());
         
         if (!msg.isRead()) {
-            b.append(" \247d[unread]");
+            b.append("\247d [unread]");
         }
         
-        b.append(" \247a");
+        b.append("\247a ");
         b.append(msg.getSrcAddress().toString());
-        b.append(": \247e");
+        b.append("\247e: ");
         b.append(bodySummary);
         
         sender.sendMessage(b.toString());

@@ -10,11 +10,13 @@ public class KMail extends JavaPlugin {
     private Map<Player, PartialMessage> partialMessages;
     private Map<String, Mailbox> mailboxes;
     private MailDispatcher dispatcher;
+    private WebServer server;
     
     public void onEnable() {
         partialMessages = new HashMap<Player, PartialMessage>();
         mailboxes = new HashMap<String, Mailbox>();
         dispatcher = new MailDispatcher(this);
+        server = new WebServer(this);
         
         new PartialMessageListener(this);
         
@@ -22,15 +24,21 @@ public class KMail extends JavaPlugin {
         
         getLogger().info("Starting mail dispatcher");
         dispatcher.start();
+        
+        getLogger().info("Starting web server");
+        server.start();
     }
     
     public void onDisable() {
         getLogger().info("Stopping mail dispatcher");
         dispatcher.stop();
+        
+        getLogger().info("Stopping web server");
+        server.stop();
     }
     
     public String getLocalHostname() {
-        return "local.fix.this.net";
+        return "localhost";
     }
     
     public Mailbox getMailbox(String username) {
