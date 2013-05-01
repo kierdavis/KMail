@@ -48,52 +48,52 @@ public class KMailCommandExecutor implements CommandExecutor {
     
     private boolean doHelp(CommandSender sender, String[] args) {
         if (args.length < 1) {
-            sender.sendMessage("&1KMail Help: (<required> [optional])");
-            sender.sendMessage("  /kmail send <address> [message]");
-            sender.sendMessage("  /kmail read");
+            sender.sendMessage("\xa7eKMail Help: (\xa7c<required> [optional]\xa7e)");
+            sender.sendMessage("  \xa74/kmail send \xa7c<address> [message]");
+            sender.sendMessage("  \xa74/kmail read");
             sender.sendMessage("");
-            sender.sendMessage("Do /kmail help <command> for help on any subcommand.");
-            sender.sendMessage("Other help topics: addresses");
+            sender.sendMessage("\xa7eDo \xa74/kmail help \xa7c<command>\xa7e for help on any subcommand.");
+            sender.sendMessage("\xa7eOther help topics: addresses");
             return true;
         }
         
         String topic = args[0];
         
         if (topic.equalsIgnoreCase("send")) {
-            sender.sendMessage("/kmail send <address> [message]");
-            sender.sendMessage("Send a message to the specified address. If the message is not specified in the command, all future chat messages (until one consisting of a single period ('.') is sent) will be used as the body of the message.");
-            sender.sendMessage("See also: /kmail help addresses");
+            sender.sendMessage("\xa74/kmail send \xa7c<address> [message]");
+            sender.sendMessage("\xa7eSend a message to the specified address. If the message is not specified in the command, all future chat messages (until one consisting of a single period ('.') is sent) will be used as the body of the message.");
+            sender.sendMessage("\xa7eSee also: \xa74/kmail help addresses");
             return true;
         }
         
         if (topic.equalsIgnoreCase("read")) {
-            sender.sendMessage("/kmail read");
-            sender.sendMessage("Displays the oldest unread message and marks it as read.");
+            sender.sendMessage("\xa74/kmail read");
+            sender.sendMessage("\xa7eDisplays the oldest unread message and marks it as read.");
             return true;
         }
         
         if (topic.equalsIgnoreCase("list")) {
-            sender.sendMessage("/kmail list [criteria] [page]");
-            sender.sendMessage("Lists messages with the given criteria.");
-            sender.sendMessage("See also: /kmail help criteria");
+            sender.sendMessage("\xa74/kmail list \xa7c[criteria] [page]");
+            sender.sendMessage("\xa7eLists messages with the given criteria.");
+            sender.sendMessage("\xa7eSee also: \xa74/kmail help criteria");
             return true;
         }
         
         if (topic.equalsIgnoreCase("addresses")) {
-            sender.sendMessage("An address can be:");
-            sender.sendMessage("  <username>");
-            sender.sendMessage("    - The username of a player on the local server");
-            sender.sendMessage("  <username>@<server-addr>");
-            sender.sendMessage("    - A user on another server (<server-addr> is the same IP address/domain name used to connect to it from the Minecraft client)");
-            sender.sendMessage("  *");
-            sender.sendMessage("    - All players on the local server");
+            sender.sendMessage("\xa7eAn address can be:");
+            sender.sendMessage("  \xa7a<username>");
+            sender.sendMessage("    \xa7e- The username of a player on the local server");
+            sender.sendMessage("  \xa7a<username>\xa72@\xa7a<server-addr>");
+            sender.sendMessage("    \xa7e- A user on another server (\xa7a<server-addr>\xa7e is the same IP address/domain name used to connect to it from the Minecraft client)");
+            sender.sendMessage("  \xa72*");
+            sender.sendMessage("    \xa7e- All players on the local server");
             return true;
         }
         
         if (topic.equalsIgnoreCase("criteria")) {
-            sender.sendMessage("Search criteria are space-seperated values that can take the form of:");
-            sender.sendMessage("  t:<tag>");
-            sender.sendMessage("    Messages with a certain tag. Predefined tags are: 'unread'");
+            sender.sendMessage("\xa7eSearch criteria are space-seperated values that can take the form of:");
+            sender.sendMessage("  \xa72t:\xa7a<tag>");
+            sender.sendMessage("    \xa7eMessages with a certain tag. Predefined tags are: 'unread'");
             return true;
         }
         
@@ -103,8 +103,8 @@ public class KMailCommandExecutor implements CommandExecutor {
     
     private boolean doSend(CommandSender sender, String[] args) {
         if (args.length < 1) {
-            sender.sendMessage("Usage: /kmail send <address> [message]");
-            sender.sendMessage("See /kmail help send for more info.");
+            sender.sendMessage("\xa7eUsage: \xa74/kmail send \xa7c<address> [message]");
+            sender.sendMessage("\xa7eSee \xa74/kmail help send\xa7e for more info.");
             return false;
         }
         
@@ -132,14 +132,14 @@ public class KMailCommandExecutor implements CommandExecutor {
             msg.setBody(bodyBuilder.toString());
             plugin.sendMessage(msg);
             
-            sender.sendMessage("Mail queued.");
+            sender.sendMessage("\xa7eMail queued.");
             
             return true;
         }
         
         else {
             if (!(sender instanceof Player)) {
-                sender.sendMessage("This command must be run as a player.");
+                sender.sendMessage("\xa7eThis command must be run as a player.");
                 return false;
             }
             
@@ -148,8 +148,8 @@ public class KMailCommandExecutor implements CommandExecutor {
             
             plugin.putPartialMessage(player, pm);
             
-            sender.sendMessage("Now type your mail message in normal chat (not with commands).");
-            sender.sendMessage("End the message with a single chat message containing a dot (period).");
+            sender.sendMessage("\xa7eNow type your mail message in normal chat (not with commands).");
+            sender.sendMessage("\xa7eEnd the message with a single chat message containing a dot (period).");
             
             return true;
         }
@@ -169,7 +169,7 @@ public class KMailCommandExecutor implements CommandExecutor {
             }
         }
         
-        sender.sendMessage("No unread messages.");
+        sender.sendMessage("\xa7eNo unread messages.");
         return true;
     }
     
@@ -204,7 +204,7 @@ public class KMailCommandExecutor implements CommandExecutor {
         int i = 0;
         boolean itemsPrinted = false;
         
-        sender.sendMessage("Messages (page " + pageNum + "):");
+        sender.sendMessage("\xa7eMessages (page \xa7a" + pageNum + "\xa7e):");
         
         while (it.hasNext()) {
             Message msg = (Message) it.next();
@@ -222,7 +222,7 @@ public class KMailCommandExecutor implements CommandExecutor {
         }
         
         if (!itemsPrinted) {
-            sender.sendMessage("  No messages.");
+            sender.sendMessage("  \xa7eNo messages.");
         }
         
         return true;
@@ -238,14 +238,14 @@ public class KMailCommandExecutor implements CommandExecutor {
     }
     
     private void displayMessage(CommandSender sender, Message msg) {
-        sender.sendMessage("================================");
-        sender.sendMessage("From: " + msg.getSrcAddress().toString());
-        sender.sendMessage("To: " + msg.getDestAddress().toString());
-        sender.sendMessage("Sent: " + msg.getSentDate().toString());
-        sender.sendMessage("Recieved: " + msg.getReceivedDate().toString());
+        sender.sendMessage("\xa7e================================");
+        sender.sendMessage("\xa7eFrom: \xa7a" + msg.getSrcAddress().toString());
+        sender.sendMessage("\xa7eTo: \xa7a" + msg.getDestAddress().toString());
+        sender.sendMessage("\xa7eSent: \xa7c" + msg.getSentDate().toString());
+        sender.sendMessage("\xa7eRecieved: \xa7c" + msg.getReceivedDate().toString());
         sender.sendMessage("");
         sender.sendMessage(msg.getBody());
-        sender.sendMessage("================================");
+        sender.sendMessage("\xa7e================================");
     }
     
     private void displayMessageSummary(CommandSender sender, Message msg) {
@@ -257,16 +257,16 @@ public class KMailCommandExecutor implements CommandExecutor {
         
         StringBuilder b = new StringBuilder();
         
-        b.append("  ");
+        b.append("  \xa7c");
         b.append(msg.getLocalID());
         
         if (!msg.isRead()) {
-            b.append(" [unread]");
+            b.append(" \xa7d[unread]");
         }
         
-        b.append(" ");
+        b.append(" \xa7a");
         b.append(msg.getSrcAddress().toString());
-        b.append(": ");
+        b.append(": \xa7e");
         b.append(bodySummary);
         
         sender.sendMessage(b.toString());
