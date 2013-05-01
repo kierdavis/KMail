@@ -11,7 +11,7 @@ public class PartialMessage {
     
     public synchronized void append(String s) {
         bodyBuilder.append(s);
-        bodyBuilder.append(" ");
+        bodyBuilder.append("\n");
     }
     
     public synchronized Message finish() {

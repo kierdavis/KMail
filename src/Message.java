@@ -12,10 +12,11 @@ public class Message implements Serializable {
     private String body;
     private Date sentDate;
     
-    // Only used in mailboxes
+    // Only used internally
     private transient long localID;
     private transient Date receivedDate;
     private transient Set<String> tags;
+    private transient int numRetries;
     
     private static long nextLocalID = 0;
     private static synchronized long getNextLocalID() {
@@ -28,6 +29,10 @@ public class Message implements Serializable {
         this.dest = dest;
         this.body = "";
         this.sentDate = null;
+        this.localID = 0;
+        this.receivedDate = null;
+        this.tags = null;
+        this.numRetries = 0;
         
         assignLocalID();
     }
@@ -113,5 +118,13 @@ public class Message implements Serializable {
     
     public void markUnread() {
         addTag("unread");
+    }
+    
+    public void incRetries() {
+        numRetries++;
+    }
+    
+    public void getRetries() {
+        return numRetries;
     }
 }

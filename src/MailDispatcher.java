@@ -12,6 +12,8 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class MailDispatcher implements Runnable {
+    public static final int MAX_RETRIES = 3;
+    
     private KMail plugin;
     private Queue<Message> queue;
     private boolean stopFlag;
@@ -82,29 +84,76 @@ public class MailDispatcher implements Runnable {
         
         plugin.getLogger().info("Sending message via HTTP to " + hostname + ": " + msg.getSrcAddress().toString() + " -> " + msg.getDestAddress().toString());
         
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(bos);
-        oos.writeObject(msg);
-        oos.flush();
-        oos.close();
+        boolean success = false;
+        HttpURLConnection conn = null;
         
-        byte[] requestBytes = bos.toByteArray();
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(bos);
+            oos.writeObject(msg);
+            oos.flush();
+            oos.close();
+            
+            byte[] requestBytes = bos.toByteArray();
+            
+            URL url = new URL("http://" + hostname + "/");
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/x-java-serialized-object");
+            conn.setRequestProperty("Content-Length", Integer.toString(requestBytes.length));
+            conn.setRequestProperty("Host", hostname);
+            conn.setUseCaches(false);
+            conn.setDoOutput(true);
+            conn.setDoInput(false);
+            
+            OutputStream os = conn.getOutputStream();
+            os.write(requestBytes);
+            os.flush();
+            os.close();
+            success = true;
+        }
         
-        URL url = new URL("http://" + hostname + "/");
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("POST");
-        conn.setRequestProperty("Content-Type", "application/x-java-serialized-object");
-        conn.setRequestProperty("Content-Length", Integer.toString(requestBytes.length));
-        conn.setRequestProperty("Host", hostname);
-        conn.setUseCaches(false);
-        conn.setDoOutput(true);
-        conn.setDoInput(false);
+        catch (IOException e) {
+            plugin.getLogger().severe("Error sending message: " + e.toString());
+        }
         
-        OutputStream os = conn.getOutputStream();
-        os.write(requestBytes);
-        os.flush();
-        os.close();
+        catch (MalformedURLException e) {
+            plugin.getLogger().severe("Error sending message: " + e.toString());
+        }
         
-        conn.disconnect();
+        catch (ProtocolException e) {
+            plugin.getLogger().severe("Error sending message: " + e.toString());
+        }
+        
+        finally {
+            if (conn != null) {
+                conn.disconnect();
+            }
+        }
+        
+        if (!success) {
+            msg.incRetries();
+            
+            if (msg.getRetries() == MAX_RETRIES) {
+                plugin.getLogger().severe("Sending failed permanently");
+                
+                Address srcAddr = new Address("CONSOLE", plugin.getLocalHostname());
+                Message replyMsg = new Message(srcAddr, msg.getSrcAddress());
+                
+                StringBuilder bodyBuilder = new StringBuilder();
+                bodyBuilder.append("Sending of the following message failed after ").append(MAX_RETRIES).append(" attempts:\n");
+                bodyBuilder.append("  From: ").append(msg.getSrcAddress().toString()).append("\n");
+                bodyBuilder.append("  To: ").append(msg.getDestAddress().toString()).append("\n");
+                bodyBuilder.append("  Sent: ").append(msg.getSentDate().toString()).append("\n");
+                bodyBuilder.append("  Body:\n    ").append(msg.getBody());
+                replyMsg.setBody(bodyBuilder.toString());
+                
+                queueMessage(replyMsg);
+            }
+            
+            else {
+                queueMessage(msg);
+            }
+        }
     }
 }
