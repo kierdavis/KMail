@@ -1,13 +1,17 @@
 package com.kierdavis.kmail;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class KMailCommandExecutor implements CommandExecutor {
+    public static final int ITEMS_PER_PAGE = 10;
+    
     private KMail plugin;
     
     public KMailCommandExecutor(KMail plugin) {
@@ -162,22 +166,18 @@ public class KMailCommandExecutor implements CommandExecutor {
     }
     
     private boolean doList(CommandSender sender, String[] args) {
-        if (args.length < 1) {
-            sender.sendMessage("Usage: /kmail list <tag>");
-            sender.sendMessage("See /kmail help list for more info.");
-            return false;
+        Set<SearchCriteria> criteria = new HashSet<SearchCriteria>();
+        
+        for (int i = 0; i < args.length; i++) {
+            criteria.add(SearchCriteria.parse(args[i]));
         }
         
-        String tag = args[0];
         Mailbox mb = plugin.getMailbox(getUsername(sender));
-        Iterator it = mb.iterator();
+        Iterator<Message> it = mb.search(criteria);
         
         while (it.hasNext()) {
             Message msg = (Message) it.next();
-            
-            if (msg.hasTag(tag)) {
-                displayMessageSummary(sender, msg);
-            }
+            displayMessageSummary(sender, msg);
         }
         
         return true;
@@ -219,7 +219,7 @@ public class KMailCommandExecutor implements CommandExecutor {
         b.append(msg.getLocalID());
         b.append(" ");
         b.append(msg.getSrcAddress().toString());
-        b.append(" ");
+        b.append(": ");
         b.append(bodySummary);
         
         sender.sendMessage(b.toString());

@@ -23,4 +23,12 @@ public class Mailbox {
     public Iterator<Message> iterator() {
         return messages.iterator();
     }
+    
+    public Iterator<Message> search(Set<SearchCriteria> criteria) {
+        if (criteria.size() == 0) {
+            return messages.iterator();
+        }
+        
+        return new SearchIterator(messages.iterator(), criteria);
+    }
 }
