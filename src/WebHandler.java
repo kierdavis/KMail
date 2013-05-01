@@ -18,6 +18,8 @@ public class WebHandler implements HttpHandler {
         String response;
         Message msg = null;
         
+        plugin.getLogger().info("Incoming connection via HTTP from " + t.getRemoteAddress().toString());
+        
         try {
             InputStream is = t.getRequestBody();
             ObjectInputStream ois = new ObjectInputStream(is);
