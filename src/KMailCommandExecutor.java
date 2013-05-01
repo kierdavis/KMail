@@ -169,7 +169,10 @@ public class KMailCommandExecutor implements CommandExecutor {
         Set<SearchCriteria> criteria = new HashSet<SearchCriteria>();
         
         for (int i = 0; i < args.length; i++) {
-            criteria.add(SearchCriteria.parse(args[i]));
+            SearchCriteria crit = parseSearchCriteria(args[i]);
+            if (crit != null) {
+                criteria.add(crit);
+            }
         }
         
         Mailbox mb = plugin.getMailbox(getUsername(sender));
@@ -223,5 +226,21 @@ public class KMailCommandExecutor implements CommandExecutor {
         b.append(bodySummary);
         
         sender.sendMessage(b.toString());
+    }
+    
+    public SearchCritera parseSearchCritera(String s) {
+        if (s.length < 3 || s.charAt(1) != ':') {
+            return null;
+        }
+        
+        char c = s.charAt(0);
+        String arg = s.substring(2);
+        
+        switch (c) {
+        case 't':
+            return new TagSearchCriteria(arg);
+        default:
+            return null;
+        }
     }
 }

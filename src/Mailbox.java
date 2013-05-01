@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 public class Mailbox {
     private List<Message> messages;
@@ -29,6 +30,6 @@ public class Mailbox {
             return messages.iterator();
         }
         
-        return new SearchIterator(messages.iterator(), criteria);
+        return (Iterator<Message>) (new SearchIterator(messages.iterator(), criteria));
     }
 }
