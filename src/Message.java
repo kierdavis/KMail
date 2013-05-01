@@ -31,9 +31,10 @@ public class Message {
     }
     
     public void initReceived() {
-        this.read = false;
         this.receivedDate = null;
         this.tags = new HashSet<String>();
+        
+        markUnread();
     }
     
     public final long getLocalID() {

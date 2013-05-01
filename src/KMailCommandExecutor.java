@@ -180,7 +180,7 @@ public class KMailCommandExecutor implements CommandExecutor {
         int pageNum;
         
         try {
-            pageNum = Integer.parseInt(lastArgIndex);
+            pageNum = Integer.parseInt(args[lastArgIndex]);
             args = Arrays.copyOfRange(args, 0, lastArgIndex);
         }
         catch (NumberFormatException e) {
