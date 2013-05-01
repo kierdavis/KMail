@@ -120,14 +120,6 @@ public class MailDispatcher implements Runnable {
             plugin.getLogger().severe("Error sending message: " + e.toString());
         }
         
-        catch (MalformedURLException e) {
-            plugin.getLogger().severe("Error sending message: " + e.toString());
-        }
-        
-        catch (ProtocolException e) {
-            plugin.getLogger().severe("Error sending message: " + e.toString());
-        }
-        
         finally {
             if (conn != null) {
                 conn.disconnect();
