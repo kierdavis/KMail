@@ -34,8 +34,6 @@ public class KMail extends JavaPlugin {
     }
     
     public Mailbox getMailbox(String username) {
-        getLogger().info("Using mailbox for '" + username.toLowerCase() + "'");
-        
         Mailbox mb = mailboxes.get(username.toLowerCase());
         
         if (mb == null) {

@@ -48,7 +48,7 @@ public class KMailCommandExecutor implements CommandExecutor {
     
     private boolean doHelp(CommandSender sender, String[] args) {
         if (args.length < 1) {
-            sender.sendMessage("KMail Help: (<required> [optional])");
+            sender.sendMessage("&1KMail Help: (<required> [optional])");
             sender.sendMessage("  /kmail send <address> [message]");
             sender.sendMessage("  /kmail read");
             sender.sendMessage("");
