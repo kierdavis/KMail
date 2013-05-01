@@ -45,7 +45,8 @@ public class WebHandler implements HttpHandler {
             msg.assignLocalID();
             
             plugin.getLogger().info("Received message via HTTP from " + t.getRemoteAddress().toString() + ": " + msg.getSrcAddress().toString() + " -> " + msg.getDestAddress().toString());
-            plugin.sendMessage(msg);
+            plugin.receiveMessage(msg);
+            //plugin.sendMessage(msg);
             
             response = "Mail received successfully.\r\n";
             t.sendResponseHeaders(200, response.length());
