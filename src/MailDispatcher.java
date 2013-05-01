@@ -1,6 +1,8 @@
 package com.kierdavis.kmail;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
@@ -101,18 +103,34 @@ public class MailDispatcher implements Runnable {
             
             URL url = new URL("http://" + hostname + "/");
             conn = (HttpURLConnection) url.openConnection();
+            conn.setReadTimeout(15000);
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/x-java-serialized-object");
             conn.setRequestProperty("Content-Length", Integer.toString(requestBytes.length));
             conn.setRequestProperty("Host", hostname);
             conn.setUseCaches(false);
             conn.setDoOutput(true);
-            conn.setDoInput(false);
+            conn.setDoInput(true);
             
             OutputStream os = conn.getOutputStream();
             os.write(requestBytes);
             os.flush();
             os.close();
+            
+            if (conn.getResponseCode() >= 400) {
+                throw new IOException("Bad HTTP response from server: " + code.getResponseMessage());
+            }
+            
+            InputStream is = conn.getInputStream();
+            InputStreamReader isr = new InputStreamReader(isr);
+            BufferedReader br = new BufferedReader(br);
+            
+            String line = br.readLine();
+            while (line != null) {
+                line = br.readLine();
+            }
+            
+            br.close();
             success = true;
         }
         
