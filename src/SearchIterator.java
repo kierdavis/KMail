@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-public class SearchIterator {
+public class SearchIterator implements Iterator<Message> {
     private Iterator<Message> it;
     private Set<SearchCriteria> criteria;
     private Message nextItem;
