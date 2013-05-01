@@ -1,6 +1,7 @@
 package com.kierdavis.kmail;
 
 import com.sun.net.httpserver.HttpServer;
+import java.io.IOException;
 import java.net.InetSocketAddress;
 
 public class WebServer {
@@ -11,7 +12,7 @@ public class WebServer {
         this.plugin = plugin;
     }
     
-    public void start() {
+    public void start() throws IOException {
         if (server != null) {
             stop();
         }

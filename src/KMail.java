@@ -1,5 +1,6 @@
 package com.kierdavis.kmail;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +27,12 @@ public class KMail extends JavaPlugin {
         dispatcher.start();
         
         getLogger().info("Starting web server");
-        server.start();
+        try {
+            server.start();
+        }
+        catch (IOException e) {
+            getLogger().severe("Could not start web server: " + e.toString());
+        }
     }
     
     public void onDisable() {
