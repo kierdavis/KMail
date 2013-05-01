@@ -37,7 +37,7 @@ public class WebHandler implements HttpHandler {
         else {
             plugin.sendMessage(msg);
             
-            response = "Mail received successfully."
+            response = "Mail received successfully.";
             t.sendResponseHeaders(200, response.length());
         }
         
