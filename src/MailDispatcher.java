@@ -2,6 +2,7 @@ package com.kierdavis.kmail;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -118,12 +119,12 @@ public class MailDispatcher implements Runnable {
             os.close();
             
             if (conn.getResponseCode() >= 400) {
-                throw new IOException("Bad HTTP response from server: " + code.getResponseMessage());
+                throw new IOException("Bad HTTP response from server: " + conn.getResponseMessage());
             }
             
             InputStream is = conn.getInputStream();
-            InputStreamReader isr = new InputStreamReader(isr);
-            BufferedReader br = new BufferedReader(br);
+            InputStreamReader isr = new InputStreamReader(is);
+            BufferedReader br = new BufferedReader(isr);
             
             String line = br.readLine();
             while (line != null) {
