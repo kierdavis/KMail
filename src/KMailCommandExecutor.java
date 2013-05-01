@@ -228,8 +228,8 @@ public class KMailCommandExecutor implements CommandExecutor {
         sender.sendMessage(b.toString());
     }
     
-    public SearchCritera parseSearchCritera(String s) {
-        if (s.length < 3 || s.charAt(1) != ':') {
+    public SearchCriteria parseSearchCriteria(String s) {
+        if (s.length() < 3 || s.charAt(1) != ':') {
             return null;
         }
         
