@@ -124,7 +124,7 @@ public class Message implements Serializable {
         numRetries++;
     }
     
-    public void getRetries() {
+    public int getRetries() {
         return numRetries;
     }
 }

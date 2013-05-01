@@ -1,12 +1,15 @@
 package com.kierdavis.kmail;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.lang.InterruptedException;
 import java.lang.Runnable;
 import java.lang.Thread;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.Queue;
