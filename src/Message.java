@@ -12,7 +12,6 @@ public class Message {
     private Date sentDate;
     
     // Only used in mailboxes
-    private boolean read;
     private Date receivedDate;
     private Set<String> tags;
     
@@ -73,14 +72,6 @@ public class Message {
         sentDate = x;
     }
     
-    public boolean isRead() {
-        return read;
-    }
-    
-    public void setRead(boolean x) {
-        read = x;
-    }
-    
     public Date getReceivedDate() {
         return receivedDate;
     }
@@ -99,5 +90,21 @@ public class Message {
     
     public void removeTag(String tag) {
         tags.remove(tag.toLowerCase());
+    }
+    
+    public boolean isUnread() {
+        return hasTag("unread");
+    }
+    
+    public boolean isRead() {
+        return !isUnread();
+    }
+    
+    public void markRead() {
+        removeTag("unread");
+    }
+    
+    public void markUnread() {
+        addTag("unread");
     }
 }

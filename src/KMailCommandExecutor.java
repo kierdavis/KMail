@@ -73,19 +73,27 @@ public class KMailCommandExecutor implements CommandExecutor {
         }
         
         if (topic.equalsIgnoreCase("list")) {
-            sender.sendMessage("/kmail list <tag>");
-            sender.sendMessage("Lists messages with the given tag.");
+            sender.sendMessage("/kmail list [criteria] [page]");
+            sender.sendMessage("Lists messages with the given criteria.");
+            sender.sendMessage("See also: /kmail help criteria");
             return true;
         }
         
         if (topic.equalsIgnoreCase("addresses")) {
             sender.sendMessage("An address can be:");
-            sender.sendMessage("  kierdavis");
+            sender.sendMessage("  <username>");
             sender.sendMessage("    - The username of a player on the local server");
-            sender.sendMessage("  kierdavis@mc.example.net");
-            sender.sendMessage("    - A user on another server (replace 'mc.example.net' with the same IP address/domain name used to connect to it from the Minecraft client)");
+            sender.sendMessage("  <username>@<server-addr>");
+            sender.sendMessage("    - A user on another server (<server-addr> is the same IP address/domain name used to connect to it from the Minecraft client)");
             sender.sendMessage("  *");
             sender.sendMessage("    - All players on the local server");
+            return true;
+        }
+        
+        if (topic.equalsIgnoreCase("criteria")) {
+            sender.sendMessage("Search criteria are space-seperated values that can take the form of:");
+            sender.sendMessage("  t:<tag>");
+            sender.sendMessage("    Messages with a certain tag. Predefined tags are: 'unread'");
             return true;
         }
         
@@ -154,9 +162,9 @@ public class KMailCommandExecutor implements CommandExecutor {
         while (it.hasNext()) {
             Message msg = (Message) it.next();
             
-            if (!msg.isRead()) {
+            if (msg.isUnread()) {
                 displayMessage(sender, msg);
-                msg.setRead(true);
+                msg.markRead();
                 return true;
             }
         }
@@ -168,6 +176,19 @@ public class KMailCommandExecutor implements CommandExecutor {
     private boolean doList(CommandSender sender, String[] args) {
         Set<SearchCriteria> criteria = new HashSet<SearchCriteria>();
         
+        int lastArgIndex = args.length - 1;
+        int pageNum;
+        
+        try {
+            pageNum = Integer.parseInt(lastArgIndex);
+            args = Arrays.copyOfRange(args, 0, lastArgIndex);
+        }
+        catch (NumberFormatException e) {
+            pageNum = 1;
+        }
+        
+        int startIndex = (pageNum - 1) * ITEMS_PER_PAGE;
+        
         for (int i = 0; i < args.length; i++) {
             SearchCriteria crit = parseSearchCriteria(args[i]);
             if (crit != null) {
@@ -178,9 +199,28 @@ public class KMailCommandExecutor implements CommandExecutor {
         Mailbox mb = plugin.getMailbox(getUsername(sender));
         Iterator<Message> it = mb.search(criteria);
         
+        int i = 0;
+        boolean itemsPrinted = false;
+        
+        sender.sendMessage("Messages (page " + pageNum + "):");
+        
         while (it.hasNext()) {
             Message msg = (Message) it.next();
-            displayMessageSummary(sender, msg);
+            
+            if (i >= startIndex + ITEMS_PER_PAGE) {
+                break;
+            }
+            
+            if (i >= startIndex) {
+                displayMessageSummary(sender, msg);
+                itemsPrinted = true;
+            }
+            
+            i++;
+        }
+        
+        if (!itemsPrinted) {
+            sender.sendMessage("  No messages.");
         }
         
         return true;
@@ -215,11 +255,13 @@ public class KMailCommandExecutor implements CommandExecutor {
         
         StringBuilder b = new StringBuilder();
         
-        if (!msg.isRead()) {
-            b.append("*");
-        }
-                
+        b.append("  ");
         b.append(msg.getLocalID());
+        
+        if (!msg.isRead()) {
+            b.append(" [unread]");
+        }
+        
         b.append(" ");
         b.append(msg.getSrcAddress().toString());
         b.append(": ");
