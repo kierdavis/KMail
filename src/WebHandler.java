@@ -16,7 +16,7 @@ public class WebHandler implements HttpHandler {
     
     public void handle(HttpExchange t) throws IOException {
         String response;
-        Message msg;
+        Message msg = null;
         
         try {
             InputStream is = t.getRequestBody();
@@ -27,6 +27,10 @@ public class WebHandler implements HttpHandler {
         }
         
         catch (IOException e) {
+            // Pass
+        }
+        
+        catch (ClassNotFoundException e) {
             // Pass
         }
         
