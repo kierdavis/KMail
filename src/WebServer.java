@@ -21,6 +21,8 @@ public class WebServer {
         server.createContext("/", new WebHandler(plugin));
         server.setExecutor(null);
         server.start();
+        
+        plugin.getLogger().info("Listening on *:4880");
     }
     
     public void stop() {

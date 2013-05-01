@@ -35,14 +35,17 @@ public class WebHandler implements HttpHandler {
         }
         
         if (msg == null) {
-            response = "Could not parse request body.";
+            response = "Could not parse request body.\r\n";
             t.sendResponseHeaders(400, response.length());
         }
         
         else {
+            msg.assignLocalID();
+            
+            plugin.getLogger().info("Received message via HTTP from " + t.getRemoteAddress().toString() + ": " + msg.getSrcAddress().toString() + " -> " + msg.getDestAddress().toString());
             plugin.sendMessage(msg);
             
-            response = "Mail received successfully.";
+            response = "Mail received successfully.\r\n";
             t.sendResponseHeaders(200, response.length());
         }
         

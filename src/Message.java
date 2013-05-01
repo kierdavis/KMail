@@ -7,29 +7,29 @@ import java.util.Set;
 import java.io.Serializable;
 
 public class Message implements Serializable {
-    private transient final long localID;
     private Address src;
     private Address dest;
     private String body;
     private Date sentDate;
     
     // Only used in mailboxes
-    private Date receivedDate;
-    private Set<String> tags;
+    private transient final long localID;
+    private transient Date receivedDate;
+    private transient Set<String> tags;
     
     private static long nextLocalID = 0;
-    
     private static synchronized long getNextLocalID() {
         nextLocalID++;
         return nextLocalID;
     }
     
     public Message(Address src, Address dest) {
-        this.localID = Message.getNextLocalID();
         this.src = src;
         this.dest = dest;
         this.body = "";
         this.sentDate = null;
+        
+        assignLocalID();
     }
     
     public void initReceived() {
@@ -41,6 +41,10 @@ public class Message implements Serializable {
     
     public final long getLocalID() {
         return localID;
+    }
+    
+    public void assignLocalID() {
+        localID = Message.getNextLocalID();
     }
     
     public Address getSrcAddress() {

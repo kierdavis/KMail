@@ -69,6 +69,37 @@ public class MailDispatcher implements Runnable {
     }
     
     public void dispatchRemote(Message msg) {
+        String hostname = msg.getDestAddress().getHostname();
         
+        if (hostname.indexOf(":") < 0) {
+            hostname += ":4880";
+        }
+        
+        plugin.getLogger().info("Sending message via HTTP to " + hostname + ": " + msg.getSrcAddress().toString() + " -> " + msg.getDestAddress().toString());
+        
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(bos);
+        oos.writeObject(msg);
+        oos.flush();
+        oos.close();
+        
+        byte[] requestBytes = bos.toByteArray();
+        
+        URL url = new URL("http://" + hostname + "/");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-Type", "application/x-java-serialized-object");
+        conn.setRequestProperty("Content-Length", Integer.toString(requestBytes.length));
+        conn.setRequestProperty("Host", hostname);
+        conn.setUseCaches(false);
+        conn.setDoOutput(true);
+        conn.setDoInput(false);
+        
+        OutputStream os = conn.getOutputStream();
+        os.write(requestBytes);
+        os.flush();
+        os.close();
+        
+        conn.disconnect();
     }
 }
