@@ -94,7 +94,7 @@ public class Mailbox {
         return mb;
     }
     
-    public void save(KMail plugin, String player) {
+    public void save(KMail plugin, String player) throws IOException {
         File dir = new File(plugin.getDataFolder(), "mailboxes");
         File file = new File(dir, player.toLowerCase() + ".yml");
         
