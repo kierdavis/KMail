@@ -1,20 +1,25 @@
 local:
-    # The local hostname of the server
-    # This will be used as the hostname in the source address of outgoing mail.
+    # The local hostname of the server.
     # It should be set to the preferred IP (or domain name) of your server.
+    #
+    # This will be used as the hostname in the source address of outgoing mail,
+    # so it ought to be a valid, externally-accessible domain name so that
+    # replies to messages sent from this server can be made.
     hostname: please.change.me
 
 remote:
     client:
-        # Connection timeout, in seconds
+        # Connection timeout, in seconds.
         timeout: 15
         
-        # Number of times to attempt sending a message before it is marked as failed and discarded
+        # Number of times to attempt sending a message before it is marked as
+        # failed and discarded.
         retries: 3
     
     server:
-        # Hostname to listen on (usually should be set to same as server-ip in server.properties)
+        # IP to listen on (usually should be set to same as server-ip in
+        # server.properties).
         ip: ""
         
-        # Port to listen on
+        # Port to listen on.
         port: 4880

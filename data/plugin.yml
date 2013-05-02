@@ -1,6 +1,37 @@
 name: KMail
 main: com.kierdavis.kmail.KMail
-version: 0.1.21
+version: 0.1.22
+
 commands:
     kmail:
         description: KMail
+
+permissions:
+    kmail.command.*:
+        description: Gives access to all commands.
+        children:
+            kmail.command.help: true
+            kmail.command.send: true
+            kmail.command.send.remote: true
+            kmail.command.read: true
+            kmail.command.list: true
+    
+    kmail.command.help:
+        description: Gives access to view the builtin help.
+        default: true
+    
+    kmail.command.send:
+        description: Gives access to send mail.
+        default: true
+    
+    kmail.command.send.remote:
+        description: Gives access to send mail to remote servers.
+        default: true
+    
+    kmail.command.read:
+        description: Gives access to read mail.
+        default: true
+    
+    kmail.command.list:
+        description: Gives access to list/search mail.
+        default: true
