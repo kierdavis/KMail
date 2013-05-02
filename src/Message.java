@@ -110,6 +110,10 @@ public class Message implements Serializable {
         tags.remove(tag.toLowerCase());
     }
     
+    public Set<String> getTags() {
+        return tags;
+    }
+    
     public boolean isUnread() {
         return hasTag("unread");
     }

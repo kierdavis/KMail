@@ -1,8 +1,10 @@
 package com.kierdavis.kmail;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -99,9 +101,29 @@ public class Mailbox {
         save(file);
     }
     
-    public void save(File file) {
+    public void save(File file) throws IOException {
         if (!file.getParentFile().exists()) {
             file.getParentFile().mkdirs();
         }
+        
+        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+        Iterator<Message> it = iterator();
+        
+        while (it.hasNext()) {
+            Message msg = (Message) it.next();
+            Map<String, Object> m = new HashMap<String, Object>();
+            
+            m.put("src", msg.getSrcAddress().toString());
+            m.put("dest", msg.getDestAddress().toString());
+            m.put("body", msg.getBody());
+            m.put("sent", msg.getSentDate().getTime());
+            m.put("received", msg.getReceivedDate().getTime());
+            m.put("tags", new ArrayList<String>(msg.getTags()));
+            list.add(m);
+        }
+        
+        FileConfiguration cfg = new YamlConfiguration();
+        cfg.set("mail", list);
+        cfg.save(file);
     }
 }
