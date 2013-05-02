@@ -61,7 +61,7 @@ public class Mailbox {
             return null;
         }
         
-        Iterator<Map<String, Object>> it = list.iterator();
+        Iterator<Map> it = list.iterator();
         while (it.hasNext()) {
             Map<String, Object> m = (Map<String, Object>) it.next();
             Message msg = new Message();
