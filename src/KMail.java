@@ -112,7 +112,12 @@ public class KMail extends JavaPlugin {
             }
         }
         
-        mb.save(this, username);
+        try {
+            mb.save(this, username);
+        }
+        catch (IOException e) {
+            getLogger().info("Could not save mailbox: " + e.toString());
+        }
     }
     
     public synchronized void sendMessage(Message msg) {
