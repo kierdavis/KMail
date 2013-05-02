@@ -7,31 +7,31 @@ commands:
         description: KMail
 
 permissions:
-    kmail.command.*:
+    kmail.*:
         description: Gives access to all commands.
         children:
-            kmail.command.help: true
-            kmail.command.send: true
-            kmail.command.send.remote: true
-            kmail.command.read: true
-            kmail.command.list: true
+            kmail.help: true
+            kmail.send: true
+            kmail.send.remote: true
+            kmail.read: true
+            kmail.list: true
     
-    kmail.command.help:
+    kmail.help:
         description: Gives access to view the builtin help.
         default: true
     
-    kmail.command.send:
+    kmail.send:
         description: Gives access to send mail.
         default: true
     
-    kmail.command.send.remote:
+    kmail.send.remote:
         description: Gives access to send mail to remote servers.
         default: true
     
-    kmail.command.read:
+    kmail.read:
         description: Gives access to read mail.
         default: true
     
-    kmail.command.list:
+    kmail.list:
         description: Gives access to list/search mail.
         default: true

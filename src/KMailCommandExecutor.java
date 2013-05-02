@@ -47,8 +47,8 @@ public class KMailCommandExecutor implements CommandExecutor {
     }
     
     private boolean doHelp(CommandSender sender, String[] args) {
-        if (!sender.hasPermission("kmail.command.help")) {
-            sender.sendMessage("\247eYou don't have the required permission (kmail.command.help)");
+        if (!sender.hasPermission("kmail.help")) {
+            sender.sendMessage("\247eYou don't have the required permission (kmail.help)");
             return false;
         }
         
@@ -107,8 +107,8 @@ public class KMailCommandExecutor implements CommandExecutor {
     }
     
     private boolean doSend(CommandSender sender, String[] args) {
-        if (!sender.hasPermission("kmail.command.send")) {
-            sender.sendMessage("\247eYou don't have the required permission (kmail.command.send)");
+        if (!sender.hasPermission("kmail.send")) {
+            sender.sendMessage("\247eYou don't have the required permission (kmail.send)");
             return false;
         }
         
@@ -131,8 +131,8 @@ public class KMailCommandExecutor implements CommandExecutor {
         Address destAddress = new Address(args[0]);
         Message msg = new Message(srcAddress, destAddress);
         
-        if (destAddress.getHostname() != "local" && !sender.hasPermission("kmail.command.send.remote")) {
-            sender.sendMessage("\247eYou don't have the required permission (kmail.command.send.remote)");
+        if (destAddress.getHostname() != "local" && !sender.hasPermission("kmail.send.remote")) {
+            sender.sendMessage("\247eYou don't have the required permission (kmail.send.remote)");
             return false;
         }
         
@@ -171,8 +171,8 @@ public class KMailCommandExecutor implements CommandExecutor {
     }
     
     private boolean doRead(CommandSender sender, String[] args) {
-        if (!sender.hasPermission("kmail.command.read")) {
-            sender.sendMessage("\247eYou don't have the required permission (kmail.command.read)");
+        if (!sender.hasPermission("kmail.read")) {
+            sender.sendMessage("\247eYou don't have the required permission (kmail.read)");
             return false;
         }
         
@@ -194,8 +194,8 @@ public class KMailCommandExecutor implements CommandExecutor {
     }
     
     private boolean doList(CommandSender sender, String[] args) {
-        if (!sender.hasPermission("kmail.command.list")) {
-            sender.sendMessage("\247eYou don't have the required permission (kmail.command.list)");
+        if (!sender.hasPermission("kmail.list")) {
+            sender.sendMessage("\247eYou don't have the required permission (kmail.list)");
             return false;
         }
         
