@@ -90,8 +90,6 @@ public class KMailCommandExecutor implements CommandExecutor {
             sender.sendMessage("    \247e- The username of a player on the local server");
             sender.sendMessage("  \247a<username>\2472@\247a<server-addr>");
             sender.sendMessage("    \247e- A user on another server (\247a<server-addr>\247e is the same IP address/domain name used to connect to it from the Minecraft client)");
-            sender.sendMessage("  \2472*");
-            sender.sendMessage("    \247e- All players on the local server");
             return true;
         }
         
