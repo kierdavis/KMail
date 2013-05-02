@@ -49,6 +49,15 @@ public class KMail extends JavaPlugin {
         
         getLogger().info("Stopping web server");
         server.stop();
+        
+        // Save mailboxes
+        getLogger().info("Saving mailboxes");
+        Iterator<String> it = mailboxes.keySet().iterator();
+        
+        while (it.hasNext()) {
+            String username = (String) it.next();
+            saveMailbox(username);
+        }
     }
     
     public String getDefaultLocalHostname() {
@@ -94,10 +103,18 @@ public class KMail extends JavaPlugin {
         return mb;
     }
     
+    public void saveMailbox(String username) {
+        try {
+            getMailbox(username).save(this, username);
+        }
+        catch (IOException e) {
+            getLogger().info("Could not save mailbox: " + e.toString());
+        }
+    }
+    
     public void receiveMessage(Message msg) {
         String username = msg.getDestAddress().getUsername();
-        Mailbox mb = getMailbox(username);
-        mb.add(msg);
+        getMailbox(username).add(msg);
         
         if (username.equalsIgnoreCase("CONSOLE")) {
             getLogger().info("\247eIncoming mail from \247a" + msg.getSrcAddress().toString() + "\247e.");
@@ -112,12 +129,7 @@ public class KMail extends JavaPlugin {
             }
         }
         
-        try {
-            mb.save(this, username);
-        }
-        catch (IOException e) {
-            getLogger().info("Could not save mailbox: " + e.toString());
-        }
+        saveMailbox(username);
     }
     
     public synchronized void sendMessage(Message msg) {
