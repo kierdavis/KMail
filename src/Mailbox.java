@@ -55,7 +55,7 @@ public class Mailbox {
         Mailbox mb = new Mailbox();
         
         FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
-        List<Map<String, String>> list = cfg.getMapList("mail");
+        List<Map> list = cfg.getMapList("mail");
         
         if (list == null) {
             return null;
