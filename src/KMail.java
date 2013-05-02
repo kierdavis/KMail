@@ -3,6 +3,7 @@ package com.kierdavis.kmail;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
