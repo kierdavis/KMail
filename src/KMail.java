@@ -96,7 +96,7 @@ public class KMail extends JavaPlugin {
     
     public void receiveMessage(Message msg) {
         String username = msg.getDestAddress().getUsername();
-        Mailbox mb = getMailbox(username)
+        Mailbox mb = getMailbox(username);
         mb.add(msg);
         
         if (username.equalsIgnoreCase("CONSOLE")) {
