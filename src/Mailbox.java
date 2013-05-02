@@ -1,10 +1,14 @@
 package com.kierdavis.kmail;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Mailbox {
     private List<Message> messages;
@@ -65,7 +69,7 @@ public class Mailbox {
             if (m.containsKey("src"))
                 msg.setSrcAddress(new Address((String) m.get("src")));
             if (m.containsKey("dest"))
-                msg.setDestAddres(new Address((String) m.get("dest")));
+                msg.setDestAddress(new Address((String) m.get("dest")));
             if (m.containsKey("body"))
                 msg.setBody((String) m.get("body"));
             if (m.containsKey("sent"))
