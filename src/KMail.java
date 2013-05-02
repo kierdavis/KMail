@@ -110,6 +110,8 @@ public class KMail extends JavaPlugin {
                 player.sendMessage("\247eType \2474/kmail read\247e to view it.");
             }
         }
+        
+        mailbox.save(this, username);
     }
     
     public synchronized void sendMessage(Message msg) {

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +41,25 @@ public class Mailbox {
         }
         
         return (Iterator<Message>) (new SearchIterator(messages.iterator(), criteria));
+    }
+    
+    public int size() {
+        return messages.size();
+    }
+    
+    public int numUnread() {
+        Set<SearchCriteria> criteria = new HashSet<SearchCriteria>();
+        criteria.add(new TagSearchCriteria("unread"));
+        
+        Iterator<Message> it = search(criteria);
+        int n = 0;
+        
+        while (it.hasNext()) {
+            it.next();
+            n++;
+        }
+        
+        return n;
     }
     
     public static Mailbox load(KMail plugin, String player) {
