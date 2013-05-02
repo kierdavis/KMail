@@ -28,13 +28,8 @@ public class WebHandler implements HttpHandler {
             is.close();
         }
         
-        catch (IOException e) {
-            // Pass
-        }
-        
-        catch (ClassNotFoundException e) {
-            // Pass
-        }
+        catch (IOException e) {}
+        catch (ClassNotFoundException e) {}
         
         if (msg == null) {
             response = "Could not parse request body.\r\n";

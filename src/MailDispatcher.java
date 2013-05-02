@@ -17,9 +17,7 @@ import java.net.URL;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class MailDispatcher implements Runnable {
-    public static final int MAX_RETRIES = 3;
-    
+public class MailDispatcher implements Runnable {    
     private KMail plugin;
     private Queue<Message> queue;
     private boolean stopFlag;
@@ -104,7 +102,7 @@ public class MailDispatcher implements Runnable {
             
             URL url = new URL("http://" + hostname + "/");
             conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(15000);
+            conn.setReadTimeout(plugin.getClientTimeout() * 1000);
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/x-java-serialized-object");
             conn.setRequestProperty("Content-Length", Integer.toString(requestBytes.length));
@@ -148,14 +146,14 @@ public class MailDispatcher implements Runnable {
         if (!success) {
             msg.incRetries();
             
-            if (msg.getRetries() == MAX_RETRIES) {
+            if (msg.getRetries() >= plugin.getNumRetries()) {
                 plugin.getLogger().severe("Sending failed permanently");
                 
                 Address srcAddr = new Address("CONSOLE", plugin.getLocalHostname());
                 Message replyMsg = new Message(srcAddr, msg.getSrcAddress());
                 
                 StringBuilder bodyBuilder = new StringBuilder();
-                bodyBuilder.append("Sending of the following message failed after ").append(MAX_RETRIES).append(" attempts:\n");
+                bodyBuilder.append("Sending of the following message failed after ").append(plugin.getNumRetries()).append(" attempts:\n");
                 bodyBuilder.append("  From: ").append(msg.getSrcAddress().toString()).append("\n");
                 bodyBuilder.append("  To: ").append(msg.getDestAddress().toString()).append("\n");
                 bodyBuilder.append("  Sent: ").append(msg.getSentDate().toString()).append("\n");

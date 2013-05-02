@@ -14,15 +14,22 @@ public class KMail extends JavaPlugin {
     private WebServer server;
     
     public void onEnable() {
+        // Ensure config.yml exists
+        saveDefaultConfig();
+        
+        // Initialise variables
         partialMessages = new HashMap<Player, PartialMessage>();
         mailboxes = new HashMap<String, Mailbox>();
         dispatcher = new MailDispatcher(this);
         server = new WebServer(this);
         
+        // Register event listeners
         new PartialMessageListener(this);
         
+        // Register commands
         getCommand("kmail").setExecutor(new KMailCommandExecutor(this));
         
+        // Start out threads
         getLogger().info("Starting mail dispatcher");
         dispatcher.start();
         
@@ -36,6 +43,7 @@ public class KMail extends JavaPlugin {
     }
     
     public void onDisable() {
+        // Stop our threads
         getLogger().info("Stopping mail dispatcher");
         dispatcher.stop();
         
@@ -43,8 +51,32 @@ public class KMail extends JavaPlugin {
         server.stop();
     }
     
+    public String getDefaultLocalHostname() {
+        return getServer().getServerName().toLowerCase();
+    }
+    
+    public String getDefaultServerIP() {
+        return getServer().getIp();
+    }
+    
     public String getLocalHostname() {
-        return "localhost";
+        return getConfig().getString("local.hostname", getDefaultLocalHostname());
+    }
+    
+    public int getClientTimeout() {
+        return getConfig().getInt("remote.client.timeout", 15);
+    }
+    
+    public int getNumRetries() {
+        return getConfig().getInt("remote.client.retries", 3);
+    }
+    
+    public String getServerIP() {
+        return getConfig().getString("remote.server.ip", getDefaultServerIP());
+    }
+    
+    public int getServerPort() {
+        return getConfig().getInt("remote.server.port", 4880);
     }
     
     public Mailbox getMailbox(String username) {
@@ -63,14 +95,14 @@ public class KMail extends JavaPlugin {
         getMailbox(username).add(msg);
         
         if (username.equalsIgnoreCase("CONSOLE")) {
-            getLogger().info("Incoming mail from " + msg.getSrcAddress().toString() + ".");
-            getLogger().info("Type 'kmail read' to view it.");
+            getLogger().info("\247eIncoming mail from \247a" + msg.getSrcAddress().toString() + "\247e.");
+            getLogger().info("\247eType \2474kmail read\247e to view it.");
         }
         
         else {
             Player player = getServer().getPlayer(username);
             if (player != null) {
-                player.sendMessage("\247eIncoming mail from " + msg.getSrcAddress().toString() + ".");
+                player.sendMessage("\247eIncoming mail from \247a" + msg.getSrcAddress().toString() + "\247e.");
                 player.sendMessage("\247eType \2474/kmail read\247e to view it.");
             }
         }

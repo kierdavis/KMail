@@ -17,12 +17,15 @@ public class WebServer {
             stop();
         }
         
-        server = HttpServer.create(new InetSocketAddress(4880), 0);
+        String ip = plugin.getServerIP();
+        int port = plugin.getServerPort();
+        
+        server = HttpServer.create(new InetSocketAddress(ip, port), 0);
         server.createContext("/", new WebHandler(plugin));
         server.setExecutor(null);
         server.start();
         
-        plugin.getLogger().info("Listening on *:4880");
+        plugin.getLogger().info("Listening on " + ip + ":" + Integer.toString(port));
     }
     
     public void stop() {
