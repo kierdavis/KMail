@@ -83,8 +83,12 @@ public class KMail extends JavaPlugin {
         Mailbox mb = mailboxes.get(username.toLowerCase());
         
         if (mb == null) {
-            mb = new Mailbox();
-            mailboxes.put(username, mb);
+            mb = Mailbox.load(username);
+            if (mb == null) {
+                mb = new Mailbox();
+            }
+            
+            mailboxes.put(username.toLowerCase(), mb);
         }
         
         return mb;
