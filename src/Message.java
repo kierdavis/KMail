@@ -13,8 +13,8 @@ public class Message implements Serializable {
     private Date sentDate;
     
     // Only used internally
-    private transient long localID;
     private transient Date receivedDate;
+    private transient long localID;
     private transient Set<String> tags;
     private transient int numRetries;
     
@@ -24,17 +24,23 @@ public class Message implements Serializable {
         return nextLocalID;
     }
     
-    public Message(Address src, Address dest) {
-        this.src = src;
-        this.dest = dest;
-        this.body = "";
-        this.sentDate = null;
-        this.localID = 0;
-        this.receivedDate = null;
-        this.tags = null;
-        this.numRetries = 0;
+    public Message() {
+        src = null;
+        dest = null;
+        body = "";
+        sentDate = null;
+        receivedDate = null;
+        localID = 0;
+        tags = null;
+        numRetries = 0;
         
         assignLocalID();
+    }
+    
+    public Message(Address src, Address dest) {
+        this();
+        setSrcAddress(src);
+        setDestAddress(dest);
     }
     
     public void initReceived() {
