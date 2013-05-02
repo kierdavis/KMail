@@ -25,7 +25,11 @@ public class Mailbox {
     }
     
     public void add(Message msg) {
-        msg.initReceived();
+        messages.add(msg);
+    }
+    
+    public void receive(Message msg) {
+        msg.markUnread();
         msg.setReceivedDate(new Date());
         
         messages.add(msg);

@@ -31,7 +31,7 @@ public class Message implements Serializable {
         sentDate = null;
         receivedDate = null;
         localID = 0;
-        tags = null;
+        tags = new HashSet<String>();
         numRetries = 0;
         
         assignLocalID();
@@ -41,13 +41,6 @@ public class Message implements Serializable {
         this();
         setSrcAddress(src);
         setDestAddress(dest);
-    }
-    
-    public void initReceived() {
-        this.receivedDate = null;
-        this.tags = new HashSet<String>();
-        
-        markUnread();
     }
     
     public final long getLocalID() {

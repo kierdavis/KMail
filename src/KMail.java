@@ -115,7 +115,7 @@ public class KMail extends JavaPlugin {
     
     public void receiveMessage(Message msg) {
         String username = msg.getDestAddress().getUsername();
-        getMailbox(username).add(msg);
+        getMailbox(username).receive(msg);
         
         if (username.equalsIgnoreCase("CONSOLE")) {
             getLogger().info("\247eIncoming mail from \247a" + msg.getSrcAddress().toString() + "\247e.");
