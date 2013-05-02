@@ -55,13 +55,13 @@ public class Mailbox {
         Mailbox mb = new Mailbox();
         
         FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
-        List<Map> list = cfg.getMapList("mail");
+        List<Map<?,?>> list = cfg.getMapList("mail");
         
         if (list == null) {
             return null;
         }
         
-        Iterator<Map> it = list.iterator();
+        Iterator<Map<?, ?>> it = list.iterator();
         while (it.hasNext()) {
             Map<String, Object> m = (Map<String, Object>) it.next();
             Message msg = new Message();
