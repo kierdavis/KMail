@@ -26,7 +26,7 @@ public class KMail extends JavaPlugin {
         
         // Preload mailboxes of all online players
         Player[] players = getServer().getOnlinePlayers();
-        getLogger().info("Preloading " + players.length.toString() + " mailboxes");
+        getLogger().info("Preloading " + Integer.toString(players.length) + " mailboxes");
         for (int i = 0; i < players.length; i++) {
             getMailbox(players[i].getName());
         }

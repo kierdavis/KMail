@@ -201,7 +201,7 @@ public class KMailCommandExecutor implements CommandExecutor {
             }
         }
         
-        displayMessage(msg);
+        displayMessage(sender, msg);
         
         if (msg.isUnread()) {
             msg.markRead();
