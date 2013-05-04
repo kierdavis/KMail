@@ -369,7 +369,7 @@ public class KMailCommandExecutor implements CommandExecutor {
         }
         
         Mailbox mb = plugin.getMailbox(getUsername(sender));
-        Message msg;
+        Message msg = null;
         
         if (args.length >= 1) {
             try {
@@ -406,7 +406,7 @@ public class KMailCommandExecutor implements CommandExecutor {
         }
         
         Mailbox mb = plugin.getMailbox(getUsername(sender));
-        Message msg;
+        Message msg = null;
         
         if (args.length >= 1) {
             try {
