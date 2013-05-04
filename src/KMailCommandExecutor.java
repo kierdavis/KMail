@@ -38,12 +38,16 @@ public class KMailCommandExecutor implements CommandExecutor {
             return doSend(sender, args);
         }
         
-        if (subcmd.equalsIgnoreCase("read")) {
-            return doRead(sender, args);
-        }
-        
         if (subcmd.equalsIgnoreCase("list")) {
             return doList(sender, args);
+        }
+        
+        if (subcmd.equalsIgnoreCase("select")) {
+            return doSelect(sender, args);
+        }
+        
+        if (subcmd.equalsIgnoreCase("read")) {
+            return doRead(sender, args);
         }
         
         sender.sendMessage("Invalid subcommand: " + subcmd);
@@ -59,8 +63,9 @@ public class KMailCommandExecutor implements CommandExecutor {
         if (args.length < 1) {
             sender.sendMessage("\247eKMail Help: (\247c<required> [optional]\247e)");
             sender.sendMessage("  \2474/kmail send \247c<address> [message]");
-            sender.sendMessage("  \2474/kmail read \247c[id]");
             sender.sendMessage("  \2474/kmail list \247c[criteria] [page]");
+            sender.sendMessage("  \2474/kmail select \247c<id>");
+            sender.sendMessage("  \2474/kmail read \247c[id]");
             sender.sendMessage("");
             sender.sendMessage("\247eDo \2474/kmail help \247c<command>\247e for help on any subcommand.");
             sender.sendMessage("\247eOther help topics: addresses");
@@ -76,16 +81,22 @@ public class KMailCommandExecutor implements CommandExecutor {
             return true;
         }
         
-        if (topic.equalsIgnoreCase("read")) {
-            sender.sendMessage("\2474/kmail read \247c[id]");
-            sender.sendMessage("\247eDisplays the message numbered \247[id]\247e (or the oldest unread message if omitted), selects it and marks it as read.");
-            return true;
-        }
-        
         if (topic.equalsIgnoreCase("list")) {
             sender.sendMessage("\2474/kmail list \247c[criteria] [page]");
             sender.sendMessage("\247eLists messages with the given criteria.");
             sender.sendMessage("\247eSee also: \2474/kmail help criteria");
+            return true;
+        }
+        
+        if (topic.equalsIgnoreCase("select")) {
+            sender.sendMessage("\2474/kmail select \247c[id]");
+            sender.sendMessage("\247eSelects a message identified by its local ID (the number at the start of each line output by \2474/kmail list\247e).");
+            return true;
+        }
+        
+        if (topic.equalsIgnoreCase("read")) {
+            sender.sendMessage("\2474/kmail read \247c[id]");
+            sender.sendMessage("\247eDisplays the message numbered \247[id]\247e (or the oldest unread message if omitted), selects it and marks it as read.");
             return true;
         }
         
@@ -173,46 +184,6 @@ public class KMailCommandExecutor implements CommandExecutor {
         }
     }
     
-    private boolean doRead(CommandSender sender, String[] args) {
-        if (!sender.hasPermission("kmail.read")) {
-            sender.sendMessage("\247eYou don't have the required permission (kmail.read)");
-            return false;
-        }
-        
-        Mailbox mb = plugin.getMailbox(getUsername(sender));
-        Message msg;
-        
-        if (args.length >= 1) {
-            long id = Long.parseLong(args[0]);
-            msg = mb.getByID(id);
-            
-            if (msg == null) {
-                sender.sendMessage("\247eNo message with that ID in your mailbox.");
-                return false;
-            }
-        }
-        
-        else {
-            Iterator<Message> it = mb.searchTag("unread");
-            if (it.hasNext()) {
-                msg = it.next();
-            }
-            else {
-                sender.sendMessage("\247eNo unread messages.");
-                return true;
-            }
-        }
-        
-        if (msg.isUnread()) {
-            msg.markRead();
-        }
-        
-        displayMessage(sender, msg);
-        selected.put(sender, msg);
-        
-        return true;
-    }
-    
     private boolean doList(CommandSender sender, String[] args) {
         if (!sender.hasPermission("kmail.list")) {
             sender.sendMessage("\247eYou don't have the required permission (kmail.list)");
@@ -273,6 +244,73 @@ public class KMailCommandExecutor implements CommandExecutor {
         return true;
     }
     
+    private boolean doSelect(CommandSender sender, String[] args) {
+        if (!sender.hasPermission("kmail.select")) {
+            sender.sendMessage("\247eYou don't have the required permission (kmail.select)");
+            return false;
+        }
+        
+        if (args.length < 1) {
+            sender.sendMessage("\247eUsage: \2474/kmail select \247c<id>");
+            sender.sendMessage("\247eSee \2474/kmail help select\247e for more info.");
+            return false;
+        }
+        
+        long id = Long.parseLong(args[0]);
+        Mailbox mb = plugin.getMailbox(getUsername(sender));
+        Message msg = mb.getByID(id);
+        
+        if (msg == null) {
+            sender.sendMessage("\247eNo message with that ID in your mailbox.");
+            return false;
+        }
+        
+        selected.put(sender, msg);
+        sender.sendMessage("\247eMessage selected.");
+        
+        return true;
+    }
+    
+    private boolean doRead(CommandSender sender, String[] args) {
+        if (!sender.hasPermission("kmail.read")) {
+            sender.sendMessage("\247eYou don't have the required permission (kmail.read)");
+            return false;
+        }
+        
+        Mailbox mb = plugin.getMailbox(getUsername(sender));
+        Message msg;
+        
+        if (args.length >= 1) {
+            long id = Long.parseLong(args[0]);
+            msg = mb.getByID(id);
+            
+            if (msg == null) {
+                sender.sendMessage("\247eNo message with that ID in your mailbox.");
+                return false;
+            }
+        }
+        
+        else {
+            Iterator<Message> it = mb.searchTag("unread");
+            if (it.hasNext()) {
+                msg = it.next();
+            }
+            else {
+                sender.sendMessage("\247eNo unread messages.");
+                return true;
+            }
+        }
+        
+        if (msg.isUnread()) {
+            msg.markRead();
+        }
+        
+        displayMessage(sender, msg);
+        selected.put(sender, msg);
+        
+        return true;
+    }
+    
     private String getUsername(CommandSender sender) {
         if (sender instanceof Player) {
             return ((Player) sender).getName();
@@ -303,7 +341,7 @@ public class KMailCommandExecutor implements CommandExecutor {
         StringBuilder b = new StringBuilder();
         
         if (selected.get(sender) == msg) {
-            b.append("\247e->");
+            b.append("\247d->");
         }
         else {
             b.append("   ");
