@@ -317,7 +317,7 @@ public class KMailCommandExecutor implements CommandExecutor {
     }
     
     private void displayMessage(CommandSender sender, Message msg) {
-        tagStr = getTagStr(msg);
+        String tagStr = getTagStr(msg);
         
         sender.sendMessage("\247e================================");
         sender.sendMessage("\247eFrom: \247a" + msg.getSrcAddress().toString());
