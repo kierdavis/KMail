@@ -96,7 +96,7 @@ public class KMailCommandExecutor implements CommandExecutor {
         
         if (topic.equalsIgnoreCase("read")) {
             sender.sendMessage("\2474/kmail read \247c[id]");
-            sender.sendMessage("\247eDisplays the message numbered \247[id]\247e (or the oldest unread message if omitted), selects it and marks it as read.");
+            sender.sendMessage("\247eDisplays a message identified by its local ID (or the selected message if omitted) and marks it as read.");
             return true;
         }
         
@@ -291,13 +291,10 @@ public class KMailCommandExecutor implements CommandExecutor {
         }
         
         else {
-            Iterator<Message> it = mb.searchTag("unread");
-            if (it.hasNext()) {
-                msg = it.next();
-            }
-            else {
-                sender.sendMessage("\247eNo unread messages.");
-                return true;
+            msg = selected.get(sender);
+            if (msg == null) {
+                sender.sendMessage("\247eNo message selected.");
+                return false;
             }
         }
         
@@ -306,7 +303,6 @@ public class KMailCommandExecutor implements CommandExecutor {
         }
         
         displayMessage(sender, msg);
-        selected.put(sender, msg);
         
         return true;
     }
@@ -341,7 +337,7 @@ public class KMailCommandExecutor implements CommandExecutor {
         StringBuilder b = new StringBuilder();
         
         if (selected.get(sender) == msg) {
-            b.append("\247d->");
+            b.append("\2473->");
         }
         else {
             b.append("   ");
