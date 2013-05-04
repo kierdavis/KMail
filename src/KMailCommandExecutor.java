@@ -394,9 +394,17 @@ public class KMailCommandExecutor implements CommandExecutor {
             }
         }
         
+        if (args.length < 1) {
+            sender.sendMessage("\247eUsage: \2474/kmail tag \247c[id] <tags...>");
+            sender.sendMessage("\247eSee \2474/kmail help tag\247e for more info.");
+            return false;
+        }
+        
         for (int i = 0; i < args.length; i++) {
             msg.addTag(args[i]);
         }
+        
+        sender.sendMessage("\247e" + Integer.toString(args.length) + " tags added.");
         
         return true;
     }
@@ -433,9 +441,17 @@ public class KMailCommandExecutor implements CommandExecutor {
             }
         }
         
+        if (args.length < 1) {
+            sender.sendMessage("\247eUsage: \2474/kmail untag \247c[id] <tags...>");
+            sender.sendMessage("\247eSee \2474/kmail help untag\247e for more info.");
+            return false;
+        }
+        
         for (int i = 0; i < args.length; i++) {
             msg.removeTag(args[i]);
         }
+        
+        sender.sendMessage("\247e" + Integer.toString(args.length) + " tags removed.");
         
         return true;
     }
