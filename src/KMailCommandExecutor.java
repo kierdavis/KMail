@@ -15,9 +15,11 @@ public class KMailCommandExecutor implements CommandExecutor {
     public static final int ITEMS_PER_PAGE = 10;
     
     private KMail plugin;
+    private Map<CommandSender, Message> selected;
     
     public KMailCommandExecutor(KMail plugin) {
         this.plugin = plugin;
+        this.selected = new HashMap<CommandSender, Message>();
     }
     
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -201,11 +203,12 @@ public class KMailCommandExecutor implements CommandExecutor {
             }
         }
         
-        displayMessage(sender, msg);
-        
         if (msg.isUnread()) {
             msg.markRead();
         }
+        
+        displayMessage(sender, msg);
+        selected.put(sender, msg);
         
         return true;
     }
@@ -299,7 +302,14 @@ public class KMailCommandExecutor implements CommandExecutor {
         
         StringBuilder b = new StringBuilder();
         
-        b.append("\247c  ");
+        if (selected.get(sender) == msg) {
+            b.append("\247e->");
+        }
+        else {
+            b.append("   ");
+        }
+        
+        b.append("\247c");
         b.append(msg.getLocalID());
         
         if (!msg.isRead()) {
