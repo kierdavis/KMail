@@ -324,7 +324,7 @@ public class KMailCommandExecutor implements CommandExecutor {
         sender.sendMessage("\247eTo: \247a" + msg.getDestAddress().toString());
         sender.sendMessage("\247eSent: \247c" + msg.getSentDate().toString());
         sender.sendMessage("\247eRecieved: \247c" + msg.getReceivedDate().toString());
-        sender.sendMessage("\247eTags: " + tagStr)
+        sender.sendMessage("\247eTags: " + tagStr);
         sender.sendMessage("");
         sender.sendMessage(msg.getBody());
         sender.sendMessage("\247e================================");
