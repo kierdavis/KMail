@@ -72,7 +72,7 @@ public class Mailbox {
     }
     
     public int numUnread() {
-        Iterator<Message> = searchTag("unread");
+        Iterator<Message> it = searchTag("unread");
         int n = 0;
         
         while (it.hasNext()) {
