@@ -397,6 +397,8 @@ public class KMailCommandExecutor implements CommandExecutor {
         for (int i = 0; i < args.length; i++) {
             msg.addTag(args[i]);
         }
+        
+        return true;
     }
     
     private boolean doUntag(CommandSender sender, String[] args) {
@@ -434,6 +436,8 @@ public class KMailCommandExecutor implements CommandExecutor {
         for (int i = 0; i < args.length; i++) {
             msg.removeTag(args[i]);
         }
+        
+        return true;
     }
     
     private String getUsername(CommandSender sender) {
