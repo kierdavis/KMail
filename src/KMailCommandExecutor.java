@@ -317,11 +317,14 @@ public class KMailCommandExecutor implements CommandExecutor {
     }
     
     private void displayMessage(CommandSender sender, Message msg) {
+        tagStr = getTagStr(msg);
+        
         sender.sendMessage("\247e================================");
         sender.sendMessage("\247eFrom: \247a" + msg.getSrcAddress().toString());
         sender.sendMessage("\247eTo: \247a" + msg.getDestAddress().toString());
         sender.sendMessage("\247eSent: \247c" + msg.getSentDate().toString());
         sender.sendMessage("\247eRecieved: \247c" + msg.getReceivedDate().toString());
+        sender.sendMessage("\247eTags: " + tagStr)
         sender.sendMessage("");
         sender.sendMessage(msg.getBody());
         sender.sendMessage("\247e================================");
@@ -372,5 +375,21 @@ public class KMailCommandExecutor implements CommandExecutor {
         default:
             return null;
         }
+    }
+    
+    public String getTagStr(Message msg) {
+        Iterator<String> it = msg.getTags().iterator();
+        if (!it.hasNext()) {
+            return "None";
+        }
+        
+        StringBuilder b = new StringBuilder();
+        b.append("\247a").append((String) it.next());
+        
+        while (it.hasNext()) {
+            b.append("\247e, \247a").append((String) it.next());
+        }
+        
+        return b.toString();
     }
 }
