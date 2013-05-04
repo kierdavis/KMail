@@ -259,7 +259,16 @@ public class KMailCommandExecutor implements CommandExecutor {
             return false;
         }
         
-        long id = Long.parseLong(args[0]);
+        long id;
+        try {
+            id = Long.parseLong(args[0]);
+        }
+        catch (NumberFormatException e) {
+            sender.sendMessage("\247eBad number format.");
+            sender.sendMessage("\247eSee \2474/kmail help select\247e for more info.");
+            return false;
+        }
+        
         Mailbox mb = plugin.getMailbox(getUsername(sender));
         Message msg = mb.getByID(id);
         
@@ -284,7 +293,7 @@ public class KMailCommandExecutor implements CommandExecutor {
         Message msg;
         
         if (args.length >= 1) {
-            if (args[0] == "next") {
+            if (args[0].equalsIgnoreCase("next")) {
                 Iterator<Message> it = mb.searchTag("unread");
                 if (it.hasNext()) {
                     msg = it.next();
@@ -296,7 +305,16 @@ public class KMailCommandExecutor implements CommandExecutor {
             }
             
             else {
-                long id = Long.parseLong(args[0]);
+                long id;
+                try {
+                    id = Long.parseLong(args[0]);
+                }
+                catch (NumberFormatException e) {
+                    sender.sendMessage("\247eBad number format.");
+                    sender.sendMessage("\247eSee \2474/kmail help read\247e for more info.");
+                    return false;
+                }
+        
                 msg = mb.getByID(id);
                 
                 if (msg == null) {
