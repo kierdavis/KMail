@@ -50,6 +50,14 @@ public class KMailCommandExecutor implements CommandExecutor {
             return doRead(sender, args);
         }
         
+        if (subcmd.equalsIgnoreCase("tag")) {
+            return doTag(sender, args);
+        }
+        
+        if (subcmd.equalsIgnoreCase("untag")) {
+            return doUntag(sender, args);
+        }
+        
         sender.sendMessage("Invalid subcommand: " + subcmd);
         return false;
     }
@@ -67,6 +75,8 @@ public class KMailCommandExecutor implements CommandExecutor {
             sender.sendMessage("  \2474/kmail select \247c<id>");
             sender.sendMessage("  \2474/kmail read \247c[id]");
             sender.sendMessage("  \2474/kmail read next");
+            sender.sendMessage("  \2474/kmail tag \247c[id] <tags...>");
+            sender.sendMessage("  \2474/kmail untag \247c[id] <tags...>");
             sender.sendMessage("");
             sender.sendMessage("\247eDo \2474/kmail help \247c<command>\247e for help on any subcommand.");
             sender.sendMessage("\247eOther help topics: addresses");
@@ -100,6 +110,18 @@ public class KMailCommandExecutor implements CommandExecutor {
             sender.sendMessage("\247eDisplays a message identified by its local ID (or the selected message if omitted) and marks it as read.");
             sender.sendMessage("\2474/kmail read next");
             sender.sendMessage("\247eDisplays the first unread message and marks it as read.");
+            return true;
+        }
+        
+        if (topic.equalsIgnoreCase("tag")) {
+            sender.sendMessage("\2474/kmail tag \247c[id] <tags...>");
+            sender.sendMessage("\247eAdds the specified tags to the message identified by its local ID (or the selected message if omitted)");
+            return true;
+        }
+        
+        if (topic.equalsIgnoreCase("untag")) {
+            sender.sendMessage("\2474/kmail untag \247c[id] <tags...>");
+            sender.sendMessage("\247eRemoves the specified tags from the message identified by its local ID (or the selected message if omitted)");
             return true;
         }
         
@@ -316,7 +338,6 @@ public class KMailCommandExecutor implements CommandExecutor {
                 }
         
                 msg = mb.getByID(id);
-                
                 if (msg == null) {
                     sender.sendMessage("\247eNo message with that ID in your mailbox.");
                     return false;
@@ -339,6 +360,80 @@ public class KMailCommandExecutor implements CommandExecutor {
         displayMessage(sender, msg);
         
         return true;
+    }
+    
+    private boolean doTag(CommandSender sender, String[] args) {
+        if (!sender.hasPermission("kmail.tag")) {
+            sender.sendMessage("\247eYou don't have the required permission (kmail.tag)");
+            return false;
+        }
+        
+        Mailbox mb = plugin.getMailbox(getUsername(sender));
+        Message msg;
+        
+        if (args.length >= 1) {
+            try {
+                long id = Long.parseLong(args[0]);
+                msg = mb.getByID(id);
+                if (msg == null) {
+                    sender.sendMessage("\247eNo message with that ID in your mailbox.");
+                    return false;
+                }
+                
+                args = Arrays.copyOfRange(args, 1, args.length);
+            }
+            
+            catch (NumberFormatException e) {}
+        }
+        
+        if (msg == null) {
+            msg = selected.get(sender);
+            if (msg == null) {
+                sender.sendMessage("\247eNo message selected.");
+                return false;
+            }
+        }
+        
+        for (int i = 0; i < args.length; i++) {
+            msg.addTag(args[i]);
+        }
+    }
+    
+    private boolean doUntag(CommandSender sender, String[] args) {
+        if (!sender.hasPermission("kmail.tag")) {
+            sender.sendMessage("\247eYou don't have the required permission (kmail.tag)");
+            return false;
+        }
+        
+        Mailbox mb = plugin.getMailbox(getUsername(sender));
+        Message msg;
+        
+        if (args.length >= 1) {
+            try {
+                long id = Long.parseLong(args[0]);
+                msg = mb.getByID(id);
+                if (msg == null) {
+                    sender.sendMessage("\247eNo message with that ID in your mailbox.");
+                    return false;
+                }
+                
+                args = Arrays.copyOfRange(args, 1, args.length);
+            }
+            
+            catch (NumberFormatException e) {}
+        }
+        
+        if (msg == null) {
+            msg = selected.get(sender);
+            if (msg == null) {
+                sender.sendMessage("\247eNo message selected.");
+                return false;
+            }
+        }
+        
+        for (int i = 0; i < args.length; i++) {
+            msg.removeTag(args[i]);
+        }
     }
     
     private String getUsername(CommandSender sender) {

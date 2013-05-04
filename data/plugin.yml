@@ -1,6 +1,6 @@
 name: KMail
 main: com.kierdavis.kmail.KMail
-version: 0.2.5
+version: 0.2.6
 
 commands:
     kmail:
@@ -16,6 +16,7 @@ permissions:
             kmail.list: true
             kmail.select: true
             kmail.read: true
+            kmail.tag: true
     
     kmail.help:
         description: Gives access to view the builtin help.
@@ -30,7 +31,7 @@ permissions:
         default: true
     
     kmail.list:
-        description: Gives access to list/search mail.
+        description: Gives access to list and search mail.
         default: true
     
     kmail.select:
@@ -39,4 +40,8 @@ permissions:
     
     kmail.read:
         description: Gives access to read mail.
+        default: true
+    
+    kmail.tag:
+        description: Gives access to tag and untag messages.
         default: true
