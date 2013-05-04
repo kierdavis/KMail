@@ -66,6 +66,7 @@ public class KMailCommandExecutor implements CommandExecutor {
             sender.sendMessage("  \2474/kmail list \247c[criteria] [page]");
             sender.sendMessage("  \2474/kmail select \247c<id>");
             sender.sendMessage("  \2474/kmail read \247c[id]");
+            sender.sendMessage("  \2474/kmail read next");
             sender.sendMessage("");
             sender.sendMessage("\247eDo \2474/kmail help \247c<command>\247e for help on any subcommand.");
             sender.sendMessage("\247eOther help topics: addresses");
@@ -97,6 +98,8 @@ public class KMailCommandExecutor implements CommandExecutor {
         if (topic.equalsIgnoreCase("read")) {
             sender.sendMessage("\2474/kmail read \247c[id]");
             sender.sendMessage("\247eDisplays a message identified by its local ID (or the selected message if omitted) and marks it as read.");
+            sender.sendMessage("\2474/kmail read next");
+            sender.sendMessage("\247eDisplays the first unread message and marks it as read.");
             return true;
         }
         
@@ -281,12 +284,25 @@ public class KMailCommandExecutor implements CommandExecutor {
         Message msg;
         
         if (args.length >= 1) {
-            long id = Long.parseLong(args[0]);
-            msg = mb.getByID(id);
+            if (args[0] == "next") {
+                Iterator<Message> it = mb.searchTag("unread");
+                if (it.hasNext()) {
+                    msg = it.next();
+                }
+                else {
+                    sender.sendMessage("\247eNo unread messages.");
+                    return false;
+                }
+            }
             
-            if (msg == null) {
-                sender.sendMessage("\247eNo message with that ID in your mailbox.");
-                return false;
+            else {
+                long id = Long.parseLong(args[0]);
+                msg = mb.getByID(id);
+                
+                if (msg == null) {
+                    sender.sendMessage("\247eNo message with that ID in your mailbox.");
+                    return false;
+                }
             }
         }
         
