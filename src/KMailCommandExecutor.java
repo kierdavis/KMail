@@ -1,8 +1,10 @@
 package com.kierdavis.kmail;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -55,7 +57,8 @@ public class KMailCommandExecutor implements CommandExecutor {
         if (args.length < 1) {
             sender.sendMessage("\247eKMail Help: (\247c<required> [optional]\247e)");
             sender.sendMessage("  \2474/kmail send \247c<address> [message]");
-            sender.sendMessage("  \2474/kmail read");
+            sender.sendMessage("  \2474/kmail read \247c[id]");
+            sender.sendMessage("  \2474/kmail list \247c[criteria] [page]");
             sender.sendMessage("");
             sender.sendMessage("\247eDo \2474/kmail help \247c<command>\247e for help on any subcommand.");
             sender.sendMessage("\247eOther help topics: addresses");
@@ -72,8 +75,8 @@ public class KMailCommandExecutor implements CommandExecutor {
         }
         
         if (topic.equalsIgnoreCase("read")) {
-            sender.sendMessage("\2474/kmail read");
-            sender.sendMessage("\247eDisplays the oldest unread message and marks it as read.");
+            sender.sendMessage("\2474/kmail read \247c[id]");
+            sender.sendMessage("\247eDisplays the message numbered \247[id]\247e (or the oldest unread message if omitted), selects it and marks it as read.");
             return true;
         }
         
@@ -175,19 +178,35 @@ public class KMailCommandExecutor implements CommandExecutor {
         }
         
         Mailbox mb = plugin.getMailbox(getUsername(sender));
-        Iterator it = mb.iterator();
+        Message msg;
         
-        while (it.hasNext()) {
-            Message msg = (Message) it.next();
+        if (args.length >= 1) {
+            long id = Long.parseLong(args[0]);
+            msg = mb.getByID(id);
             
-            if (msg.isUnread()) {
-                displayMessage(sender, msg);
-                msg.markRead();
+            if (msg == null) {
+                sender.sendMessage("\247eNo message with that ID in your mailbox.");
+                return false;
+            }
+        }
+        
+        else {
+            Iterator<Message> it = mb.searchTag("unread");
+            if (it.hasNext()) {
+                msg = it.next();
+            }
+            else {
+                sender.sendMessage("\247eNo unread messages.");
                 return true;
             }
         }
         
-        sender.sendMessage("\247eNo unread messages.");
+        displayMessage(msg);
+        
+        if (msg.isUnread()) {
+            msg.markRead();
+        }
+        
         return true;
     }
     

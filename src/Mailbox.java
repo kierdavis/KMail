@@ -47,15 +47,32 @@ public class Mailbox {
         return (Iterator<Message>) (new SearchIterator(messages.iterator(), criteria));
     }
     
+    public Iterator<Message> searchTag(String tag) {
+        Set<SearchCriteria> criteria = new HashSet<SearchCriteria>();
+        criteria.add(new TagSearchCriteria("unread"));
+        return search(criteria);
+    }
+    
+    public Message getByID(long id) {
+        Iterator<Message> it = iterator();
+        
+        while (it.hasNext()) {
+            Message msg = (Message) it.next();
+            
+            if (msg.getLocalID() == id) {
+                return msg;
+            }
+        }
+        
+        return null;
+    }
+    
     public int size() {
         return messages.size();
     }
     
     public int numUnread() {
-        Set<SearchCriteria> criteria = new HashSet<SearchCriteria>();
-        criteria.add(new TagSearchCriteria("unread"));
-        
-        Iterator<Message> it = search(criteria);
+        Iterator<Message> = searchTag("unread");
         int n = 0;
         
         while (it.hasNext()) {
