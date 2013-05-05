@@ -37,7 +37,7 @@ public class KMail extends JavaPlugin {
         // Register commands
         getCommand("kmail").setExecutor(new KMailCommandExecutor(this));
         
-        // Start out threads
+        // Start our threads
         getLogger().info("Starting mail dispatcher");
         dispatcher.start();
         
@@ -59,7 +59,7 @@ public class KMail extends JavaPlugin {
         server.stop();
         
         // Save mailboxes
-        getLogger().info("Saving mailboxes");
+        getLogger().info("Saving " + Integer.toString(mailboxes.size()) + " mailboxes");
         Iterator<String> it = mailboxes.keySet().iterator();
         
         while (it.hasNext()) {
