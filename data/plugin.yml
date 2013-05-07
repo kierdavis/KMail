@@ -1,5 +1,5 @@
 name: KMail
-version: 0.2.8
+version: 0.2.9
 author: Kier Davis <kierdavis@gmail.com>
 
 main: com.kierdavis.kmail.KMail
@@ -37,7 +37,7 @@ permissions:
         default: true
     
     kmail.select:
-        description: Gives access to select messages;
+        description: Gives access to select messages.
         default: true
     
     kmail.read:
