@@ -1,6 +1,8 @@
 name: KMail
-main: com.kierdavis.kmail.KMail
 version: 0.2.8
+author: Kier Davis <kierdavis@gmail.com>
+
+main: com.kierdavis.kmail.KMail
 
 commands:
     kmail:
