@@ -28,6 +28,10 @@ public class Mailbox {
         messages.add(msg);
     }
     
+    public void remove(Message msg) {
+        messages.remove(msg);
+    }
+    
     public void receive(Message msg) {
         msg.markUnread();
         msg.setReceivedDate(new Date());

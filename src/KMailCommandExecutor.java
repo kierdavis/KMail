@@ -58,6 +58,10 @@ public class KMailCommandExecutor implements CommandExecutor {
             return doUntag(sender, args);
         }
         
+        if (subcmd.equalsIgnoreCase("delete")) {
+            return doDelete(sender, args);
+        }
+        
         sender.sendMessage("Invalid subcommand: " + subcmd);
         return false;
     }
@@ -77,6 +81,7 @@ public class KMailCommandExecutor implements CommandExecutor {
             sender.sendMessage("  \2474/kmail read next");
             sender.sendMessage("  \2474/kmail tag \247c[id] <tags...>");
             sender.sendMessage("  \2474/kmail untag \247c[id] <tags...>");
+            sender.sendMessage("  \2474/kmail delete \247c[id]");
             sender.sendMessage("");
             sender.sendMessage("\247eDo \2474/kmail help \247c<command>\247e for help on any subcommand.");
             sender.sendMessage("\247eOther help topics: addresses");
@@ -122,6 +127,12 @@ public class KMailCommandExecutor implements CommandExecutor {
         if (topic.equalsIgnoreCase("untag")) {
             sender.sendMessage("\2474/kmail untag \247c[id] <tags...>");
             sender.sendMessage("\247eRemoves the specified tags from the message identified by its local ID (or the selected message if omitted)");
+            return true;
+        }
+        
+        if (topic.equalsIgnoreCase("delete")) {
+            sender.sendMessage("\2474/kmail delete \247c[id]");
+            sender.sendMessage("\247eDeletes a message identified by its local ID (or the selected message if omitted)");
             return true;
         }
         
@@ -452,6 +463,44 @@ public class KMailCommandExecutor implements CommandExecutor {
         }
         
         sender.sendMessage("\247e" + Integer.toString(args.length) + " tags removed.");
+        
+        return true;
+    }
+    
+    private boolean doDelete(CommandSender sender, String[] args) {
+        if (!sender.hasPermission("kmail.delete")) {
+            sender.sendMessage("\247eYou don't have the required permission (kmail.delete)");
+            return false;
+        }
+        
+        Mailbox mb = plugin.getMailbox(getUsername(sender));
+        Message msg = null;
+        
+        if (args.length >= 1) {
+            try {
+                long id = Long.parseLong(args[0]);
+                msg = mb.getByID(id);
+                if (msg == null) {
+                    sender.sendMessage("\247eNo message with that ID in your mailbox.");
+                    return false;
+                }
+                
+                args = Arrays.copyOfRange(args, 1, args.length);
+            }
+            
+            catch (NumberFormatException e) {}
+        }
+        
+        if (msg == null) {
+            msg = selected.get(sender);
+            if (msg == null) {
+                sender.sendMessage("\247eNo message selected.");
+                return false;
+            }
+        }
+        
+        mb.remove(msg);
+        sender.sendMessage("\247eMessage deleted.");
         
         return true;
     }
