@@ -19,6 +19,7 @@ permissions:
             kmail.select: true
             kmail.read: true
             kmail.tag: true
+            kmail.delete: true
     
     kmail.help:
         description: Gives access to view the builtin help.
@@ -46,4 +47,8 @@ permissions:
     
     kmail.tag:
         description: Gives access to tag and untag messages.
+        default: true
+    
+    kmail.delete:
+        description: Gives access to delete messages.
         default: true
