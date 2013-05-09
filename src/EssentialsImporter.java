@@ -10,7 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginManager;
 
 public class EssentialsImporter {
-    public void import(KMail plugin, CommandSender sender, String[] args) {
+    public void importMail(KMail plugin, CommandSender sender, String[] args) {
         PluginManager pm = plugin.getServer().getPluginManager();
         if (!pm.isPluginEnabled("Essentials")) {
             sender.sendMessage(ChatColor.YELLOW + "The Essentials plugin is not enabled or could not be found.");
@@ -31,6 +31,8 @@ public class EssentialsImporter {
                 i++;
             }
         }
+        
+        sender.sendMessage(ChatColor.GREEN + Integer.toString(i) + ChatColor.YELLOW + " mailboxes imported.");
     }
     
     public void importUser(KMail plugin, IUser user) {

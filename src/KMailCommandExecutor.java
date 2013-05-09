@@ -545,7 +545,7 @@ public class KMailCommandExecutor implements CommandExecutor {
             return false;
         }
         
-        importer.import(plugin, sender, remainingArgs);
+        importer.importMail(plugin, sender, remainingArgs);
     }
     
     private String getUsername(CommandSender sender) {
