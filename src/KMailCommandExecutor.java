@@ -577,7 +577,7 @@ public class KMailCommandExecutor implements CommandExecutor {
         String bodySummary = msg.getBody();
         
         if (bodySummary.length() > 18) {
-            bodySummary = bodySummary.substring(15) + "...";
+            bodySummary = bodySummary.substring(0, 15) + "...";
         }
         
         StringBuilder b = new StringBuilder();
