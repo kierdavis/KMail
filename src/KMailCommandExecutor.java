@@ -63,6 +63,10 @@ public class KMailCommandExecutor implements CommandExecutor {
             return doDelete(sender, args);
         }
         
+        if (subcmd.equalsIgnoreCase("import")) {
+            return doImport(sender, args);
+        }
+        
         sender.sendMessage("Invalid subcommand: " + subcmd);
         return false;
     }
@@ -75,14 +79,17 @@ public class KMailCommandExecutor implements CommandExecutor {
         
         if (args.length < 1) {
             sender.sendMessage(ChatColor.YELLOW + "KMail Help: (" + ChatColor.RED + "<required> [optional]" + ChatColor.YELLOW + ")");
-            sender.sendMessage(ChatColor.DARK_RED + "  /kmail send " + ChatColor.RED + "<address> [message]");
-            sender.sendMessage(ChatColor.DARK_RED + "  /kmail list " + ChatColor.RED + "[criteria] [page]");
-            sender.sendMessage(ChatColor.DARK_RED + "  /kmail select " + ChatColor.RED + "<id>");
-            sender.sendMessage(ChatColor.DARK_RED + "  /kmail read " + ChatColor.RED + "[id]");
-            sender.sendMessage(ChatColor.DARK_RED + "  /kmail read next");
-            sender.sendMessage(ChatColor.DARK_RED + "  /kmail tag " + ChatColor.RED + "[id] <tags...>");
-            sender.sendMessage(ChatColor.DARK_RED + "  /kmail untag " + ChatColor.RED + "[id] <tags...>");
-            sender.sendMessage(ChatColor.DARK_RED + "  /kmail delete " + ChatColor.RED + "[id]");
+            
+            if (sender.hasPermission("kmail.send")   sender.sendMessage(ChatColor.DARK_RED + "  /kmail send " + ChatColor.RED + "<address> [message]");
+            if (sender.hasPermission("kmail.list")   sender.sendMessage(ChatColor.DARK_RED + "  /kmail list " + ChatColor.RED + "[criteria] [page]");
+            if (sender.hasPermission("kmail.select") sender.sendMessage(ChatColor.DARK_RED + "  /kmail select " + ChatColor.RED + "<id>");
+            if (sender.hasPermission("kmail.read")   sender.sendMessage(ChatColor.DARK_RED + "  /kmail read " + ChatColor.RED + "[id]");
+            if (sender.hasPermission("kmail.read")   sender.sendMessage(ChatColor.DARK_RED + "  /kmail read next");
+            if (sender.hasPermission("kmail.tag")    sender.sendMessage(ChatColor.DARK_RED + "  /kmail tag " + ChatColor.RED + "[id] <tags...>");
+            if (sender.hasPermission("kmail.tag")    sender.sendMessage(ChatColor.DARK_RED + "  /kmail untag " + ChatColor.RED + "[id] <tags...>");
+            if (sender.hasPermission("kmail.delete") sender.sendMessage(ChatColor.DARK_RED + "  /kmail delete " + ChatColor.RED + "[id]");
+            if (sender.hasPermission("kmail.admin.import") sender.sendMessage(ChatColor.DARK_RED + "  /kmail import " + ChatColor.RED + "<plugin>");
+            
             sender.sendMessage("");
             sender.sendMessage(ChatColor.YELLOW + "Do " + ChatColor.DARK_RED + "/kmail help " + ChatColor.RED + "<command>" + ChatColor.YELLOW + " for help on any subcommand.");
             sender.sendMessage(ChatColor.YELLOW + "Other help topics: addresses");
@@ -134,6 +141,13 @@ public class KMailCommandExecutor implements CommandExecutor {
         if (topic.equalsIgnoreCase("delete")) {
             sender.sendMessage(ChatColor.DARK_RED + "/kmail delete " + ChatColor.RED + "[id]");
             sender.sendMessage(ChatColor.YELLOW + "Deletes a message identified by its local ID (or the selected message if omitted)");
+            return true;
+        }
+        
+        if (topic.equalsIgnoreCase("import")) {
+            sender.sendMessage(ChatColor.DARK_RED + "/kmail import " + ChatColor.RED + "<plugin>");
+            sender.sendMessage(ChatColor.YELLOW + "Imports local mailboxes from another plugin.");
+            sender.sendMessage(ChatColor.YELLOW + "Supported plugins: Essentials.");
             return true;
         }
         
@@ -504,6 +518,34 @@ public class KMailCommandExecutor implements CommandExecutor {
         sender.sendMessage(ChatColor.YELLOW + "Message deleted.");
         
         return true;
+    }
+    
+    private boolean doImport(CommandSender sender, String[] args) {
+        if (!sender.hasPermission("kmail.admin.import")) {
+            sender.sendMessage(ChatColor.YELLOW + "You don't have the required permission (kmail.admin.import)");
+            return false;
+        }
+        
+        if (args.length < 1) {
+            sender.sendMessage(ChatColor.YELLOW + "Usage: " + ChatColor.DARK_RED + "/kmail import " + ChatColor.RED + "<plugin>");
+            sender.sendMessage(ChatColor.YELLOW + "See " + ChatColor.DARK_RED + "/kmail help import" + ChatColor.YELLOW + " for more info.");
+            return false;
+        }
+        
+        String plugin = args[0];
+        String[] remainingArgs = Arrays.copyOfRange(args, 1, args.length);
+        
+        Importer importer;
+        
+        if (plugin.equalsIgnoreCase("essentials")) {
+            importer = new EssentialsImporter();
+        }
+        else {
+            sender.sendMessage(ChatColor.YELLOW + "Invalid plugin");
+            return false;
+        }
+        
+        importer.import(plugin, sender, remainingArgs);
     }
     
     private String getUsername(CommandSender sender) {

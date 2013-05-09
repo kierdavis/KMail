@@ -1,5 +1,5 @@
 name: KMail
-version: 0.2.11
+version: 0.3.0
 author: Kier Davis <kierdavis@gmail.com>
 
 main: com.kierdavis.kmail.KMail
@@ -10,7 +10,7 @@ commands:
 
 permissions:
     kmail.*:
-        description: Gives access to all commands.
+        description: Gives access to all user-level commands.
         children:
             kmail.help: true
             kmail.send: true
@@ -52,3 +52,12 @@ permissions:
     kmail.delete:
         description: Gives access to delete messages.
         default: true
+    
+    kmail.admin.*:
+        description: Gives access to all admin-level commands.
+        children:
+            kmail.admin.import: true
+    
+    kmail.admin.import:
+        description: Gives access to import mail from other plugins.
+        default: op
