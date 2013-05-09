@@ -549,7 +549,7 @@ public class KMailCommandExecutor implements CommandExecutor {
         b.append(msg.getLocalID());
         
         if (!msg.isRead()) {
-            b.append(ChatColor.PINK + " [unread]");
+            b.append(ChatColor.LIGHT_PURPLE + " [unread]");
         }
         
         b.append(ChatColor.GREEN + " ");
