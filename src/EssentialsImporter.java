@@ -17,7 +17,7 @@ public class EssentialsImporter implements Importer {
         }
         
         UserMap usermap = ess.getUserMap();
-        Iterator<String> it = usermap.getAllUniqueUsers();
+        Iterator<String> it = usermap.getAllUniqueUsers().iterator();
         int i = 0;
         
         while (it.hasNext()) {
@@ -34,7 +34,7 @@ public class EssentialsImporter implements Importer {
     }
     
     public void importUser(KMail plugin, User user) {
-        Mailbox mb = plugin.getMailbox(user);
+        Mailbox mb = plugin.getMailbox(user.getName());
         Iterator<String> mailIt = user.getMails().iterator();
         String localHostname = plugin.getLocalHostname();
         int i = 0;
