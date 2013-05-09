@@ -1,30 +1,28 @@
 package com.kierdavis.kmail;
 
-import com.earth2me.essentials.api.IEssentials;
-import com.earth2me.essentials.api.IUser;
-import com.earth2me.essentials.api.IUserMap;
 import java.util.Date;
 import java.util.Iterator;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.PluginManager;
+import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.User;
+import com.earth2me.essentials.UserMap;
 
 public class EssentialsImporter {
     public void importMail(KMail plugin, CommandSender sender, String[] args) {
-        PluginManager pm = plugin.getServer().getPluginManager();
-        if (!pm.isPluginEnabled("Essentials")) {
+        Essentials ess = (Essentials) plugin.getServer().getPluginManager().getPlugin("Essentials");
+        if (ess == null) {
             sender.sendMessage(ChatColor.YELLOW + "The Essentials plugin is not enabled or could not be found.");
             return;
         }
         
-        IEssentials ess = (IEssentials) pm.getPlugin("Essentials");
-        IUserMap usermap = ess.getUserMap();
+        UserMap usermap = ess.getUserMap();
         Iterator<String> it = usermap.getAllUniqueUsers();
         int i = 0;
         
         while (it.hasNext()) {
             String username = (String) it.next();
-            IUser user = usermap.getUser(username);
+            User user = usermap.getUser(username);
             
             if (user != null) {
                 importUser(plugin, user);
@@ -35,7 +33,7 @@ public class EssentialsImporter {
         sender.sendMessage(ChatColor.GREEN + Integer.toString(i) + ChatColor.YELLOW + " mailboxes imported.");
     }
     
-    public void importUser(KMail plugin, IUser user) {
+    public void importUser(KMail plugin, User user) {
         Mailbox mb = plugin.getMailbox(user);
         Iterator<String> mailIt = user.getMails().iterator();
         String localHostname = plugin.getLocalHostname();
