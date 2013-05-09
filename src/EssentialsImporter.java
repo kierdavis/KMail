@@ -18,37 +18,40 @@ public class EssentialsImporter implements Importer {
         
         UserMap usermap = ess.getUserMap();
         Iterator<String> it = usermap.getAllUniqueUsers().iterator();
-        int i = 0;
+        int numMailboxes = 0;
+        int numMessages = 0;
         
         while (it.hasNext()) {
             String username = (String) it.next();
             User user = usermap.getUser(username);
             
             if (user != null) {
-                importUser(plugin, user);
-                i++;
+                numMessages += importUser(plugin, user);
+                numMailboxes++;
             }
         }
         
-        sender.sendMessage(ChatColor.GREEN + Integer.toString(i) + ChatColor.YELLOW + " mailboxes imported.");
+        sender.sendMessage(ChatColor.GREEN + Integer.toString(numMailboxes) + ChatColor.YELLOW + " mailboxes and " + ChatColor.GREEN + Integer.toString(numMessages) + ChatColor.YELLOW + " messages imported from Essentials.");
     }
     
-    public void importUser(KMail plugin, User user) {
+    public int importUser(KMail plugin, User user) {
         Mailbox mb = plugin.getMailbox(user.getName());
         Iterator<String> mailIt = user.getMails().iterator();
         String localHostname = plugin.getLocalHostname();
-        int i = 0;
+        int numMessages = 0;
         
         while (mailIt.hasNext()) {
             Message msg = parseMail(localHostname, user.getName(), (String) mailIt.next());
             mb.receive(msg);
-            i++;
+            numMessages++;
         }
         
-        if (i > 0) {
+        if (numMessages > 0) {
             user.sendMessage(ChatColor.GREEN + Integer.toString(i) + ChatColor.YELLOW + " messages were imported from Essentials into your KMail mailbox.");
             user.sendMessage(ChatColor.YELLOW + "Do " + ChatColor.DARK_RED + "/kmail read next" + ChatColor.YELLOW + " to read each one.");
         }
+        
+        return numMessages;
     }
     
     public Message parseMail(String localHostname, String username, String s) {
