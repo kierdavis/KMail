@@ -123,7 +123,7 @@ public class KMailCommandExecutor implements CommandExecutor {
             sender.sendMessage(ChatColor.DARK_RED + "/kmail read " + ChatColor.RED + "[id]");
             sender.sendMessage(ChatColor.YELLOW + "Displays a message identified by its local ID (or the selected message if omitted) and marks it as read.");
             sender.sendMessage(ChatColor.DARK_RED + "/kmail read next");
-            sender.sendMessage(ChatColor.YELLOW + "Displays the first unread message and marks it as read.");
+            sender.sendMessage(ChatColor.YELLOW + "Displays the first unread message, selects it and marks it as read.");
             return true;
         }
         
@@ -351,6 +351,8 @@ public class KMailCommandExecutor implements CommandExecutor {
                     sender.sendMessage(ChatColor.YELLOW + "No unread messages.");
                     return false;
                 }
+                
+                selected.put(sender, msg);
             }
             
             else {
