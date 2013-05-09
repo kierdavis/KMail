@@ -80,15 +80,16 @@ public class KMailCommandExecutor implements CommandExecutor {
         if (args.length < 1) {
             sender.sendMessage(ChatColor.YELLOW + "KMail Help: (" + ChatColor.RED + "<required> [optional]" + ChatColor.YELLOW + ")");
             
-            if (sender.hasPermission("kmail.send")   sender.sendMessage(ChatColor.DARK_RED + "  /kmail send " + ChatColor.RED + "<address> [message]");
-            if (sender.hasPermission("kmail.list")   sender.sendMessage(ChatColor.DARK_RED + "  /kmail list " + ChatColor.RED + "[criteria] [page]");
-            if (sender.hasPermission("kmail.select") sender.sendMessage(ChatColor.DARK_RED + "  /kmail select " + ChatColor.RED + "<id>");
-            if (sender.hasPermission("kmail.read")   sender.sendMessage(ChatColor.DARK_RED + "  /kmail read " + ChatColor.RED + "[id]");
-            if (sender.hasPermission("kmail.read")   sender.sendMessage(ChatColor.DARK_RED + "  /kmail read next");
-            if (sender.hasPermission("kmail.tag")    sender.sendMessage(ChatColor.DARK_RED + "  /kmail tag " + ChatColor.RED + "[id] <tags...>");
-            if (sender.hasPermission("kmail.tag")    sender.sendMessage(ChatColor.DARK_RED + "  /kmail untag " + ChatColor.RED + "[id] <tags...>");
-            if (sender.hasPermission("kmail.delete") sender.sendMessage(ChatColor.DARK_RED + "  /kmail delete " + ChatColor.RED + "[id]");
-            if (sender.hasPermission("kmail.admin.import") sender.sendMessage(ChatColor.DARK_RED + "  /kmail import " + ChatColor.RED + "<plugin>");
+            if (sender.hasPermission("kmail.send"))   sender.sendMessage(ChatColor.DARK_RED + "  /kmail send " + ChatColor.RED + "<address> [message]");
+            if (sender.hasPermission("kmail.list"))   sender.sendMessage(ChatColor.DARK_RED + "  /kmail list " + ChatColor.RED + "[criteria] [page]");
+            if (sender.hasPermission("kmail.select")) sender.sendMessage(ChatColor.DARK_RED + "  /kmail select " + ChatColor.RED + "<id>");
+            if (sender.hasPermission("kmail.read"))   sender.sendMessage(ChatColor.DARK_RED + "  /kmail read " + ChatColor.RED + "[id]");
+            if (sender.hasPermission("kmail.read"))   sender.sendMessage(ChatColor.DARK_RED + "  /kmail read next");
+            if (sender.hasPermission("kmail.tag"))    sender.sendMessage(ChatColor.DARK_RED + "  /kmail tag " + ChatColor.RED + "[id] <tags...>");
+            if (sender.hasPermission("kmail.tag"))    sender.sendMessage(ChatColor.DARK_RED + "  /kmail untag " + ChatColor.RED + "[id] <tags...>");
+            if (sender.hasPermission("kmail.delete")) sender.sendMessage(ChatColor.DARK_RED + "  /kmail delete " + ChatColor.RED + "[id]");
+            
+            if (sender.hasPermission("kmail.admin.import")) sender.sendMessage(ChatColor.DARK_RED + "  /kmail import " + ChatColor.RED + "<plugin>");
             
             sender.sendMessage("");
             sender.sendMessage(ChatColor.YELLOW + "Do " + ChatColor.DARK_RED + "/kmail help " + ChatColor.RED + "<command>" + ChatColor.YELLOW + " for help on any subcommand.");
