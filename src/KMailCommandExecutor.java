@@ -533,12 +533,12 @@ public class KMailCommandExecutor implements CommandExecutor {
             return false;
         }
         
-        String plugin = args[0];
+        String importPlugin = args[0];
         String[] remainingArgs = Arrays.copyOfRange(args, 1, args.length);
         
         Importer importer;
         
-        if (plugin.equalsIgnoreCase("essentials")) {
+        if (importPlugin.equalsIgnoreCase("essentials")) {
             importer = new EssentialsImporter();
         }
         else {

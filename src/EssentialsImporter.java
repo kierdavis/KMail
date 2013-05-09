@@ -8,7 +8,7 @@ import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.UserMap;
 
-public class EssentialsImporter {
+public class EssentialsImporter implements Importer {
     public void importMail(KMail plugin, CommandSender sender, String[] args) {
         Essentials ess = (Essentials) plugin.getServer().getPluginManager().getPlugin("Essentials");
         if (ess == null) {
