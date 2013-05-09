@@ -47,7 +47,7 @@ public class EssentialsImporter implements Importer {
         }
         
         if (numMessages > 0) {
-            user.sendMessage(ChatColor.GREEN + Integer.toString(i) + ChatColor.YELLOW + " messages were imported from Essentials into your KMail mailbox.");
+            user.sendMessage(ChatColor.GREEN + Integer.toString(numMessages) + ChatColor.YELLOW + " messages were imported from Essentials into your KMail mailbox.");
             user.sendMessage(ChatColor.YELLOW + "Do " + ChatColor.DARK_RED + "/kmail read next" + ChatColor.YELLOW + " to read each one.");
         }
         
