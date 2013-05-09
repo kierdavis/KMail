@@ -578,8 +578,8 @@ public class KMailCommandExecutor implements CommandExecutor {
     private void displayMessageSummary(CommandSender sender, Message msg) {
         String bodySummary = msg.getBody();
         
-        if (bodySummary.length() > 18) {
-            bodySummary = bodySummary.substring(0, 15) + "...";
+        if (bodySummary.length() > 25) {
+            bodySummary = bodySummary.substring(0, 25) + "...";
         }
         
         StringBuilder b = new StringBuilder();
