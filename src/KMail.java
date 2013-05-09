@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -125,15 +126,15 @@ public class KMail extends JavaPlugin {
         getMailbox(username).receive(msg);
         
         if (username.equalsIgnoreCase("CONSOLE")) {
-            getLogger().info("\247eIncoming mail from \247a" + msg.getSrcAddress().toString() + "\247e.");
-            getLogger().info("\247eType \2474kmail read\247e to view it.");
+            getLogger().info(ChatColor.YELLOW + "Incoming mail from " + ChatColor.GREEN + "" + msg.getSrcAddress().toString() + ChatColor.YELLOW + ".");
+            getLogger().info(ChatColor.YELLOW + "Type " + ChatColor.DARK_RED + "kmail read" + ChatColor.YELLOW + " to view it.");
         }
         
         else {
             Player player = getServer().getPlayer(username);
             if (player != null) {
-                player.sendMessage("\247eIncoming mail from \247a" + msg.getSrcAddress().toString() + "\247e.");
-                player.sendMessage("\247eType \2474/kmail read\247e to view it.");
+                player.sendMessage(ChatColor.YELLOW + "Incoming mail from " + ChatColor.GREEN + "" + msg.getSrcAddress().toString() + ChatColor.YELLOW + ".");
+                player.sendMessage(ChatColor.YELLOW + "Type " + ChatColor.DARK_RED + "/kmail read" + ChatColor.YELLOW + " to view it.");
             }
         }
         

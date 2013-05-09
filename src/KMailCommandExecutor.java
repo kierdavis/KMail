@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -68,87 +69,87 @@ public class KMailCommandExecutor implements CommandExecutor {
     
     private boolean doHelp(CommandSender sender, String[] args) {
         if (!sender.hasPermission("kmail.help")) {
-            sender.sendMessage("\247eYou don't have the required permission (kmail.help)");
+            sender.sendMessage(ChatColor.YELLOW + "You don't have the required permission (kmail.help)");
             return false;
         }
         
         if (args.length < 1) {
-            sender.sendMessage("\247eKMail Help: (\247c<required> [optional]\247e)");
-            sender.sendMessage("  \2474/kmail send \247c<address> [message]");
-            sender.sendMessage("  \2474/kmail list \247c[criteria] [page]");
-            sender.sendMessage("  \2474/kmail select \247c<id>");
-            sender.sendMessage("  \2474/kmail read \247c[id]");
-            sender.sendMessage("  \2474/kmail read next");
-            sender.sendMessage("  \2474/kmail tag \247c[id] <tags...>");
-            sender.sendMessage("  \2474/kmail untag \247c[id] <tags...>");
-            sender.sendMessage("  \2474/kmail delete \247c[id]");
+            sender.sendMessage(ChatColor.YELLOW + "KMail Help: (" + ChatColor.RED + "<required> [optional]" + ChatColor.YELLOW + ")");
+            sender.sendMessage(ChatColor.DARK_RED + "  /kmail send " + ChatColor.RED + "<address> [message]");
+            sender.sendMessage(ChatColor.DARK_RED + "  /kmail list " + ChatColor.RED + "[criteria] [page]");
+            sender.sendMessage(ChatColor.DARK_RED + "  /kmail select " + ChatColor.RED + "<id>");
+            sender.sendMessage(ChatColor.DARK_RED + "  /kmail read " + ChatColor.RED + "[id]");
+            sender.sendMessage(ChatColor.DARK_RED + "  /kmail read next");
+            sender.sendMessage(ChatColor.DARK_RED + "  /kmail tag " + ChatColor.RED + "[id] <tags...>");
+            sender.sendMessage(ChatColor.DARK_RED + "  /kmail untag " + ChatColor.RED + "[id] <tags...>");
+            sender.sendMessage(ChatColor.DARK_RED + "  /kmail delete " + ChatColor.RED + "[id]");
             sender.sendMessage("");
-            sender.sendMessage("\247eDo \2474/kmail help \247c<command>\247e for help on any subcommand.");
-            sender.sendMessage("\247eOther help topics: addresses");
+            sender.sendMessage(ChatColor.YELLOW + "Do " + ChatColor.DARK_RED + "/kmail help " + ChatColor.RED + "<command>" + ChatColor.YELLOW + " for help on any subcommand.");
+            sender.sendMessage(ChatColor.YELLOW + "Other help topics: addresses");
             return true;
         }
         
         String topic = args[0];
         
         if (topic.equalsIgnoreCase("send")) {
-            sender.sendMessage("\2474/kmail send \247c<address> [message]");
-            sender.sendMessage("\247eSend a message to the specified address. If the message is not specified in the command, all future chat messages (until one consisting of a single period ('.') is sent) will be used as the body of the message.");
-            sender.sendMessage("\247eSee also: \2474/kmail help addresses");
+            sender.sendMessage(ChatColor.DARK_RED + "/kmail send " + ChatColor.RED + "<address> [message]");
+            sender.sendMessage(ChatColor.YELLOW + "Send a message to the specified address. If the message is not specified in the command, all future chat messages (until one consisting of a single period ('.') is sent) will be used as the body of the message.");
+            sender.sendMessage(ChatColor.YELLOW + "See also: " + ChatColor.DARK_RED + "/kmail help addresses");
             return true;
         }
         
         if (topic.equalsIgnoreCase("list")) {
-            sender.sendMessage("\2474/kmail list \247c[criteria] [page]");
-            sender.sendMessage("\247eLists messages with the given criteria.");
-            sender.sendMessage("\247eSee also: \2474/kmail help criteria");
+            sender.sendMessage(ChatColor.DARK_RED + "/kmail list " + ChatColor.RED + "[criteria] [page]");
+            sender.sendMessage(ChatColor.YELLOW + "Lists messages with the given criteria.");
+            sender.sendMessage(ChatColor.YELLOW + "See also: " + ChatColor.DARK_RED + "/kmail help criteria");
             return true;
         }
         
         if (topic.equalsIgnoreCase("select")) {
-            sender.sendMessage("\2474/kmail select \247c[id]");
-            sender.sendMessage("\247eSelects a message identified by its local ID (the number at the start of each line output by \2474/kmail list\247e).");
+            sender.sendMessage(ChatColor.DARK_RED + "/kmail select " + ChatColor.RED + "[id]");
+            sender.sendMessage(ChatColor.YELLOW + "Selects a message identified by its local ID (the number at the start of each line output by " + ChatColor.DARK_RED + "/kmail list" + ChatColor.YELLOW + ").");
             return true;
         }
         
         if (topic.equalsIgnoreCase("read")) {
-            sender.sendMessage("\2474/kmail read \247c[id]");
-            sender.sendMessage("\247eDisplays a message identified by its local ID (or the selected message if omitted) and marks it as read.");
-            sender.sendMessage("\2474/kmail read next");
-            sender.sendMessage("\247eDisplays the first unread message and marks it as read.");
+            sender.sendMessage(ChatColor.DARK_RED + "/kmail read " + ChatColor.RED + "[id]");
+            sender.sendMessage(ChatColor.YELLOW + "Displays a message identified by its local ID (or the selected message if omitted) and marks it as read.");
+            sender.sendMessage(ChatColor.DARK_RED + "/kmail read next");
+            sender.sendMessage(ChatColor.YELLOW + "Displays the first unread message and marks it as read.");
             return true;
         }
         
         if (topic.equalsIgnoreCase("tag")) {
-            sender.sendMessage("\2474/kmail tag \247c[id] <tags...>");
-            sender.sendMessage("\247eAdds the specified tags to the message identified by its local ID (or the selected message if omitted)");
+            sender.sendMessage(ChatColor.DARK_RED + "/kmail tag " + ChatColor.RED + "[id] <tags...>");
+            sender.sendMessage(ChatColor.YELLOW + "Adds the specified tags to the message identified by its local ID (or the selected message if omitted)");
             return true;
         }
         
         if (topic.equalsIgnoreCase("untag")) {
-            sender.sendMessage("\2474/kmail untag \247c[id] <tags...>");
-            sender.sendMessage("\247eRemoves the specified tags from the message identified by its local ID (or the selected message if omitted)");
+            sender.sendMessage(ChatColor.DARK_RED + "/kmail untag " + ChatColor.RED + "[id] <tags...>");
+            sender.sendMessage(ChatColor.YELLOW + "Removes the specified tags from the message identified by its local ID (or the selected message if omitted)");
             return true;
         }
         
         if (topic.equalsIgnoreCase("delete")) {
-            sender.sendMessage("\2474/kmail delete \247c[id]");
-            sender.sendMessage("\247eDeletes a message identified by its local ID (or the selected message if omitted)");
+            sender.sendMessage(ChatColor.DARK_RED + "/kmail delete " + ChatColor.RED + "[id]");
+            sender.sendMessage(ChatColor.YELLOW + "Deletes a message identified by its local ID (or the selected message if omitted)");
             return true;
         }
         
         if (topic.equalsIgnoreCase("addresses")) {
-            sender.sendMessage("\247eAn address can be:");
-            sender.sendMessage("  \247a<username>");
-            sender.sendMessage("    \247e- The username of a player on the local server");
-            sender.sendMessage("  \247a<username>\2472@\247a<server-addr>");
-            sender.sendMessage("    \247e- A user on another server (\247a<server-addr>\247e is the same IP address/domain name used to connect to it from the Minecraft client)");
+            sender.sendMessage(ChatColor.YELLOW + "An address can be:");
+            sender.sendMessage(ChatColor.GREEN + "  <username>");
+            sender.sendMessage(ChatColor.YELLOW + "    - The username of a player on the local server");
+            sender.sendMessage(ChatColor.GREEN + "  <username>" + ChatColor.DARK_GREEN + "@" + ChatColor.GREEN + "<server-addr>");
+            sender.sendMessage(ChatColor.YELLOW + "    - A user on another server (" + ChatColor.GREEN + "<server-addr>" + ChatColor.YELLOW + " is the same IP address/domain name used to connect to it from the Minecraft client)");
             return true;
         }
         
         if (topic.equalsIgnoreCase("criteria")) {
-            sender.sendMessage("\247eSearch criteria are space-seperated values that can take the form of:");
-            sender.sendMessage("  \2472t:\247a<tag>");
-            sender.sendMessage("    \247eMessages with a certain tag. Predefined tags are: 'unread'");
+            sender.sendMessage(ChatColor.YELLOW + "Search criteria are space-seperated values that can take the form of:");
+            sender.sendMessage(ChatColor.DARK_GREEN + "  t:" + ChatColor.GREEN + "<tag>");
+            sender.sendMessage(ChatColor.YELLOW + "    Messages with a certain tag. Predefined tags are: 'unread'");
             return true;
         }
         
@@ -158,13 +159,13 @@ public class KMailCommandExecutor implements CommandExecutor {
     
     private boolean doSend(CommandSender sender, String[] args) {
         if (!sender.hasPermission("kmail.send")) {
-            sender.sendMessage("\247eYou don't have the required permission (kmail.send)");
+            sender.sendMessage(ChatColor.YELLOW + "You don't have the required permission (kmail.send)");
             return false;
         }
         
         if (args.length < 1) {
-            sender.sendMessage("\247eUsage: \2474/kmail send \247c<address> [message]");
-            sender.sendMessage("\247eSee \2474/kmail help send\247e for more info.");
+            sender.sendMessage(ChatColor.YELLOW + "Usage: " + ChatColor.DARK_RED + "/kmail send " + ChatColor.RED + "<address> [message]");
+            sender.sendMessage(ChatColor.YELLOW + "See " + ChatColor.DARK_RED + "/kmail help send" + ChatColor.YELLOW + " for more info.");
             return false;
         }
         
@@ -182,7 +183,7 @@ public class KMailCommandExecutor implements CommandExecutor {
         Message msg = new Message(srcAddress, destAddress);
         
         if (destAddress.getHostname() != "local" && !sender.hasPermission("kmail.send.remote")) {
-            sender.sendMessage("\247eYou don't have the required permission (kmail.send.remote)");
+            sender.sendMessage(ChatColor.YELLOW + "You don't have the required permission (kmail.send.remote)");
             return false;
         }
         
@@ -197,14 +198,14 @@ public class KMailCommandExecutor implements CommandExecutor {
             msg.setBody(bodyBuilder.toString());
             plugin.sendMessage(msg);
             
-            sender.sendMessage("\247eMail queued.");
+            sender.sendMessage(ChatColor.YELLOW + "Mail queued.");
             
             return true;
         }
         
         else {
             if (!(sender instanceof Player)) {
-                sender.sendMessage("\247eThis command must be run as a player.");
+                sender.sendMessage(ChatColor.YELLOW + "This command must be run as a player.");
                 return false;
             }
             
@@ -213,8 +214,8 @@ public class KMailCommandExecutor implements CommandExecutor {
             
             plugin.putPartialMessage(player, pm);
             
-            sender.sendMessage("\247eNow type your mail message in normal chat (not with commands).");
-            sender.sendMessage("\247eEnd the message with a single chat message containing a dot (period).");
+            sender.sendMessage(ChatColor.YELLOW + "Now type your mail message in normal chat (not with commands).");
+            sender.sendMessage(ChatColor.YELLOW + "End the message with a single chat message containing a dot (period).");
             
             return true;
         }
@@ -222,7 +223,7 @@ public class KMailCommandExecutor implements CommandExecutor {
     
     private boolean doList(CommandSender sender, String[] args) {
         if (!sender.hasPermission("kmail.list")) {
-            sender.sendMessage("\247eYou don't have the required permission (kmail.list)");
+            sender.sendMessage(ChatColor.YELLOW + "You don't have the required permission (kmail.list)");
             return false;
         }
         
@@ -256,7 +257,7 @@ public class KMailCommandExecutor implements CommandExecutor {
         int i = 0;
         boolean itemsPrinted = false;
         
-        sender.sendMessage("\247eMessages (page \247a" + pageNum + "\247e):");
+        sender.sendMessage(ChatColor.YELLOW + "Messages (page " + ChatColor.GREEN + pageNum + ChatColor.YELLOW + "):");
         
         while (it.hasNext()) {
             Message msg = (Message) it.next();
@@ -274,7 +275,7 @@ public class KMailCommandExecutor implements CommandExecutor {
         }
         
         if (!itemsPrinted) {
-            sender.sendMessage("  \247eNo messages.");
+            sender.sendMessage(ChatColor.YELLOW + "  No messages.");
         }
         
         return true;
@@ -282,13 +283,13 @@ public class KMailCommandExecutor implements CommandExecutor {
     
     private boolean doSelect(CommandSender sender, String[] args) {
         if (!sender.hasPermission("kmail.select")) {
-            sender.sendMessage("\247eYou don't have the required permission (kmail.select)");
+            sender.sendMessage(ChatColor.YELLOW + "You don't have the required permission (kmail.select)");
             return false;
         }
         
         if (args.length < 1) {
-            sender.sendMessage("\247eUsage: \2474/kmail select \247c<id>");
-            sender.sendMessage("\247eSee \2474/kmail help select\247e for more info.");
+            sender.sendMessage(ChatColor.YELLOW + "Usage: " + ChatColor.DARK_RED + "/kmail select " + ChatColor.RED + "<id>");
+            sender.sendMessage(ChatColor.YELLOW + "See " + ChatColor.DARK_RED + "/kmail help select" + ChatColor.YELLOW + " for more info.");
             return false;
         }
         
@@ -297,8 +298,8 @@ public class KMailCommandExecutor implements CommandExecutor {
             id = Long.parseLong(args[0]);
         }
         catch (NumberFormatException e) {
-            sender.sendMessage("\247eBad number format.");
-            sender.sendMessage("\247eSee \2474/kmail help select\247e for more info.");
+            sender.sendMessage(ChatColor.YELLOW + "Bad number format.");
+            sender.sendMessage(ChatColor.YELLOW + "See " + ChatColor.DARK_RED + "/kmail help select" + ChatColor.YELLOW + " for more info.");
             return false;
         }
         
@@ -306,19 +307,19 @@ public class KMailCommandExecutor implements CommandExecutor {
         Message msg = mb.getByID(id);
         
         if (msg == null) {
-            sender.sendMessage("\247eNo message with that ID in your mailbox.");
+            sender.sendMessage(ChatColor.YELLOW + "No message with that ID in your mailbox.");
             return false;
         }
         
         selected.put(sender, msg);
-        sender.sendMessage("\247eMessage selected.");
+        sender.sendMessage(ChatColor.YELLOW + "Message selected.");
         
         return true;
     }
     
     private boolean doRead(CommandSender sender, String[] args) {
         if (!sender.hasPermission("kmail.read")) {
-            sender.sendMessage("\247eYou don't have the required permission (kmail.read)");
+            sender.sendMessage(ChatColor.YELLOW + "You don't have the required permission (kmail.read)");
             return false;
         }
         
@@ -332,7 +333,7 @@ public class KMailCommandExecutor implements CommandExecutor {
                     msg = it.next();
                 }
                 else {
-                    sender.sendMessage("\247eNo unread messages.");
+                    sender.sendMessage(ChatColor.YELLOW + "No unread messages.");
                     return false;
                 }
             }
@@ -343,14 +344,14 @@ public class KMailCommandExecutor implements CommandExecutor {
                     id = Long.parseLong(args[0]);
                 }
                 catch (NumberFormatException e) {
-                    sender.sendMessage("\247eBad number format.");
-                    sender.sendMessage("\247eSee \2474/kmail help read\247e for more info.");
+                    sender.sendMessage(ChatColor.YELLOW + "Bad number format.");
+                    sender.sendMessage(ChatColor.YELLOW + "See " + ChatColor.DARK_RED + "/kmail help read" + ChatColor.YELLOW + " for more info.");
                     return false;
                 }
         
                 msg = mb.getByID(id);
                 if (msg == null) {
-                    sender.sendMessage("\247eNo message with that ID in your mailbox.");
+                    sender.sendMessage(ChatColor.YELLOW + "No message with that ID in your mailbox.");
                     return false;
                 }
             }
@@ -359,7 +360,7 @@ public class KMailCommandExecutor implements CommandExecutor {
         else {
             msg = selected.get(sender);
             if (msg == null) {
-                sender.sendMessage("\247eNo message selected.");
+                sender.sendMessage(ChatColor.YELLOW + "No message selected.");
                 return false;
             }
         }
@@ -375,7 +376,7 @@ public class KMailCommandExecutor implements CommandExecutor {
     
     private boolean doTag(CommandSender sender, String[] args) {
         if (!sender.hasPermission("kmail.tag")) {
-            sender.sendMessage("\247eYou don't have the required permission (kmail.tag)");
+            sender.sendMessage(ChatColor.YELLOW + "You don't have the required permission (kmail.tag)");
             return false;
         }
         
@@ -387,7 +388,7 @@ public class KMailCommandExecutor implements CommandExecutor {
                 long id = Long.parseLong(args[0]);
                 msg = mb.getByID(id);
                 if (msg == null) {
-                    sender.sendMessage("\247eNo message with that ID in your mailbox.");
+                    sender.sendMessage(ChatColor.YELLOW + "No message with that ID in your mailbox.");
                     return false;
                 }
                 
@@ -400,14 +401,14 @@ public class KMailCommandExecutor implements CommandExecutor {
         if (msg == null) {
             msg = selected.get(sender);
             if (msg == null) {
-                sender.sendMessage("\247eNo message selected.");
+                sender.sendMessage(ChatColor.YELLOW + "No message selected.");
                 return false;
             }
         }
         
         if (args.length < 1) {
-            sender.sendMessage("\247eUsage: \2474/kmail tag \247c[id] <tags...>");
-            sender.sendMessage("\247eSee \2474/kmail help tag\247e for more info.");
+            sender.sendMessage(ChatColor.YELLOW + "Usage: " + ChatColor.DARK_RED + "/kmail tag " + ChatColor.RED + "[id] <tags...>");
+            sender.sendMessage(ChatColor.YELLOW + "See " + ChatColor.DARK_RED + "/kmail help tag" + ChatColor.YELLOW + " for more info.");
             return false;
         }
         
@@ -415,14 +416,14 @@ public class KMailCommandExecutor implements CommandExecutor {
             msg.addTag(args[i]);
         }
         
-        sender.sendMessage("\247e" + Integer.toString(args.length) + " tags added.");
+        sender.sendMessage(ChatColor.YELLOW + Integer.toString(args.length) + " tags added.");
         
         return true;
     }
     
     private boolean doUntag(CommandSender sender, String[] args) {
         if (!sender.hasPermission("kmail.tag")) {
-            sender.sendMessage("\247eYou don't have the required permission (kmail.tag)");
+            sender.sendMessage(ChatColor.YELLOW + "You don't have the required permission (kmail.tag)");
             return false;
         }
         
@@ -434,7 +435,7 @@ public class KMailCommandExecutor implements CommandExecutor {
                 long id = Long.parseLong(args[0]);
                 msg = mb.getByID(id);
                 if (msg == null) {
-                    sender.sendMessage("\247eNo message with that ID in your mailbox.");
+                    sender.sendMessage(ChatColor.YELLOW + "No message with that ID in your mailbox.");
                     return false;
                 }
                 
@@ -447,14 +448,14 @@ public class KMailCommandExecutor implements CommandExecutor {
         if (msg == null) {
             msg = selected.get(sender);
             if (msg == null) {
-                sender.sendMessage("\247eNo message selected.");
+                sender.sendMessage(ChatColor.YELLOW + "No message selected.");
                 return false;
             }
         }
         
         if (args.length < 1) {
-            sender.sendMessage("\247eUsage: \2474/kmail untag \247c[id] <tags...>");
-            sender.sendMessage("\247eSee \2474/kmail help untag\247e for more info.");
+            sender.sendMessage(ChatColor.YELLOW + "Usage: " + ChatColor.DARK_RED + "/kmail untag " + ChatColor.RED + "[id] <tags...>");
+            sender.sendMessage(ChatColor.YELLOW + "See " + ChatColor.DARK_RED + "/kmail help untag" + ChatColor.YELLOW + " for more info.");
             return false;
         }
         
@@ -462,14 +463,14 @@ public class KMailCommandExecutor implements CommandExecutor {
             msg.removeTag(args[i]);
         }
         
-        sender.sendMessage("\247e" + Integer.toString(args.length) + " tags removed.");
+        sender.sendMessage(ChatColor.YELLOW + Integer.toString(args.length) + " tags removed.");
         
         return true;
     }
     
     private boolean doDelete(CommandSender sender, String[] args) {
         if (!sender.hasPermission("kmail.delete")) {
-            sender.sendMessage("\247eYou don't have the required permission (kmail.delete)");
+            sender.sendMessage(ChatColor.YELLOW + "You don't have the required permission (kmail.delete)");
             return false;
         }
         
@@ -481,7 +482,7 @@ public class KMailCommandExecutor implements CommandExecutor {
                 long id = Long.parseLong(args[0]);
                 msg = mb.getByID(id);
                 if (msg == null) {
-                    sender.sendMessage("\247eNo message with that ID in your mailbox.");
+                    sender.sendMessage(ChatColor.YELLOW + "No message with that ID in your mailbox.");
                     return false;
                 }
                 
@@ -494,13 +495,13 @@ public class KMailCommandExecutor implements CommandExecutor {
         if (msg == null) {
             msg = selected.get(sender);
             if (msg == null) {
-                sender.sendMessage("\247eNo message selected.");
+                sender.sendMessage(ChatColor.YELLOW + "No message selected.");
                 return false;
             }
         }
         
         mb.remove(msg);
-        sender.sendMessage("\247eMessage deleted.");
+        sender.sendMessage(ChatColor.YELLOW + "Message deleted.");
         
         return true;
     }
@@ -517,15 +518,15 @@ public class KMailCommandExecutor implements CommandExecutor {
     private void displayMessage(CommandSender sender, Message msg) {
         String tagStr = getTagStr(msg);
         
-        sender.sendMessage("\247e================================");
-        sender.sendMessage("\247eFrom: \247a" + msg.getSrcAddress().toString());
-        sender.sendMessage("\247eTo: \247a" + msg.getDestAddress().toString());
-        sender.sendMessage("\247eSent: \247c" + msg.getSentDate().toString());
-        sender.sendMessage("\247eRecieved: \247c" + msg.getReceivedDate().toString());
-        sender.sendMessage("\247eTags: " + tagStr);
+        sender.sendMessage(ChatColor.YELLOW + "================================");
+        sender.sendMessage(ChatColor.YELLOW + "From: " + ChatColor.GREEN + msg.getSrcAddress().toString());
+        sender.sendMessage(ChatColor.YELLOW + "To: " + ChatColor.GREEN + msg.getDestAddress().toString());
+        sender.sendMessage(ChatColor.YELLOW + "Sent: " + ChatColor.RED + msg.getSentDate().toString());
+        sender.sendMessage(ChatColor.YELLOW + "Recieved: " + ChatColor.RED + msg.getReceivedDate().toString());
+        sender.sendMessage(ChatColor.YELLOW + "Tags: " + tagStr);
         sender.sendMessage("");
         sender.sendMessage(msg.getBody());
-        sender.sendMessage("\247e================================");
+        sender.sendMessage(ChatColor.YELLOW + "================================");
     }
     
     private void displayMessageSummary(CommandSender sender, Message msg) {
@@ -538,22 +539,22 @@ public class KMailCommandExecutor implements CommandExecutor {
         StringBuilder b = new StringBuilder();
         
         if (selected.get(sender) == msg) {
-            b.append("\2473->");
+            b.append(ChatColor.DARK_AQUA + "->");
         }
         else {
             b.append("   ");
         }
         
-        b.append("\247c");
+        b.append(ChatColor.RED);
         b.append(msg.getLocalID());
         
         if (!msg.isRead()) {
-            b.append("\247d [unread]");
+            b.append(ChatColor.PINK + " [unread]");
         }
         
-        b.append("\247a ");
+        b.append(ChatColor.GREEN + " ");
         b.append(msg.getSrcAddress().toString());
-        b.append("\247e: ");
+        b.append(ChatColor.YELLOW + ": ");
         b.append(bodySummary);
         
         sender.sendMessage(b.toString());
@@ -582,10 +583,10 @@ public class KMailCommandExecutor implements CommandExecutor {
         }
         
         StringBuilder b = new StringBuilder();
-        b.append("\247a").append((String) it.next());
+        b.append(ChatColor.GREEN).append((String) it.next());
         
         while (it.hasNext()) {
-            b.append("\247e, \247a").append((String) it.next());
+            b.append(ChatColor.YELLOW + ", " + ChatColor.GREEN).append((String) it.next());
         }
         
         return b.toString();
