@@ -13,8 +13,8 @@ import java.net.URL;
 public class WebClient {
     private KMail plugin;
     
-    public WebClient(KMail plugin) {
-        this.plugin = plugin;
+    public WebClient(KMail plugin_) {
+        plugin = plugin_;
     }
     
     public void send(Message msg) {

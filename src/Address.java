@@ -10,19 +10,19 @@ public class Address implements Serializable {
         int pos = s.indexOf('@');
         
         if (pos < 0) {
-            this.username = s;
-            this.hostname = "local";
+            username = s;
+            hostname = "local";
         }
         
         else {
-            this.username = s.substring(0, pos);
-            this.hostname = s.substring(pos + 1);
+            username = s.substring(0, pos);
+            hostname = s.substring(pos + 1);
         }
     }
     
-    public Address(String username, String hostname) {
-        this.username = username;
-        this.hostname = hostname;
+    public Address(String username_, String hostname_) {
+        username = username_;
+        hostname = hostname_;
     }
     
     public String getUsername() {

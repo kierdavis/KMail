@@ -10,10 +10,10 @@ public class SearchIterator implements Iterator<Message> {
     private Set<SearchCriteria> criteria;
     private Message nextItem;
     
-    public SearchIterator(Iterator<Message> it, Set<SearchCriteria> criteria) {
-        this.it = it;
-        this.criteria = criteria;
-        this.nextItem = null;
+    public SearchIterator(Iterator<Message> it_, Set<SearchCriteria> criteria_) {
+        it = it_;
+        criteria = criteria_;
+        nextItem = null;
     }
     
     public boolean hasNext() {

@@ -8,8 +8,8 @@ public class WebServer {
     private KMail plugin;
     private HttpServer server;
     
-    public WebServer(KMail plugin) {
-        this.plugin = plugin;
+    public WebServer(KMail plugin_) {
+        plugin = plugin_;
     }
     
     public void start() throws IOException {

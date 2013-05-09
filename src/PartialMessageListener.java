@@ -8,10 +8,10 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 public class PartialMessageListener implements Listener {
     private KMail plugin;
     
-    public PartialMessageListener(KMail plugin) {
+    public PartialMessageListener(KMail plugin_) {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         
-        this.plugin = plugin;
+        plugin = plugin_;
     }
     
     @EventHandler

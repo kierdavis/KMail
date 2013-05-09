@@ -3,8 +3,8 @@ package com.kierdavis.kmail;
 public class TagSearchCriteria implements SearchCriteria {
     private String tag;
     
-    public TagSearchCriteria(String tag) {
-        this.tag = tag;
+    public TagSearchCriteria(String tag_) {
+        tag = tag_;
     }
     
     public String getTag() {

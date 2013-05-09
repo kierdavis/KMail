@@ -4,9 +4,9 @@ public class PartialMessage {
     private Message msg;
     private StringBuilder bodyBuilder;
     
-    public PartialMessage(Message msg) {
-        this.msg = msg;
-        this.bodyBuilder = new StringBuilder();
+    public PartialMessage(Message msg_) {
+        msg = msg_;
+        bodyBuilder = new StringBuilder();
     }
     
     public synchronized void append(String s) {

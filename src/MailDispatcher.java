@@ -12,11 +12,11 @@ public class MailDispatcher implements Runnable {
     private Queue<Message> queue;
     private boolean stopFlag;
     
-    public MailDispatcher(KMail plugin) {
-        this.plugin = plugin;
-        this.client = new WebClient(plugin);
-        this.queue = new LinkedList<Message>();
-        this.stopFlag = false;
+    public MailDispatcher(KMail plugin_) {
+        plugin = plugin_;
+        client = new WebClient(plugin);
+        queue = new LinkedList<Message>();
+        stopFlag = false;
     }
     
     public synchronized boolean queueMessage(Message msg) {

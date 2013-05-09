@@ -18,9 +18,9 @@ public class KMailCommandExecutor implements CommandExecutor {
     private KMail plugin;
     private Map<CommandSender, Message> selected;
     
-    public KMailCommandExecutor(KMail plugin) {
-        this.plugin = plugin;
-        this.selected = new HashMap<CommandSender, Message>();
+    public KMailCommandExecutor(KMail plugin_) {
+        plugin = plugin_;
+        selected = new HashMap<CommandSender, Message>();
     }
     
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {

@@ -10,8 +10,8 @@ import java.io.OutputStream;
 public class WebHandler implements HttpHandler {
     private KMail plugin;
     
-    public WebHandler(KMail plugin) {
-        this.plugin = plugin;
+    public WebHandler(KMail plugin_) {
+        plugin = plugin_;
     }
     
     public void handle(HttpExchange t) throws IOException {
