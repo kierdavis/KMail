@@ -9,9 +9,8 @@ public class PartialMessageListener implements Listener {
     private KMail plugin;
     
     public PartialMessageListener(KMail plugin_) {
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
-        
         plugin = plugin_;
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
     
     @EventHandler
