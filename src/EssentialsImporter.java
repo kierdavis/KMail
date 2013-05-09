@@ -1,10 +1,10 @@
 package com.kierdavis.kmail;
 
+import com.earth2me.essentials.api.IEssentials;
+import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.api.IUserMap;
 import java.util.Date;
 import java.util.Iterator;
-import net.ess3.api.IEssentials;
-import net.ess3.api.IUser;
-import net.ess3.api.IUserMap;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginManager;
