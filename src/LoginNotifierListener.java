@@ -14,6 +14,7 @@ public class LoginNotifierListener implements Listener {
     
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        plugin.runTaskAsynchronously(new DelayedJoinHandler(plugin, event.getPlayer()));
+        DelayedJoinTask task = new DelayedJoinTask(plugin, event.getPlayer());
+        task.runTaskLater(plugin, 20);
     }
 }
