@@ -20,6 +20,9 @@ public class LoginNotifierListener implements Listener {
         Mailbox mb = plugin.getMailbox(player.getName());
         int numUnread = mb.numUnread();
         
+        plugin.getLogger().info("Player: " + player.getName());
+        plugin.getLogger().info("Num unread: " + Integer.toString(numUnread));
+        
         if (numUnread > 0) {
             String pluralization = numUnread == 1 ? "" : "s";
             player.sendMessage(ChatColor.YELLOW + "You have " + ChatColor.GREEN + Integer.toString(numUnread) + ChatColor.YELLOW + " unread message" + pluralization + ".");
