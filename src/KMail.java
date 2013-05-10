@@ -127,6 +127,12 @@ public class KMail extends JavaPlugin {
     }
     
     public void receiveMessage(Message msg) {
+        MailDeliverEvent event = new MailDeliverEvent(msg);
+        getServer().getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
+            return;
+        }
+        
         String username = msg.getDestAddress().getUsername();
         Mailbox mb = getMailbox(username, false);
         
@@ -164,6 +170,12 @@ public class KMail extends JavaPlugin {
         
         if (msg.getSentDate() == null) {
             msg.setSentDate(new Date());
+        }
+        
+        MailSendEvent event = new MailSendEvent(msg);
+        getServer().getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
+            return;
         }
         
         if (!dispatcher.queueMessage(msg)) {
