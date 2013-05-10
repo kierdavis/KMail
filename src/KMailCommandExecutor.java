@@ -340,13 +340,22 @@ public class KMailCommandExecutor implements CommandExecutor {
         
         Mailbox mb = plugin.getMailbox(getUsername(sender));
         Message msg;
+        String tailStr = null;
         
         if (args.length >= 1) {
             if (args[0].equalsIgnoreCase("next")) {
                 Iterator<Message> it = mb.searchTag("unread");
                 if (it.hasNext()) {
                     msg = it.next();
+                    
+                    if (it.hasNext()) {
+                        tailStr = ChatColor.YELLOW + "Repeat " + ChatColor.DARK_RED + "/kmail read next" + ChatColor.YELLOW + " to read the next unread message.";
+                    }
+                    else {
+                        tailStr = ChatColor.YELLOW + "No more unread messages.";
+                    }
                 }
+                
                 else {
                     sender.sendMessage(ChatColor.YELLOW + "No unread messages.");
                     return false;
@@ -387,6 +396,10 @@ public class KMailCommandExecutor implements CommandExecutor {
         }
         
         displayMessage(sender, msg);
+        
+        if (tailStr != null) {
+            sender.sendMessage(tailStr);
+        }
         
         return true;
     }

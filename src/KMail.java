@@ -127,14 +127,14 @@ public class KMail extends JavaPlugin {
         
         if (username.equalsIgnoreCase("CONSOLE")) {
             getLogger().info(ChatColor.YELLOW + "Incoming mail from " + ChatColor.GREEN + "" + msg.getSrcAddress().toString() + ChatColor.YELLOW + ".");
-            getLogger().info(ChatColor.YELLOW + "Type " + ChatColor.DARK_RED + "kmail read" + ChatColor.YELLOW + " to view it.");
+            getLogger().info(ChatColor.YELLOW + "Type " + ChatColor.DARK_RED + "kmail read next" + ChatColor.YELLOW + " to begin reading unread mail.");
         }
         
         else {
             Player player = getServer().getPlayer(username);
             if (player != null) {
                 player.sendMessage(ChatColor.YELLOW + "Incoming mail from " + ChatColor.GREEN + "" + msg.getSrcAddress().toString() + ChatColor.YELLOW + ".");
-                player.sendMessage(ChatColor.YELLOW + "Type " + ChatColor.DARK_RED + "/kmail read" + ChatColor.YELLOW + " to view it.");
+                player.sendMessage(ChatColor.YELLOW + "Type " + ChatColor.DARK_RED + "/kmail read next" + ChatColor.YELLOW + " to begin reading unread mail.");
             }
         }
         
