@@ -94,12 +94,12 @@ public class XMLMessageParser {
     
     public Address parseAddress(Element el) throws XMLMessageParseException {
         String username = el.elementTextTrim("username");
-        if (username == null || username.length == 0) {
+        if (username == null || username.length() == 0) {
             throw new XMLMessageParseException("Invalid or missing value for <username> element in <src>/<dest>");
         }
         
         String hostname = el.elementTextTrim("hostname");
-        if (hostname == null || hostname.length == 0) {
+        if (hostname == null || hostname.length() == 0) {
             throw new XMLMessageParseException("Invalid or missing value for <hostname> element in <src>/<dest>");
         }
         
