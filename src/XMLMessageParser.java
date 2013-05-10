@@ -2,53 +2,57 @@ package com.kierdavis.kmail;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Date;
 import java.io.File;
 import java.io.InputStream;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import org.w3c.doc.Document;
-import org.w3c.doc.Element;
-import org.w3c.doc.NodeList;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.io.SAXReader;
 
 public class XMLMessageParser {
-    private DocumentBuilderFactory factory;
-    
     public XMLMessageParser() {
-        factory = DocumentBuilderFactory.newInstance();
+        
     }
     
     public List<Message> parse(InputStream is) throws XMLMessageParseException {
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        Document doc = builder.parse(is);
+        SAXReader reader = new SAXReader();
+        Document doc;
+        
+        try {
+            doc = reader.read(is);
+        }
+        catch (DocumentException e) {
+            throw new XMLMessageParseException("Could not parse document: " + e.toString(), e);
+        }
         
         return parse(doc);
     }
     
     public List<Message> parse(File file) throws XMLMessageParseException {
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        Document doc = builder.parse(file);
+        SAXReader reader = new SAXReader();
+        Document doc;
+        
+        try {
+            doc = reader.read(file);
+        }
+        catch (DocumentException e) {
+            throw new XMLMessageParseException("Could not parse document: " + e.toString(), e);
+        }
         
         return parse(doc);
     }
     
     public List<Message> parse(Document doc) throws XMLMessageParseException {
         List<Message> msgs = new ArrayList<Message>();
-        Element root = doc.getDocumentElement();
-        NodeList messageNodes = root.getElementsByTagName("message");
+        Element root = doc.getRootElement();
+        Iterator it = root.elementIterator("message");
         
-        if (messageNodes == null || messageNodes.getLength() == 0) {
-            return msgs;
-        }
-        
-        for (int i = 0; i < messageNodes.getLength(); i++) {
-            Node messageNode = messageNodes.item(i);
+        while (it.hasNext()) {
+            Element el = (Element) it.next();
+            Message msg = parseMessage(el);
             
-            if (messageNode.getNodeType() == Node.ELEMENT_NODE) {
-                Message msg = parseMessage((Element) messageNode);
-                
-                if (msg != null) {
-                    msgs.add(msg);
-                }
+            if (msg != null) {
+                msgs.add(msg);
             }
         }
         
@@ -57,89 +61,50 @@ public class XMLMessageParser {
     
     public Message parseMessage(Element el) throws XMLMessageParseException {
         Message msg = new Message();
-        NodeList children = el.getChildNodes();
-        msg.setBody("");
-        msg.setSentDate(new Date());
         
-        if (children == null || children.getLength() == 0) {
-            throw new XMLMessageParseException("Message element cannot be empty");
+        Element srcEl = el.element("src");
+        if (srcEl == null) {
+            throw new XMLMessageParseException("Invalid or missing value for <src> element in <message>", e);
+        }
+        msg.setSrcAddress(parseAddress(srcEl));
+        
+        Element destEl = el.element("dest");
+        if (destEl == null) {
+            throw new XMLMessageParseException("Invalid or missing value for <dest> element in <message>", e);
+        }
+        msg.setDestAddress(parseAddress(destEl));
+        
+        String sentStr = el.elementTextTrim("sent");
+        long sentTime;
+        
+        try {
+            sentTime = Long.parseLong(sentStr);
+        }
+        catch (NumberFormatException e) {
+            throw new XMLMessageParseException("Invalid or missing value for <sent> element in <message>", e);
         }
         
-        for (int i = 0; i < children.getLength(); i++) {
-            Node child = children.item(i);
-            
-            if (child.getNodeType() == Node.ELEMENT_NODE) {
-                String tagName = child.getTagName();
-                
-                if (tagName.equals("src")) {
-                    msg.setSrcAddress(parseAddress(child));
-                }
-                
-                else if (tagName.equals("dest")) {
-                    msg.setDestAddress(parseAddress(child));
-                }
-                
-                else if (tagName.equals("body")) {
-                    msg.setBody(child.getTextContent());
-                }
-                
-                else if (tagName.equals("sent")) {
-                    long sentTime;
-                    
-                    try {
-                        sentTime = Long.parseLong(child.getTextContent());
-                    }
-                    catch (NumberFormatException e) {
-                        throw new XMLMessageParseException("Invalid format for sent date (expected a long integer)", e);
-                    }
-                    
-                    msg.setSentDate(new Date(sentTime));
-                }
-            }
-        }
-        
-        if (msg.getSrcAddress() == null) {
-            throw new XMLMessageParseException("Source address missing or empty");
-        }
-        
-        if (msg.getDestAddress() == null) {
-            throw new XMLMessageParseException("Destination address missing or empty");
-        }
+        msg.setBody(el.elementTextTrim("body"));
+        msg.setSentDate(new Date(sentTime));
         
         return msg;
     }
     
     public Address parseAddress(Element el) throws XMLMessageParseException {
         Address addr = new Address();
-        NodeList children = el.getChildNodes();
         
-        if (children == null || children.getLength() == 0) {
-            throw new XMLMessageParseException("Address element cannot be empty");
+        String username = el.elementTextTrim("username");
+        if (username == null || username.length == 0) {
+            throw new XMLMessageParseException("Invalid or missing value for <username> element in <src>/<dest>");
         }
         
-        for (int i = 0; i < children.getLength(); i++) {
-            Node child = children.item(i);
-            
-            if (child.getNodeType() == Node.ELEMENT_NODE) {
-                String tagName = child.getTagName();
-                
-                if (tagName.equals("username")) {
-                    addr.setUsername(child.getTextContent());
-                }
-                
-                else if (tagName.equals("hostname")) {
-                    addr.setHostname(child.getTextContent());
-                }
-            }
+        String hostname = el.elementTextTrim("hostname");
+        if (hostname == null || hostname.length == 0) {
+            throw new XMLMessageParseException("Invalid or missing value for <hostname> element in <src>/<dest>");
         }
         
-        if (addr.getUsername() == null || addr.getUsername().length == 0) {
-            throw new XMLMessageParseException("Address username missing or empty");
-        }
-        
-        if (addr.getHostname() == null || addr.getHostname().length == 0) {
-            throw new XMLMessageParseException("Address hostname missing or empty");
-        }
+        addr.setUsername(username);
+        addr.setHostname(hostname);
         
         return addr;
     }

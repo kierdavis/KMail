@@ -3,8 +3,9 @@ package com.kierdavis.kmail;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import java.io.InputStream;
-import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Iterator;
+import java.util.List;
 
 public class WebHandler implements HttpHandler {
     private KMail plugin;
@@ -26,6 +27,7 @@ public class WebHandler implements HttpHandler {
         
         try {
             msgs = parser.parse(is);
+            is.close();
         }
         catch (XMLMessageParseException e) {
             statusCode = 400;
@@ -36,6 +38,7 @@ public class WebHandler implements HttpHandler {
             Iterator<Message> it = msgs.iterator();
             
             while (it.hasNext()) {
+                Message msg = (Message) it.next();
                 plugin.getLogger().info("Received message via HTTP from " + t.getRemoteAddress().toString() + ": " + msg.getSrcAddress().toString() + " -> " + msg.getDestAddress().toString());
                 plugin.receiveMessage(msg);
             }
