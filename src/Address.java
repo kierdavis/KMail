@@ -48,4 +48,8 @@ public class Address implements Serializable {
         b.append(hostname);
         return b.toString();
     }
+    
+    public Address clone() {
+        return new Address(username, hostname);
+    }
 }

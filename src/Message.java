@@ -128,4 +128,15 @@ public class Message {
     public int getRetries() {
         return numRetries;
     }
+    
+    public Message clone() {
+        Message msg = new Message()
+        msg.src = src.clone();
+        msg.dest = dest.clone();
+        msg.body = body;
+        msg.sentDate = sentDate;
+        msg.receivedDate = receivedDate;
+        msg.tags = new HashSet<String>(tags);
+        return msg;
+    }
 }
