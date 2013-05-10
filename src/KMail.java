@@ -33,8 +33,7 @@ public class KMail extends JavaPlugin {
         }
         
         // Register event listeners
-        new PartialMessageListener(this);
-        new LoginNotifierListener(this);
+        getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
         
         // Register commands
         getCommand("kmail").setExecutor(new KMailCommandExecutor(this));
