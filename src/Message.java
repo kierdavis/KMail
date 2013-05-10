@@ -4,19 +4,17 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import java.io.Serializable;
-
-public class Message implements Serializable {
+public class Message {
     private Address src;
     private Address dest;
     private String body;
     private Date sentDate;
     
     // Only used internally
-    private transient Date receivedDate;
-    private transient long localID;
-    private transient Set<String> tags;
-    private transient int numRetries;
+    private Date receivedDate;
+    private long localID;
+    private Set<String> tags;
+    private int numRetries;
     
     private static long nextLocalID = 0;
     private static synchronized long getNextLocalID() {
