@@ -601,7 +601,7 @@ public class KMailCommandExecutor implements CommandExecutor {
         
         Message newMsg = msg.clone();
         newMsg.setDestAddress(new Address(args[0]));
-        newMsg.setBody("** Message forwarded via " + msg.getDestAddress() + " at " + (new Date()).toString() + "\n\n" + newMsg.getBody());
+        newMsg.setBody("** Message forwarded via " + msg.getDestAddress() + " at " + (new Date()).toString() + "\n" + newMsg.getBody());
         
         plugin.sendMessage(newMsg);
         
@@ -655,7 +655,7 @@ public class KMailCommandExecutor implements CommandExecutor {
         reply.setSrcAddress(new Address(srcUsername, "local"));
         reply.setDestAddress(msg.getSrcAddress());
         
-        String header = "** In reply to " + msg.getSrcAddress() + "\n";
+        String header = "** In reply to " + msg.getSrcAddress();
         
         if (args.length >= 1) {
             StringBuilder bodyBuilder = new StringBuilder();
