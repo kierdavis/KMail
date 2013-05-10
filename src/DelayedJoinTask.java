@@ -4,7 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class DelayedJoinTask implements BukkitRunnable {
+public class DelayedJoinTask extends BukkitRunnable {
     private KMail plugin;
     private Player player;
     
