@@ -5,16 +5,19 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class WebClient {
     private KMail plugin;
+    private XMLMessageSerializer serializer;
     
     public WebClient(KMail plugin_) {
         plugin = plugin_;
+        serializer = new XMLMessageSerializer();
     }
     
     public void send(Message msg) {
@@ -34,21 +37,19 @@ public class WebClient {
         HttpURLConnection conn = null;
         
         try {
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            ObjectOutputStream oos = new ObjectOutputStream(bos);
-            oos.writeObject(msg);
-            oos.flush();
-            oos.close();
+            Collection<Message> msgs = new ArrayList<Message>();
+            msgs.add(msg);
             
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            serializer.serialize(bos, msg);
             byte[] requestBytes = bos.toByteArray();
             
             URL url = new URL("http://" + hostname + "/");
             conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(plugin.getClientTimeout() * 1000);
             conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/x-java-serialized-object");
+            conn.setRequestProperty("Content-Type", "application/xml");
             conn.setRequestProperty("Content-Length", Integer.toString(requestBytes.length));
-            conn.setRequestProperty("Host", hostname);
             conn.setUseCaches(false);
             conn.setDoOutput(true);
             conn.setDoInput(true);
@@ -73,10 +74,6 @@ public class WebClient {
             
             br.close();
             success = true;
-        }
-        
-        catch (IOException e) {
-            plugin.getLogger().severe("Error sending message: " + e.toString());
         }
         
         finally {
