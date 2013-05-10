@@ -27,5 +27,7 @@ public class DelayedJoinTask extends BukkitRunnable {
             player.sendMessage(ChatColor.YELLOW + "You have " + ChatColor.GREEN + Integer.toString(numUnread) + ChatColor.YELLOW + " unread message" + s1 + ".");
             player.sendMessage(ChatColor.YELLOW + "Type " + ChatColor.DARK_RED + "/kmail read next" + ChatColor.YELLOW + " to begin reading " + s2 + ".");
         }
+        
+        plugin.saveMailbox(player.getName());
     }
 }
