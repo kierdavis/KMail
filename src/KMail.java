@@ -34,6 +34,7 @@ public class KMail extends JavaPlugin {
         
         // Register event listeners
         new PartialMessageListener(this);
+        new LoginNotifierListener(this);
         
         // Register commands
         getCommand("kmail").setExecutor(new KMailCommandExecutor(this));
