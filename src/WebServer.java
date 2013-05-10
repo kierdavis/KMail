@@ -33,7 +33,7 @@ public class WebServer {
             return;
         }
         
-        server.stop(5);
+        server.stop(2);
         server = null;
     }
 }
