@@ -63,6 +63,10 @@ public class KMailCommandExecutor implements CommandExecutor {
             return doDelete(sender, args);
         }
         
+        if (subcmd.equalsIgnoreCase("forward")) {
+            return doForward(sender, args);
+        }
+        
         if (subcmd.equalsIgnoreCase("import")) {
             return doImport(sender, args);
         }
@@ -80,14 +84,15 @@ public class KMailCommandExecutor implements CommandExecutor {
         if (args.length < 1) {
             sender.sendMessage(ChatColor.YELLOW + "KMail Help: (" + ChatColor.RED + "<required> [optional]" + ChatColor.YELLOW + ")");
             
-            if (sender.hasPermission("kmail.send"))   sender.sendMessage(ChatColor.DARK_RED + "  /kmail send " + ChatColor.RED + "<address> [message]");
-            if (sender.hasPermission("kmail.list"))   sender.sendMessage(ChatColor.DARK_RED + "  /kmail list " + ChatColor.RED + "[criteria] [page]");
-            if (sender.hasPermission("kmail.select")) sender.sendMessage(ChatColor.DARK_RED + "  /kmail select " + ChatColor.RED + "<id>");
-            if (sender.hasPermission("kmail.read"))   sender.sendMessage(ChatColor.DARK_RED + "  /kmail read " + ChatColor.RED + "[id]");
-            if (sender.hasPermission("kmail.read"))   sender.sendMessage(ChatColor.DARK_RED + "  /kmail read next");
-            if (sender.hasPermission("kmail.tag"))    sender.sendMessage(ChatColor.DARK_RED + "  /kmail tag " + ChatColor.RED + "[id] <tags...>");
-            if (sender.hasPermission("kmail.tag"))    sender.sendMessage(ChatColor.DARK_RED + "  /kmail untag " + ChatColor.RED + "[id] <tags...>");
-            if (sender.hasPermission("kmail.delete")) sender.sendMessage(ChatColor.DARK_RED + "  /kmail delete " + ChatColor.RED + "[id]");
+            if (sender.hasPermission("kmail.send"))    sender.sendMessage(ChatColor.DARK_RED + "  /kmail send " + ChatColor.RED + "<address> [message]");
+            if (sender.hasPermission("kmail.list"))    sender.sendMessage(ChatColor.DARK_RED + "  /kmail list " + ChatColor.RED + "[criteria] [page]");
+            if (sender.hasPermission("kmail.select"))  sender.sendMessage(ChatColor.DARK_RED + "  /kmail select " + ChatColor.RED + "<id>");
+            if (sender.hasPermission("kmail.read"))    sender.sendMessage(ChatColor.DARK_RED + "  /kmail read " + ChatColor.RED + "[id]");
+            if (sender.hasPermission("kmail.read"))    sender.sendMessage(ChatColor.DARK_RED + "  /kmail read next");
+            if (sender.hasPermission("kmail.tag"))     sender.sendMessage(ChatColor.DARK_RED + "  /kmail tag " + ChatColor.RED + "[id] <tags...>");
+            if (sender.hasPermission("kmail.tag"))     sender.sendMessage(ChatColor.DARK_RED + "  /kmail untag " + ChatColor.RED + "[id] <tags...>");
+            if (sender.hasPermission("kmail.delete"))  sender.sendMessage(ChatColor.DARK_RED + "  /kmail delete " + ChatColor.RED + "[id]");
+            if (sender.hasPermission("kmail.forward")) sender.sendMessage(ChatColor.DARK_RED + "  /kmail forward " + ChatColor.RED + "[id] <address>");
             
             if (sender.hasPermission("kmail.admin.import")) sender.sendMessage(ChatColor.DARK_RED + "  /kmail import " + ChatColor.RED + "<plugin>");
             
@@ -142,6 +147,13 @@ public class KMailCommandExecutor implements CommandExecutor {
         if (topic.equalsIgnoreCase("delete")) {
             sender.sendMessage(ChatColor.DARK_RED + "/kmail delete " + ChatColor.RED + "[id]");
             sender.sendMessage(ChatColor.YELLOW + "Deletes a message identified by its local ID (or the selected message if omitted)");
+            return true;
+        }
+        
+        if (topic.equalsIgnoreCase("forward")) {
+            sender.sendMessage(ChatColor.DARK_RED + "/kmail forward " + ChatColor.RED + "[id] <address>");
+            sender.sendMessage(ChatColor.YELLOW + "Forwards a message identified by its local ID (or the selected message if omitted) to another mail address.");
+            sender.sendMessage(ChatColor.YELLOW + "See also: " + ChatColor.DARK_RED + "/kmail help addresses");
             return true;
         }
         
@@ -532,6 +544,55 @@ public class KMailCommandExecutor implements CommandExecutor {
         
         mb.remove(msg);
         sender.sendMessage(ChatColor.YELLOW + "Message deleted.");
+        
+        return true;
+    }
+    
+    private boolean doForward(CommandSender sender, String[] args) {
+        if (!sender.hasPermission("kmail.forward")) {
+            sender.sendMessage(ChatColor.YELLOW + "You don't have the required permission (kmail.forward)");
+            return false;
+        }
+        
+        Mailbox mb = plugin.getMailbox(getUsername(sender));
+        Message msg = null;
+        
+        if (args.length >= 1) {
+            try {
+                long id = Long.parseLong(args[0]);
+                msg = mb.getByID(id);
+                if (msg == null) {
+                    sender.sendMessage(ChatColor.YELLOW + "No message with that ID in your mailbox.");
+                    return false;
+                }
+                
+                args = Arrays.copyOfRange(args, 1, args.length);
+            }
+            
+            catch (NumberFormatException e) {}
+        }
+        
+        if (msg == null) {
+            msg = selected.get(sender);
+            if (msg == null) {
+                sender.sendMessage(ChatColor.YELLOW + "No message selected.");
+                return false;
+            }
+        }
+        
+        if (args.length < 1) {
+            sender.sendMessage(ChatColor.YELLOW + "Usage: " + ChatColor.DARK_RED + "/kmail forward " + ChatColor.RED + "[id] <address>");
+            sender.sendMessage(ChatColor.YELLOW + "See " + ChatColor.DARK_RED + "/kmail help forward" + ChatColor.YELLOW + " for more info.");
+            return false;
+        }
+        
+        Message newMsg = msg.clone();
+        newMsg.setDestAddress(new Address(args[0]));
+        newMsg.setBody("** Message forwarded via " + msg.getDestAddress() + " at " + (new Date()).toString() + "\n\n" + newMsg.getBody());
+        
+        plugin.sendMessage(newMsg);
+        
+        sender.sendMessage(ChatColor.YELLOW + "Message forwarded.");
         
         return true;
     }
