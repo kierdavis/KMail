@@ -7,6 +7,7 @@ public class MailDeliverEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
     
     private Message msg;
+    private boolean cancelled;
     
     public MailDeliverEvent(Message msg_) {
         msg = msg_;
