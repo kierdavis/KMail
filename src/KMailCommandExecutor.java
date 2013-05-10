@@ -666,7 +666,7 @@ public class KMailCommandExecutor implements CommandExecutor {
             }
             
             reply.setBody(header + "\n" + bodyBuilder.toString());
-            plugin.sendMessage(msg);
+            plugin.sendMessage(reply);
             
             sender.sendMessage(ChatColor.YELLOW + "Mail queued.");
             
@@ -680,7 +680,7 @@ public class KMailCommandExecutor implements CommandExecutor {
             }
             
             Player player = (Player) sender;
-            PartialMessage pm = new PartialMessage(msg);
+            PartialMessage pm = new PartialMessage(reply);
             pm.append(header);
             
             plugin.putPartialMessage(player, pm);
