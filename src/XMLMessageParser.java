@@ -3,10 +3,12 @@ package com.kierdavis.kmail;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.io.File;
 import java.io.InputStream;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
+import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 public class XMLMessageParser {
@@ -64,13 +66,13 @@ public class XMLMessageParser {
         
         Element srcEl = el.element("src");
         if (srcEl == null) {
-            throw new XMLMessageParseException("Invalid or missing value for <src> element in <message>", e);
+            throw new XMLMessageParseException("Invalid or missing value for <src> element in <message>");
         }
         msg.setSrcAddress(parseAddress(srcEl));
         
         Element destEl = el.element("dest");
         if (destEl == null) {
-            throw new XMLMessageParseException("Invalid or missing value for <dest> element in <message>", e);
+            throw new XMLMessageParseException("Invalid or missing value for <dest> element in <message>");
         }
         msg.setDestAddress(parseAddress(destEl));
         
@@ -91,8 +93,6 @@ public class XMLMessageParser {
     }
     
     public Address parseAddress(Element el) throws XMLMessageParseException {
-        Address addr = new Address();
-        
         String username = el.elementTextTrim("username");
         if (username == null || username.length == 0) {
             throw new XMLMessageParseException("Invalid or missing value for <username> element in <src>/<dest>");
@@ -103,9 +103,6 @@ public class XMLMessageParser {
             throw new XMLMessageParseException("Invalid or missing value for <hostname> element in <src>/<dest>");
         }
         
-        addr.setUsername(username);
-        addr.setHostname(hostname);
-        
-        return addr;
+        return new Address(username, hostname);
     }
 }
