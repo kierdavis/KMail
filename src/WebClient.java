@@ -101,22 +101,9 @@ public class WebClient {
         if (msg.getRetries() >= plugin.getNumRetries()) {
             plugin.getLogger().severe("Sending failed permanently");
             
-            Address srcAddr = new Address("CONSOLE", plugin.getLocalHostname());
-            Message replyMsg = new Message(srcAddr, msg.getSrcAddress());
-            
-            StringBuilder bodyBuilder = new StringBuilder();
-            bodyBuilder.append("Sending of the following message failed after ").append(plugin.getNumRetries()).append(" attempts:\n");
-            bodyBuilder.append("  From: ").append(msg.getSrcAddress().toString()).append("\n");
-            bodyBuilder.append("  To: ").append(msg.getDestAddress().toString()).append("\n");
-            bodyBuilder.append("  Sent: ").append(msg.getSentDate().toString()).append("\n");
-            bodyBuilder.append("  Body:\n    ").append(msg.getBody());
-            replyMsg.setBody(bodyBuilder.toString());
-            
-            plugin.sendMessage(replyMsg);
+            msg = errorResponse(msg, "Sending failed after " + Integer.toString(plugin.getNumRetries()) + " attempts");
         }
         
-        else {
-            plugin.sendMessage(msg);
-        }
+        plugin.sendMessage(msg);
     }
 }

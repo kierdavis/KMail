@@ -29,7 +29,7 @@ public class KMail extends JavaPlugin {
         Player[] players = getServer().getOnlinePlayers();
         getLogger().info("Preloading " + Integer.toString(players.length) + " mailboxes");
         for (int i = 0; i < players.length; i++) {
-            getMailbox(players[i].getName());
+            getMailbox(players[i].getName(), true);
         }
         
         // Register event listeners
@@ -97,7 +97,7 @@ public class KMail extends JavaPlugin {
         return getConfig().getInt("remote.server.port", 4880);
     }
     
-    public Mailbox getMailbox(String username, boolean createNew) {
+    public Mailbox getMailbox(String username, boolean create) {
         Mailbox mb = mailboxes.get(username.toLowerCase());
         
         if (mb == null) {
@@ -119,7 +119,7 @@ public class KMail extends JavaPlugin {
     
     public void saveMailbox(String username) {
         try {
-            getMailbox(username).save(this, username);
+            getMailbox(username, true).save(this, username);
         }
         catch (IOException e) {
             getLogger().info("Could not save mailbox: " + e.toString());
@@ -128,7 +128,15 @@ public class KMail extends JavaPlugin {
     
     public void receiveMessage(Message msg) {
         String username = msg.getDestAddress().getUsername();
-        getMailbox(username).receive(msg);
+        Mailbox mb = getMailbox(username, false);
+        
+        if (mb == null) {
+            msg = errorResponse(msg, "No user named '" + username + "' at destination host.");
+            sendMessage(msg);
+            return;
+        }
+        
+        mb.receive(msg);
         
         if (username.equalsIgnoreCase("CONSOLE")) {
             getLogger().info(ChatColor.YELLOW + "Incoming mail from " + ChatColor.GREEN + "" + msg.getSrcAddress().toString() + ChatColor.YELLOW + ".");
@@ -173,5 +181,21 @@ public class KMail extends JavaPlugin {
     
     public synchronized void removePartialMessage(Player player) {
         partialMessages.remove(player);
+    }
+    
+    public Message errorResponse(Message cause, String error) {
+        Message msg = new Message();
+        msg.setSrcAddress(new Address("KMail", getLocalHostname()));
+        msg.setDestAddress(cause.getSrcAddress());
+        
+        StringBuilder bodyBuilder = new StringBuilder();
+        bodyBuilder.append("Sending of the following message failed because: ").append(error);
+        bodyBuilder.append("  From: ").append(cause.getSrcAddress().toString()).append("\n");
+        bodyBuilder.append("  To: ").append(cause.getDestAddress().toString()).append("\n");
+        bodyBuilder.append("  Sent: ").append(cause.getSentDate().toString()).append("\n\n");
+        bodyBuilder.append(cause.getBody());
+        msg.setBody(bodyBuilder.toString());
+        
+        return msg;
     }
 }

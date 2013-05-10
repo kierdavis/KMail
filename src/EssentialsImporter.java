@@ -35,7 +35,7 @@ public class EssentialsImporter implements Importer {
     }
     
     public int importUser(KMail plugin, User user) {
-        Mailbox mb = plugin.getMailbox(user.getName());
+        Mailbox mb = plugin.getMailbox(user.getName(), true);
         Iterator<String> mailIt = user.getMails().iterator();
         String localHostname = plugin.getLocalHostname();
         int numMessages = 0;
