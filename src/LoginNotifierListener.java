@@ -4,7 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 public class LoginNotifierListener implements Listener {
     private KMail plugin;
@@ -15,13 +15,10 @@ public class LoginNotifierListener implements Listener {
     }
     
     @EventHandler
-    public void onPlayerLogin(PlayerLoginEvent event) {
+    public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         Mailbox mb = plugin.getMailbox(player.getName());
         int numUnread = mb.numUnread();
-        
-        plugin.getLogger().info("Player: " + player.getName());
-        plugin.getLogger().info("Num unread: " + Integer.toString(numUnread));
         
         if (numUnread > 0) {
             String pluralization = numUnread == 1 ? "" : "s";
