@@ -149,7 +149,9 @@ public class KMail extends JavaPlugin {
             msg.getDestAddress().setHostname(getLocalHostname());
         }
         
-        msg.setSentDate(new Date());
+        if (msg.getSentDate() == null) {
+            msg.setSentDate(new Date());
+        }
         
         if (!dispatcher.queueMessage(msg)) {
             getLogger().severe("Failed to queue message from " + msg.getSrcAddress().toString());

@@ -53,6 +53,14 @@ permissions:
         description: Gives access to delete messages.
         default: true
     
+    kmail.forward:
+        description: Gives access to forward messages.
+        default: true
+    
+    kmail.reply:
+        description: Gives access to reply to messages.
+        default: true
+    
     kmail.admin.*:
         description: Gives access to all admin-level commands.
         children:

@@ -67,6 +67,10 @@ public class KMailCommandExecutor implements CommandExecutor {
         if (subcmd.equalsIgnoreCase("forward")) {
             return doForward(sender, args);
         }
+
+        if (subcmd.equalsIgnoreCase("reply")) {
+            return doReply(sender, args);
+        }
         
         if (subcmd.equalsIgnoreCase("import")) {
             return doImport(sender, args);
@@ -94,6 +98,7 @@ public class KMailCommandExecutor implements CommandExecutor {
             if (sender.hasPermission("kmail.tag"))     sender.sendMessage(ChatColor.DARK_RED + "  /kmail untag " + ChatColor.RED + "[id] <tags...>");
             if (sender.hasPermission("kmail.delete"))  sender.sendMessage(ChatColor.DARK_RED + "  /kmail delete " + ChatColor.RED + "[id]");
             if (sender.hasPermission("kmail.forward")) sender.sendMessage(ChatColor.DARK_RED + "  /kmail forward " + ChatColor.RED + "[id] <address>");
+            if (sender.hasPermission("kmail.reply"))   sender.sendMessage(ChatColor.DARK_RED + "  /kmail reply " + ChatColor.RED + "[id] [message]");
             
             if (sender.hasPermission("kmail.admin.import")) sender.sendMessage(ChatColor.DARK_RED + "  /kmail import " + ChatColor.RED + "<plugin>");
             
@@ -154,6 +159,13 @@ public class KMailCommandExecutor implements CommandExecutor {
         if (topic.equalsIgnoreCase("forward")) {
             sender.sendMessage(ChatColor.DARK_RED + "/kmail forward " + ChatColor.RED + "[id] <address>");
             sender.sendMessage(ChatColor.YELLOW + "Forwards a message identified by its local ID (or the selected message if omitted) to another mail address.");
+            sender.sendMessage(ChatColor.YELLOW + "See also: " + ChatColor.DARK_RED + "/kmail help addresses");
+            return true;
+        }
+        
+        if (topic.equalsIgnoreCase("reply")) {
+            sender.sendMessage(ChatColor.DARK_RED + "/kmail reply " + ChatColor.RED + "[id] [message]");
+            sender.sendMessage(ChatColor.YELLOW + "Reply to a message identified by its local ID (or the selected message if omitted). If the message is not specified in the command, all future chat messages (until one consisting of a single period ('.') is sent) will be used as the body of the message.");
             sender.sendMessage(ChatColor.YELLOW + "See also: " + ChatColor.DARK_RED + "/kmail help addresses");
             return true;
         }
@@ -596,6 +608,88 @@ public class KMailCommandExecutor implements CommandExecutor {
         sender.sendMessage(ChatColor.YELLOW + "Message forwarded.");
         
         return true;
+    }
+    
+    private boolean doReply(CommandSender sender, String[] args) {
+        if (!sender.hasPermission("kmail.reply")) {
+            sender.sendMessage(ChatColor.YELLOW + "You don't have the required permission (kmail.reply)");
+            return false;
+        }
+        
+        Mailbox mb = plugin.getMailbox(getUsername(sender));
+        Message msg = null;
+        
+        if (args.length >= 1) {
+            try {
+                long id = Long.parseLong(args[0]);
+                msg = mb.getByID(id);
+                if (msg == null) {
+                    sender.sendMessage(ChatColor.YELLOW + "No message with that ID in your mailbox.");
+                    return false;
+                }
+                
+                args = Arrays.copyOfRange(args, 1, args.length);
+            }
+            
+            catch (NumberFormatException e) {}
+        }
+        
+        if (msg == null) {
+            msg = selected.get(sender);
+            if (msg == null) {
+                sender.sendMessage(ChatColor.YELLOW + "No message selected.");
+                return false;
+            }
+        }
+        
+        String srcUsername;
+        
+        if (sender instanceof Player) {
+            srcUsername = ((Player) sender).getName();
+        }
+        else {
+            srcUsername = "CONSOLE";
+        }
+        
+        Message reply = new Message();
+        reply.setSrcAddress(new Address(srcUsername, "local"));
+        reply.setDestAddress(msg.getSrcAddress());
+        
+        String header = "** In reply to " + msg.getSrcAddress() + "\n";
+        
+        if (args.length >= 1) {
+            StringBuilder bodyBuilder = new StringBuilder();
+            bodyBuilder.append(args[0]);
+            
+            for (int i = 1; i < args.length; i++) {
+                bodyBuilder.append(" ").append(args[i]);
+            }
+            
+            reply.setBody(header + "\n" + bodyBuilder.toString());
+            plugin.sendMessage(msg);
+            
+            sender.sendMessage(ChatColor.YELLOW + "Mail queued.");
+            
+            return true;
+        }
+        
+        else {
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(ChatColor.YELLOW + "This command must be run as a player.");
+                return false;
+            }
+            
+            Player player = (Player) sender;
+            PartialMessage pm = new PartialMessage(msg);
+            pm.append(header);
+            
+            plugin.putPartialMessage(player, pm);
+            
+            sender.sendMessage(ChatColor.YELLOW + "Now type your mail message in normal chat (not with commands).");
+            sender.sendMessage(ChatColor.YELLOW + "End the message with a single chat message containing a dot (period).");
+            
+            return true;
+        }
     }
     
     private boolean doImport(CommandSender sender, String[] args) {
