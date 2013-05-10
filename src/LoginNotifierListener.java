@@ -17,7 +17,7 @@ public class LoginNotifierListener implements Listener {
     @EventHandler
     public void onPlayerLogin(PlayerLoginEvent event) {
         Player player = event.getPlayer();
-        Mailbox mb = player.getMailbox();
+        Mailbox mb = plugin.getMailbox(player.getName());
         int numUnread = mb.numUnread();
         
         if (numUnread > 0) {
