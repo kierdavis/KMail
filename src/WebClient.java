@@ -76,6 +76,14 @@ public class WebClient {
             success = true;
         }
         
+        catch (XMLMessageSerializationException e) {
+            plugin.getLogger().severe("Could not serialize messages: " + e.toString());
+        }
+        
+        catch (IOException e) {
+            plugin.getLogger().severe("Could not send messages: " + e.toString());
+        }
+        
         finally {
             if (conn != null) {
                 conn.disconnect();
