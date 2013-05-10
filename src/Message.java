@@ -130,7 +130,7 @@ public class Message {
     }
     
     public Message clone() {
-        Message msg = new Message()
+        Message msg = new Message();
         msg.src = src.clone();
         msg.dest = dest.clone();
         msg.body = body;
