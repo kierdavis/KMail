@@ -2,8 +2,10 @@ package com.kierdavis.kmail;
 
 import java.io.OutputStream;
 import java.util.Collection;
+import java.util.Iterator;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
 import org.dom4j.io.XMLWriter;
 
 public class XMLMessageSerializer {
@@ -26,7 +28,7 @@ public class XMLMessageSerializer {
         while (it.hasNext()) {
             Message msg = (Message) it.next();
             Element msgElement = root.addElement("message");
-            populateMessageElement(el, msg);
+            populateMessageElement(msgElement, msg);
         }
         
         return doc;

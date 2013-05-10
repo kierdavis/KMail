@@ -9,7 +9,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 public class WebClient {
     private KMail plugin;
@@ -41,7 +41,7 @@ public class WebClient {
             msgs.add(msg);
             
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            serializer.serialize(bos, msg);
+            serializer.serialize(bos, msgs);
             byte[] requestBytes = bos.toByteArray();
             
             URL url = new URL("http://" + hostname + "/");
