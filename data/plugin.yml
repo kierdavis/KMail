@@ -1,5 +1,5 @@
 name: KMail
-version: 1.1.4
+version: 1.1.5
 author: Kier Davis <kierdavis@gmail.com>
 
 main: com.kierdavis.kmail.KMail
@@ -20,6 +20,8 @@ permissions:
             kmail.read: true
             kmail.tag: true
             kmail.delete: true
+            kmail.forward: true
+            kmail.reply: true
     
     kmail.help:
         description: Gives access to view the builtin help.
