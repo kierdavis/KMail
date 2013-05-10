@@ -97,13 +97,18 @@ public class KMail extends JavaPlugin {
         return getConfig().getInt("remote.server.port", 4880);
     }
     
-    public Mailbox getMailbox(String username) {
+    public Mailbox getMailbox(String username, boolean createNew) {
         Mailbox mb = mailboxes.get(username.toLowerCase());
         
         if (mb == null) {
             mb = Mailbox.load(this, username);
             if (mb == null) {
-                mb = new Mailbox();
+                if (create) {
+                    mb = new Mailbox();
+                }
+                else {
+                    return null;
+                }
             }
             
             mailboxes.put(username.toLowerCase(), mb);
