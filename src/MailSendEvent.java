@@ -7,6 +7,7 @@ public class MailSendEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
     
     private Message msg;
+    private boolean cancelled;
     
     public MailSendEvent(Message msg_) {
         msg = msg_;
@@ -22,5 +23,13 @@ public class MailSendEvent extends Event {
     
     public static HandlerList getHandlerList() {
         return handlers;
+    }
+    
+    public boolean isCancelled() {
+        return cancelled;
+    }
+    
+    public void setCancelled(boolean state) {
+        cancelled = state;
     }
 }

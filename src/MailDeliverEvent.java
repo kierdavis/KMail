@@ -23,4 +23,12 @@ public class MailDeliverEvent extends Event {
     public static HandlerList getHandlerList() {
         return handlers;
     }
+    
+    public boolean isCancelled() {
+        return cancelled;
+    }
+    
+    public void setCancelled(boolean state) {
+        cancelled = state;
+    }
 }
