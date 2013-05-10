@@ -101,7 +101,7 @@ public class WebClient {
         if (msg.getRetries() >= plugin.getNumRetries()) {
             plugin.getLogger().severe("Sending failed permanently");
             
-            msg = errorResponse(msg, "Sending failed after " + Integer.toString(plugin.getNumRetries()) + " attempts");
+            msg = plugin.errorResponse(msg, "Sending failed after " + Integer.toString(plugin.getNumRetries()) + " attempts");
         }
         
         plugin.sendMessage(msg);

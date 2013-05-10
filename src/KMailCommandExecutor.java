@@ -291,7 +291,7 @@ public class KMailCommandExecutor implements CommandExecutor {
             }
         }
         
-        Mailbox mb = plugin.getMailbox(getUsername(sender));
+        Mailbox mb = plugin.getMailbox(getUsername(sender), true);
         Iterator<Message> it = mb.search(criteria);
         
         int i = 0;
@@ -343,7 +343,7 @@ public class KMailCommandExecutor implements CommandExecutor {
             return false;
         }
         
-        Mailbox mb = plugin.getMailbox(getUsername(sender));
+        Mailbox mb = plugin.getMailbox(getUsername(sender), true);
         Message msg = mb.getByID(id);
         
         if (msg == null) {
@@ -363,7 +363,7 @@ public class KMailCommandExecutor implements CommandExecutor {
             return false;
         }
         
-        Mailbox mb = plugin.getMailbox(getUsername(sender));
+        Mailbox mb = plugin.getMailbox(getUsername(sender), true);
         Message msg;
         String tailStr = null;
         
@@ -435,7 +435,7 @@ public class KMailCommandExecutor implements CommandExecutor {
             return false;
         }
         
-        Mailbox mb = plugin.getMailbox(getUsername(sender));
+        Mailbox mb = plugin.getMailbox(getUsername(sender), true);
         Message msg = null;
         
         if (args.length >= 1) {
@@ -482,7 +482,7 @@ public class KMailCommandExecutor implements CommandExecutor {
             return false;
         }
         
-        Mailbox mb = plugin.getMailbox(getUsername(sender));
+        Mailbox mb = plugin.getMailbox(getUsername(sender), true);
         Message msg = null;
         
         if (args.length >= 1) {
@@ -529,7 +529,7 @@ public class KMailCommandExecutor implements CommandExecutor {
             return false;
         }
         
-        Mailbox mb = plugin.getMailbox(getUsername(sender));
+        Mailbox mb = plugin.getMailbox(getUsername(sender), true);
         Message msg = null;
         
         if (args.length >= 1) {
@@ -567,7 +567,7 @@ public class KMailCommandExecutor implements CommandExecutor {
             return false;
         }
         
-        Mailbox mb = plugin.getMailbox(getUsername(sender));
+        Mailbox mb = plugin.getMailbox(getUsername(sender), true);
         Message msg = null;
         
         if (args.length >= 1) {
@@ -616,7 +616,7 @@ public class KMailCommandExecutor implements CommandExecutor {
             return false;
         }
         
-        Mailbox mb = plugin.getMailbox(getUsername(sender));
+        Mailbox mb = plugin.getMailbox(getUsername(sender), true);
         Message msg = null;
         
         if (args.length >= 1) {
