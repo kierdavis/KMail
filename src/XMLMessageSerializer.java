@@ -1,6 +1,7 @@
 package com.kierdavis.kmail;
 
 import java.io.OutputStream;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 import org.dom4j.Document;
@@ -16,8 +17,14 @@ public class XMLMessageSerializer {
     public void serialize(OutputStream os, Collection<Message> msgs) throws XMLMessageSerializationException {
         Document doc = buildDocument(msgs);
         
-        XMLWriter w = new XMLWriter(os);
-        w.write(doc);
+        try {
+            XMLWriter w = new XMLWriter(os);
+            w.write(doc);
+        }
+        
+        catch (IOException e) {
+            throw new XMLMessageSerializationException("Serialization failed: " + e.toString(), e);
+        }
     }
     
     public Document buildDocument(Collection<Message> msgs) throws XMLMessageSerializationException {
