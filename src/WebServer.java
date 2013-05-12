@@ -21,7 +21,7 @@ public class WebServer {
         int port = plugin.getServerPort();
         
         server = HttpServer.create(new InetSocketAddress(ip, port), 0);
-        server.createContext("/", new WebHandler(plugin));
+        server.createContext("/", new WebMailHandler(plugin));
         server.setExecutor(null);
         server.start();
         

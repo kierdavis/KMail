@@ -8,11 +8,11 @@ import java.io.OutputStream;
 import java.util.Iterator;
 import java.util.List;
 
-public class WebHandler implements HttpHandler {
+public class WebMailHandler implements HttpHandler {
     private KMail plugin;
     private XMLMessageParser parser;
     
-    public WebHandler(KMail plugin_) {
+    public WebMailHandler(KMail plugin_) {
         plugin = plugin_;
         parser = new XMLMessageParser();
     }
