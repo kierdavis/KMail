@@ -26,7 +26,7 @@ public class KMail extends JavaPlugin {
         server = new WebServer(this);
         
         // Preload mailboxes of all online players
-        preloadAllMailboxes()
+        preloadAllMailboxes();
         
         // Register event listeners
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
