@@ -1,5 +1,7 @@
 package com.kierdavis.kmail;
 
+import com.kierdavis.kmail.events.MailDeliverEvent;
+import com.kierdavis.kmail.events.MailSendEvent;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
