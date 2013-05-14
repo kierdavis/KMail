@@ -1,15 +1,16 @@
-package com.kierdavis.kmail;
+package com.kierdavis.kmail.events;
 
+import com.kierdavis.kmail.Message;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class MailDeliverEvent extends Event {
+public class MailSendEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
     
     private Message msg;
     private boolean cancelled;
     
-    public MailDeliverEvent(Message msg_) {
+    public MailSendEvent(Message msg_) {
         msg = msg_;
     }
     
