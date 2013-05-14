@@ -72,6 +72,14 @@ public class KMailCommandExecutor implements CommandExecutor {
             return doReply(sender, args);
         }
         
+        if (subcmd.equalsIgnoreCase("reload")) {
+            return doReload(sender, args);
+        }
+        
+        if (subcmd.equalsIgnoreCase("prune")) {
+            return doPrune(sender, args);
+        }
+        
         if (subcmd.equalsIgnoreCase("import")) {
             return doImport(sender, args);
         }
@@ -167,6 +175,18 @@ public class KMailCommandExecutor implements CommandExecutor {
             sender.sendMessage(ChatColor.DARK_RED + "/kmail reply " + ChatColor.RED + "[id] [message]");
             sender.sendMessage(ChatColor.YELLOW + "Reply to a message identified by its local ID (or the selected message if omitted). If the message is not specified in the command, all future chat messages (until one consisting of a single period ('.') is sent) will be used as the body of the message.");
             sender.sendMessage(ChatColor.YELLOW + "See also: " + ChatColor.DARK_RED + "/kmail help addresses");
+            return true;
+        }
+        
+        if (topic.equalsIgnoreCase("reload")) {
+            sender.sendMessage(ChatColor.DARK_RED + "/kmail reload");
+            sender.sendMessage(ChatColor.YELLOW + "Reloads config.yml.");
+            return true;
+        }
+        
+        if (topic.equalsIgnoreCase("prune")) {
+            sender.sendMessage(ChatColor.DARK_RED + "/kmail prune");
+            sender.sendMessage(ChatColor.YELLOW + "Prunes cached mailboxes.");
             return true;
         }
         
@@ -690,6 +710,31 @@ public class KMailCommandExecutor implements CommandExecutor {
             
             return true;
         }
+    }
+    
+    private boolean doReload(CommandSender sender, String[] args) {
+        if (!sender.hasPermission("kmail.admin.reload")) {
+            sender.sendMessage(ChatColor.YELLOW + "You don't have the required permission (kmail.admin.reload)");
+            return false;
+        }
+        
+        plugin.reloadConfig();
+        sender.sendMessage(ChatColor.YELLOW + "Config reloaded.");
+        return true;
+    }
+    
+    private boolean doPrune(CommandSender sender, String[] args) {
+        if (!sender.hasPermission("kmail.admin.prune")) {
+            sender.sendMessage(ChatColor.YELLOW + "You don't have the required permission (kmail.admin.prune)");
+            return false;
+        }
+        
+        int n1 = plugin.numMailboxes();
+        plugin.reloadMailboxes();
+        int n2 = plugin.numMailboxes();
+        
+        sender.sendMessage(ChatColor.GREEN + Integer.toString(n2 - n1) + ChatColor.YELLOW + " mailboxes pruned.");
+        return true;
     }
     
     private boolean doImport(CommandSender sender, String[] args) {

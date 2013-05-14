@@ -1,5 +1,5 @@
 name: KMail
-version: 1.1.5
+version: 1.2.0
 author: Kier Davis <kierdavis@gmail.com>
 
 main: com.kierdavis.kmail.KMail
@@ -66,7 +66,17 @@ permissions:
     kmail.admin.*:
         description: Gives access to all admin-level commands.
         children:
+            kmail.admin.reload: true
+            kmail.admin.prune: true
             kmail.admin.import: true
+    
+    kmail.admin.reload:
+        description: Gives access to reload config.
+        default: op
+    
+    kmail.admin.prune:
+        description: Gives access to prune mailboxes.
+        default: op
     
     kmail.admin.import:
         description: Gives access to import mail from other plugins.

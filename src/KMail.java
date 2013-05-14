@@ -26,11 +26,7 @@ public class KMail extends JavaPlugin {
         server = new WebServer(this);
         
         // Preload mailboxes of all online players
-        Player[] players = getServer().getOnlinePlayers();
-        getLogger().info("Preloading " + Integer.toString(players.length) + " mailboxes");
-        for (int i = 0; i < players.length; i++) {
-            getMailbox(players[i].getName(), true);
-        }
+        preloadAllMailboxes()
         
         // Register event listeners
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
@@ -123,6 +119,22 @@ public class KMail extends JavaPlugin {
         }
         catch (IOException e) {
             getLogger().info("Could not save mailbox: " + e.toString());
+        }
+    }
+    
+    public int numMailboxes() {
+        return mailboxes.size();
+    }
+    
+    public void reloadMailboxes() {
+        mailboxes.clear();
+        loadMailboxes();
+    }
+    
+    public void loadMailboxes() {
+        Player[] players = getServer().getOnlinePlayers();
+        for (int i = 0; i < players.length; i++) {
+            getMailbox(players[i].getName(), true);
         }
     }
     
