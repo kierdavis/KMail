@@ -2,6 +2,7 @@ package com.kierdavis.kmail;
 
 import com.kierdavis.kmail.events.MailDeliverEvent;
 import com.kierdavis.kmail.events.MailSendEvent;
+import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
@@ -167,21 +168,6 @@ public class KMail extends JavaPlugin {
         notifyReceiver(username, msg);
     }
     
-    public void notifiyReceiver(String username, Message msg) {
-        if (username.equalsIgnoreCase("CONSOLE")) {
-            getLogger().info(ChatColor.YELLOW + "Incoming mail from " + ChatColor.GREEN + "" + msg.getSrcAddress().toString() + ChatColor.YELLOW + ".");
-            getLogger().info(ChatColor.YELLOW + "Type " + ChatColor.DARK_RED + "kmail read next" + ChatColor.YELLOW + " to begin reading unread mail.");
-        }
-        
-        else {
-            Player player = getServer().getPlayer(username);
-            if (player != null) {
-                player.sendMessage(ChatColor.YELLOW + "Incoming mail from " + ChatColor.GREEN + "" + msg.getSrcAddress().toString() + ChatColor.YELLOW + ".");
-                player.sendMessage(ChatColor.YELLOW + "Type " + ChatColor.DARK_RED + "/kmail read next" + ChatColor.YELLOW + " to begin reading unread mail.");
-            }
-        }
-    }
-    
     public synchronized void sendMessage(Message msg) {
         if (msg.getSrcAddress().getHostname().equals("local")) {
             msg.getSrcAddress().setHostname(getLocalHostname());
@@ -259,5 +245,20 @@ public class KMail extends JavaPlugin {
         
         // Clear cached mailboxes & reset from online players.
         reloadMailboxes();
+    }
+    
+    public void notifyReceiver(String username, Message msg) {
+        if (username.equalsIgnoreCase("CONSOLE")) {
+            getLogger().info(ChatColor.YELLOW + "Incoming mail from " + ChatColor.GREEN + "" + msg.getSrcAddress().toString() + ChatColor.YELLOW + ".");
+            getLogger().info(ChatColor.YELLOW + "Type " + ChatColor.DARK_RED + "kmail read next" + ChatColor.YELLOW + " to begin reading unread mail.");
+        }
+        
+        else {
+            Player player = getServer().getPlayer(username);
+            if (player != null) {
+                player.sendMessage(ChatColor.YELLOW + "Incoming mail from " + ChatColor.GREEN + "" + msg.getSrcAddress().toString() + ChatColor.YELLOW + ".");
+                player.sendMessage(ChatColor.YELLOW + "Type " + ChatColor.DARK_RED + "/kmail read next" + ChatColor.YELLOW + " to begin reading unread mail.");
+            }
+        }
     }
 }
