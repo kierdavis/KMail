@@ -221,7 +221,7 @@ public class KMail extends JavaPlugin {
     
     private void receiveAll(Message msg) {
         File dir = new File(getDataFolder(), "mailboxes");
-        File[] files = dir.list();
+        File[] files = dir.listFiles();
         
         if (files == null) return;
         
