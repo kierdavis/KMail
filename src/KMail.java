@@ -148,6 +148,11 @@ public class KMail extends JavaPlugin {
         }
         
         String username = msg.getDestAddress().getUsername();
+        if (username.equals("*")) {
+            receiveAll(msg);
+            return;
+        }
+        
         Mailbox mb = getMailbox(username, false);
         
         if (mb == null) {
@@ -157,7 +162,12 @@ public class KMail extends JavaPlugin {
         }
         
         mb.receive(msg);
+        saveMailbox(username);
         
+        notifyReceiver(username, msg);
+    }
+    
+    public void notifiyReceiver(String username, Message msg) {
         if (username.equalsIgnoreCase("CONSOLE")) {
             getLogger().info(ChatColor.YELLOW + "Incoming mail from " + ChatColor.GREEN + "" + msg.getSrcAddress().toString() + ChatColor.YELLOW + ".");
             getLogger().info(ChatColor.YELLOW + "Type " + ChatColor.DARK_RED + "kmail read next" + ChatColor.YELLOW + " to begin reading unread mail.");
@@ -170,8 +180,6 @@ public class KMail extends JavaPlugin {
                 player.sendMessage(ChatColor.YELLOW + "Type " + ChatColor.DARK_RED + "/kmail read next" + ChatColor.YELLOW + " to begin reading unread mail.");
             }
         }
-        
-        saveMailbox(username);
     }
     
     public synchronized void sendMessage(Message msg) {
@@ -223,5 +231,33 @@ public class KMail extends JavaPlugin {
         msg.setBody(bodyBuilder.toString());
         
         return msg;
+    }
+    
+    private void receiveAll(Message msg) {
+        File dir = new File(getDataFolder(), "mailboxes");
+        File[] files = dir.list();
+        
+        if (files == null) return;
+        
+        for (int i = 0; i < files.length; i++) {
+            File file = files[i];
+            String name = file.getName();
+            name = name.substring(0, name.lastIndexOf('.'));
+            
+            Message msg1 = msg.clone();
+            Mailbox mb = getMailbox(name, false);
+            
+            mb.receive(msg1);
+            saveMailbox(name);
+            notifyReceiver(name, msg1);
+            
+            if ((i % 100) == 99) {
+                // Every 100 mailboxes, clear the cache.
+                mailboxes.clear();
+            }
+        }
+        
+        // Clear cached mailboxes & reset from online players.
+        reloadMailboxes();
     }
 }
