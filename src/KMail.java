@@ -225,6 +225,8 @@ public class KMail extends JavaPlugin {
         
         if (files == null) return;
         
+        plugin.getLogger("Distributing incoming 'sendall' message to " + Integer.toString(files.length) + " recipients");
+        
         for (int i = 0; i < files.length; i++) {
             File file = files[i];
             String name = file.getName();
