@@ -225,7 +225,7 @@ public class KMail extends JavaPlugin {
         
         if (files == null) return;
         
-        getLogger().info("Distributing incoming 'sendall' message to " + Integer.toString(files.length) + " recipients");
+        getLogger().info("Distributing incoming 'sendall' message to " + Integer.toString(files.length) + " recipients...");
         
         for (int i = 0; i < files.length; i++) {
             File file = files[i];
@@ -241,11 +241,13 @@ public class KMail extends JavaPlugin {
             
             if ((i % 100) == 99) {
                 // Every 100 mailboxes, clear the cache.
+                getLogger.info("Distribution progress: " + Integer.toString(i + 1) + "/" + Integer.toString(files.length));
                 mailboxes.clear();
             }
         }
         
         // Clear cached mailboxes & reset from online players.
+        getLogger.info("Distribution complete. Reloading mailboxes to clear cache.");
         reloadMailboxes();
     }
     
