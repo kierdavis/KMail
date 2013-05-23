@@ -242,8 +242,13 @@ public class KMailCommandExecutor implements CommandExecutor {
         Address destAddress = new Address(args[0]);
         Message msg = new Message(srcAddress, destAddress);
         
-        if (destAddress.getHostname() != "local" && !sender.hasPermission("kmail.send.remote")) {
+        if (!destAddress.getHostname().equals("local") && !sender.hasPermission("kmail.send.remote")) {
             sender.sendMessage(ChatColor.YELLOW + "You don't have the required permission (kmail.send.remote)");
+            return false;
+        }
+        
+        if (destAddress.getUsername().equals("*") && !sender.hasPermission("kmail.send.all")) {
+            sender.sendMessage(ChatColor.YELLOW + "You don't have the required permission (kmail.send.all)");
             return false;
         }
         

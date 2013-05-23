@@ -1,5 +1,5 @@
 name: KMail
-version: 1.3.2
+version: 1.3.3
 author: Kier Davis <kierdavis@gmail.com>
 
 main: com.kierdavis.kmail.KMail
@@ -69,6 +69,7 @@ permissions:
             kmail.admin.reload: true
             kmail.admin.prune: true
             kmail.admin.import: true
+            kmail.send.all: true
     
     kmail.admin.reload:
         description: Gives access to reload config.
@@ -80,4 +81,8 @@ permissions:
     
     kmail.admin.import:
         description: Gives access to import mail from other plugins.
+        default: op
+    
+    kmail.send.all:
+        description: Gives access to send mail to all players on a server.
         default: op
