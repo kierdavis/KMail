@@ -20,7 +20,6 @@ public class MailDispatcher implements Runnable {
     }
     
     public synchronized boolean queueMessage(Message msg) {
-        plugin.getLogger().info("DEBUG: queueMessage: " + msg.getSrcAddress().toString() + "->" + msg.getDestAddress().toString() + ": " + msg.getBody());
         return queue.offer(msg);
     }
     
@@ -63,8 +62,6 @@ public class MailDispatcher implements Runnable {
     }
     
     public void dispatch(Message msg) {
-        plugin.getLogger().info("DEBUG: dispatch: " + msg.getSrcAddress().toString() + "->" + msg.getDestAddress().toString() + ": " + msg.getBody());
-        
         if (msg.getDestAddress().getHostname().equalsIgnoreCase(plugin.getLocalHostname())) {
             plugin.receiveMessage(msg);
         }
