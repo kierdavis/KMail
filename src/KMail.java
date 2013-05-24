@@ -59,13 +59,7 @@ public class KMail extends JavaPlugin {
         server.stop();
         
         // Save mailboxes
-        getLogger().info("Saving " + Integer.toString(mailboxes.size()) + " mailboxes");
-        Iterator<String> it = mailboxes.keySet().iterator();
-        
-        while (it.hasNext()) {
-            String username = (String) it.next();
-            saveMailbox(username);
-        }
+        saveMailboxes();
     }
     
     public String getDefaultLocalHostname() {
@@ -123,6 +117,18 @@ public class KMail extends JavaPlugin {
         catch (IOException e) {
             getLogger().info("Could not save mailbox: " + e.toString());
         }
+    }
+    
+    public void saveMailboxes() {
+        getLogger().info("Saving " + Integer.toString(mailboxes.size()) + " mailboxes");
+        Iterator<String> it = mailboxes.keySet().iterator();
+        
+        while (it.hasNext()) {
+            String username = (String) it.next();
+            saveMailbox(username);
+        }
+        
+        mailboxes.clear();
     }
     
     public int numMailboxes() {
@@ -224,6 +230,8 @@ public class KMail extends JavaPlugin {
     }
     
     private void receiveAll(Message msg) {
+        saveMailboxes(); // Make sure mailboxes folder contains newly created mailboxes too.
+        
         File dir = new File(getDataFolder(), "mailboxes");
         File[] files = dir.listFiles();
         
