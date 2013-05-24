@@ -142,6 +142,8 @@ public class KMail extends JavaPlugin {
     }
     
     public void receiveMessage(Message msg) {
+        plugin.getLogger().info("DEBUG: receiveMessage: " + msg.getSrcAddress().toString() + "->" + msg.getDestAddress().toString() + ": " + msg.getBody());
+        
         MailDeliverEvent event = new MailDeliverEvent(msg);
         getServer().getPluginManager().callEvent(event);
         if (event.isCancelled()) {
@@ -169,6 +171,8 @@ public class KMail extends JavaPlugin {
     }
     
     public synchronized void sendMessage(Message msg) {
+        plugin.getLogger().info("DEBUG: sendMessage: " + msg.getSrcAddress().toString() + "->" + msg.getDestAddress().toString() + ": " + msg.getBody());
+        
         if (msg.getSrcAddress().getHostname().equals("local")) {
             msg.getSrcAddress().setHostname(getLocalHostname());
         }
