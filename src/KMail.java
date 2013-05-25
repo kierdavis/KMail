@@ -11,6 +11,7 @@ import java.util.Map;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.mcstats.Metrics;
 
 public class KMail extends JavaPlugin {
     private Map<Player, PartialMessage> partialMessages;
@@ -47,6 +48,15 @@ public class KMail extends JavaPlugin {
         }
         catch (IOException e) {
             getLogger().severe("Could not start web server: " + e.toString());
+        }
+        
+        // Start Metrics
+        try {
+            Metrics metrics = new Metrics(this);
+            metrics.start();
+        }
+        catch (IOException e) {
+            getLogger().severe("Failed to submit stats to Metrics: " + e.toString());
         }
     }
     
