@@ -45,10 +45,20 @@ public class WebMailHandler implements HttpHandler {
             }
         }
         
+        t.getResponseHeaders().add("Server", getServerHeader());
         t.sendResponseHeaders(statusCode, response.length());
         
         OutputStream os = t.getResponseBody();
         os.write(response.getBytes());
         os.close();
+    }
+    
+    public String getServerHeader() {
+        StringBuilder b = new StringBuilder();
+        b.append("KMail/");
+        b.append(plugin.getDescription().getVersion());
+        b.append(" Bukkit/");
+        b.append(plugin.getServer().getVersion());
+        return b.toString();
     }
 }
