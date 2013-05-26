@@ -155,6 +155,8 @@ public class KMail extends JavaPlugin {
         for (int i = 0; i < players.length; i++) {
             getMailbox(players[i].getName(), true);
         }
+        
+        getMailbox("CONSOLE", true);
     }
     
     public void receiveMessage(Message msg) {
@@ -225,7 +227,7 @@ public class KMail extends JavaPlugin {
         msg.setDestAddress(cause.getSrcAddress());
         
         StringBuilder bodyBuilder = new StringBuilder();
-        bodyBuilder.append("Sending of the following message failed because: ").append(error);
+        bodyBuilder.append("Sending of the following message failed because: ").append(error).append("\n");
         bodyBuilder.append("  From: ").append(cause.getSrcAddress().toString()).append("\n");
         bodyBuilder.append("  To: ").append(cause.getDestAddress().toString()).append("\n");
         bodyBuilder.append("  Sent: ").append(cause.getSentDate().toString()).append("\n\n");
