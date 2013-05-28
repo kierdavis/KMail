@@ -792,6 +792,8 @@ public class KMailCommandExecutor implements CommandExecutor {
         sender.sendMessage(ChatColor.YELLOW + "To: " + ChatColor.GREEN + msg.getDestAddress().toString());
         sender.sendMessage(ChatColor.YELLOW + "Sent: " + ChatColor.RED + msg.getSentDate().toString());
         sender.sendMessage(ChatColor.YELLOW + "Recieved: " + ChatColor.RED + msg.getReceivedDate().toString());
+        if (msg.hasReplyVia())
+            sender.sendMessage(ChatColor.YELLOW + "Reply via: " + ChatColor.GREEN + msg.getReplyVia().toString());
         sender.sendMessage(ChatColor.YELLOW + "Tags: " + tagStr);
         sender.sendMessage("");
         sender.sendMessage(msg.getBody());
