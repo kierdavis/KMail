@@ -4,7 +4,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -118,11 +117,11 @@ public class WebClient {
     public List<Message> pollQueue(String addr) {
         plugin.getLogger().info("Polling queue at " + addr + " for new messages");
         
-        String hostname = URLEncoder.encode(plugin.getLocalHostname(), "UTF-8");
         HttpURLConnection conn = null;
         List<Message> messages = null;
         
         try {
+            String hostname = URLEncoder.encode(plugin.getLocalHostname(), "UTF-8");
             URL url = new URL("http://" + addr + "/fetch?hostname=" + hostname);
             conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(plugin.getClientTimeout() * 1000);
@@ -143,10 +142,6 @@ public class WebClient {
         
         catch (XMLMessageParseException e) {
             plugin.getLogger().severe("Could not parse response: " + e.toString());
-        }
-        
-        catch (UnsupportedEncodingException e) {
-            plugin.getLogger().severe("This shouldn't happen: " + e.toString());
         }
         
         catch (IOException e) {
