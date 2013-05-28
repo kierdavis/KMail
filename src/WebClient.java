@@ -59,7 +59,7 @@ public class WebClient {
             conn.setRequestProperty("Content-Length", Integer.toString(requestBytes.length));
             conn.setUseCaches(false);
             conn.setDoOutput(true);
-            conn.setDoInput(false);
+            conn.setDoInput(true);
             
             OutputStream os = conn.getOutputStream();
             os.write(requestBytes);
