@@ -86,7 +86,7 @@ public class Message {
     }
     
     public boolean hasReplyVia() {
-        return replyVia != null && replyVia.length() > 0
+        return replyVia != null && replyVia.length() > 0;
     }
     
     public Date getSentDate() {
@@ -154,7 +154,7 @@ public class Message {
     }
     
     public boolean hasSendVia() {
-        return sendVia != null && sendVia.length() > 0
+        return sendVia != null && sendVia.length() > 0;
     }
     
     public Message clone() {
