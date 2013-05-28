@@ -131,11 +131,7 @@ public class WebClient {
             conn.setDoInput(true);
             
             if (conn.getResponseCode() == 404) {
-                if (!registerQueue(addr)) {
-                    return null;
-                }
-                
-                //return pollQueue(addr;
+                registerQueue(addr);
                 return null;
             }
             
@@ -166,11 +162,10 @@ public class WebClient {
         return messages;
     }
     
-    public boolean registerQueue(String addr) {
+    public void registerQueue(String addr) {
         plugin.getLogger().info("Registering a new queue at " + addr);
         
         HttpURLConnection conn = null;
-        List<Message> messages = null;
         
         try {
             String hostname = URLEncoder.encode(plugin.getLocalHostname(), "UTF-8");
@@ -200,7 +195,5 @@ public class WebClient {
                 conn.disconnect();
             }
         }
-        
-        return messages;
     }
 }
