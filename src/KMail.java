@@ -4,6 +4,7 @@ import com.kierdavis.kmail.events.MailDeliverEvent;
 import com.kierdavis.kmail.events.MailSendEvent;
 import java.io.File;
 import java.io.IOException;
+import java.lang.Thread;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -194,7 +195,7 @@ public class KMail extends JavaPlugin {
         getMailbox("CONSOLE", true);
     }
     
-    public void receiveMessage(Message msg) {
+    public synchronized void receiveMessage(Message msg) {
         MailDeliverEvent event = new MailDeliverEvent(msg);
         getServer().getPluginManager().callEvent(event);
         if (event.isCancelled()) {
@@ -341,7 +342,11 @@ public class KMail extends JavaPlugin {
         }
     }
     
-    public void pollQueues() {
+    public void pollQueuesAsync() {
+        new Thread(new QueuePollRunnable(this)).start();
+    }
+    
+    public synchronized void pollQueues() {
         List<String> queues = getQueues();
         for (int i = 0; i < queues.size(); i++) {
             pollQueue(queues.get(i));

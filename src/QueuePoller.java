@@ -12,7 +12,7 @@ public class QueuePoller extends BukkitRunnable {
     }
     
     public void run() {
-        plugin.pollQueues();
+        plugin.pollQueuesAsync();
     }
     
     public void start() {
