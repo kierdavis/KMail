@@ -680,6 +680,10 @@ public class KMailCommandExecutor implements CommandExecutor {
         reply.setSrcAddress(new Address(srcUsername, "local"));
         reply.setDestAddress(msg.getSrcAddress());
         
+        if (msg.getReplyVia() != null) {
+            reply.setSendVia(msg.getReplyVia());
+        }
+        
         String header = "** In reply to " + msg.getSrcAddress();
         
         if (args.length >= 1) {

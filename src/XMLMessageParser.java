@@ -87,6 +87,7 @@ public class XMLMessageParser {
         }
         
         msg.setBody(el.elementTextTrim("body"));
+        msg.setReplyVia(el.elementTextTrim("reply-via"));
         msg.setSentDate(new Date(sentTime));
         
         return msg;

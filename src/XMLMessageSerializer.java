@@ -47,6 +47,8 @@ public class XMLMessageSerializer {
         
         el.addElement("body").setText(msg.getBody());
         el.addElement("sent").setText(Long.toString(msg.getSentDate().getTime()));
+        
+        if (msg.getReplyVia() != null) el.addElement("reply-via").setText(msg.getReplyVia());
     }
     
     public void populateAddressElement(Element el, Address addr) throws XMLMessageSerializationException {

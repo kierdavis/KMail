@@ -119,6 +119,8 @@ public class Mailbox {
                 msg.setDestAddress(new Address((String) m.get("dest")));
             if (m.containsKey("body"))
                 msg.setBody((String) m.get("body"));
+            if (m.containsKey("reply-via"))
+                msg.setBody((String) m.get("reply-via"));
             if (m.containsKey("sent"))
                 msg.setSentDate(new Date((long) m.get("sent")));
             if (m.containsKey("received"))
@@ -161,6 +163,7 @@ public class Mailbox {
             m.put("src", msg.getSrcAddress().toString());
             m.put("dest", msg.getDestAddress().toString());
             m.put("body", msg.getBody());
+            m.put("reply-via", msg.getReplyVia());
             m.put("sent", msg.getSentDate().getTime());
             m.put("received", msg.getReceivedDate().getTime());
             m.put("tags", new ArrayList<String>(msg.getTags()));

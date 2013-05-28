@@ -21,17 +21,24 @@ public class WebClient {
     }
     
     public void send(Message msg) {
-        String hostname = msg.getDestAddress().getHostname();
+        String addr;
         
-        if (hostname.indexOf(":") < 0) {
-            hostname += ":4880";
+        if (msg.getSendVia() == null) {
+            addr = msg.getDestAddress().getHostname();
+        }
+        else {
+            addr = msg.getSendVia();
         }
         
-        send(hostname, msg);
+        if (addr.indexOf(":") < 0) {
+            addr += ":4880";
+        }
+        
+        send(addr, msg);
     }
     
-    public void send(String hostname, Message msg) {
-        plugin.getLogger().info("Sending message via HTTP to " + hostname + ": " + msg.getSrcAddress().toString() + " -> " + msg.getDestAddress().toString());
+    public void send(String addr, Message msg) {
+        plugin.getLogger().info("Sending message via HTTP to " + addr + ": " + msg.getSrcAddress().toString() + " -> " + msg.getDestAddress().toString());
         
         boolean success = false;
         HttpURLConnection conn = null;
@@ -44,7 +51,7 @@ public class WebClient {
             serializer.serialize(bos, msgs);
             byte[] requestBytes = bos.toByteArray();
             
-            URL url = new URL("http://" + hostname + "/");
+            URL url = new URL("http://" + addr + "/");
             conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(plugin.getClientTimeout() * 1000);
             conn.setRequestMethod("POST");

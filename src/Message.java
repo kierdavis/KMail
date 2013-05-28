@@ -8,6 +8,7 @@ public class Message {
     private Address src;
     private Address dest;
     private String body;
+    private String replyVia;
     private Date sentDate;
     
     // Only used internally
@@ -15,6 +16,7 @@ public class Message {
     private long localID;
     private Set<String> tags;
     private int numRetries;
+    private String sendVia;
     
     private static long nextLocalID = 0;
     private static synchronized long getNextLocalID() {
@@ -26,11 +28,13 @@ public class Message {
         src = null;
         dest = null;
         body = "";
+        replyVia = "";
         sentDate = null;
         receivedDate = null;
         localID = 0;
         tags = new HashSet<String>();
         numRetries = 0;
+        sendVia = null;
         
         assignLocalID();
     }
@@ -71,6 +75,14 @@ public class Message {
     
     public void setBody(String x) {
         body = x;
+    }
+    
+    public String getReplyVia() {
+        return replyVia;
+    }
+    
+    public void setReplyVia(String x) {
+        replyVia = x;
     }
     
     public Date getSentDate() {
@@ -129,14 +141,24 @@ public class Message {
         return numRetries;
     }
     
+    public String getSendVia() {
+        return sendVia;
+    }
+    
+    public void setSendVia(String x) {
+        sendVia = x;
+    }
+    
     public Message clone() {
         Message msg = new Message();
         msg.src = src.clone();
         msg.dest = dest.clone();
         msg.body = body;
+        msg.replyVia = replyVia;
         msg.sentDate = sentDate;
         msg.receivedDate = receivedDate;
         msg.tags = new HashSet<String>(tags);
+        msg.sendVia = sendVia;
         return msg;
     }
 }
