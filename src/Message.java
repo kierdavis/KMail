@@ -85,6 +85,10 @@ public class Message {
         replyVia = x;
     }
     
+    public boolean hasReplyVia() {
+        return replyVia != null && replyVia.length() > 0
+    }
+    
     public Date getSentDate() {
         return sentDate;
     }
@@ -147,6 +151,10 @@ public class Message {
     
     public void setSendVia(String x) {
         sendVia = x;
+    }
+    
+    public boolean hasSendVia() {
+        return sendVia != null && sendVia.length() > 0
     }
     
     public Message clone() {

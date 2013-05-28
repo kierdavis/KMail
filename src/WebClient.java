@@ -23,11 +23,11 @@ public class WebClient {
     public void send(Message msg) {
         String addr;
         
-        if (msg.getSendVia() == null) {
-            addr = msg.getDestAddress().getHostname();
+        if (msg.hasSendVia()) {
+            addr = msg.getSendVia();
         }
         else {
-            addr = msg.getSendVia();
+            addr = msg.getDestAddress().getHostname();
         }
         
         if (addr.indexOf(":") < 0) {

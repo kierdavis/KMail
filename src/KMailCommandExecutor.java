@@ -680,7 +680,7 @@ public class KMailCommandExecutor implements CommandExecutor {
         reply.setSrcAddress(new Address(srcUsername, "local"));
         reply.setDestAddress(msg.getSrcAddress());
         
-        if (msg.getReplyVia() != null) {
+        if (msg.hasReplyVia()) {
             reply.setSendVia(msg.getReplyVia());
         }
         
