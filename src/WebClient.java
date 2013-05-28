@@ -11,6 +11,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class WebClient {
     private KMail plugin;
@@ -135,9 +136,8 @@ public class WebClient {
                 throw new IOException("Bad HTTP response from server: " + conn.getResponseMessage());
             }
             
-            BufferedReader is = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             XMLMessageParser parser = new XMLMessageParser();
-            messages = parser.parse(is);
+            messages = parser.parse(conn.getInputStream());
             is.close();
         }
         
