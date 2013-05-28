@@ -12,9 +12,9 @@ public class MailDispatcher implements Runnable {
     private Queue<Message> queue;
     private boolean stopFlag;
     
-    public MailDispatcher(KMail plugin_) {
+    public MailDispatcher(KMail plugin_, WebClient client_) {
         plugin = plugin_;
-        client = new WebClient(plugin);
+        client = client_;
         queue = new LinkedList<Message>();
         stopFlag = false;
     }
@@ -66,7 +66,7 @@ public class MailDispatcher implements Runnable {
             plugin.receiveMessage(msg);
         }
         else {
-            client.send(msg);
+            plugin.client.send(msg);
         }
     }
 }

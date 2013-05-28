@@ -17,9 +17,17 @@ remote:
         retries: 3
     
     server:
+        # Whether to run the server. If the server is behind a firewall
+        # (blocking the server port) then it is recommended to set this to false
+        # and use a queue instead.
+        enabled: true
+        
         # IP to listen on (usually should be set to same as server-ip in
         # server.properties).
         ip: ""
         
         # Port to listen on.
         port: 4880
+    
+    # Queues to poll for messages (if the KMail server cannot be run).
+    queues: []

@@ -17,8 +17,9 @@ import org.mcstats.Metrics;
 public class KMail extends JavaPlugin {
     private Map<Player, PartialMessage> partialMessages;
     private Map<String, Mailbox> mailboxes;
-    private MailDispatcher dispatcher;
     private WebServer server;
+    private WebClient client;
+    private MailDispatcher dispatcher;
     
     public void onEnable() {
         // Ensure config.yml exists
@@ -27,8 +28,9 @@ public class KMail extends JavaPlugin {
         // Initialise variables
         partialMessages = new HashMap<Player, PartialMessage>();
         mailboxes = new HashMap<String, Mailbox>();
-        dispatcher = new MailDispatcher(this);
         server = new WebServer(this);
+        client = new WebClient(this);
+        dispatcher = new MailDispatcher(this, client);
         
         // Preload mailboxes of all online players
         loadMailboxes();
@@ -43,12 +45,14 @@ public class KMail extends JavaPlugin {
         getLogger().info("Starting mail dispatcher");
         dispatcher.start();
         
-        getLogger().info("Starting web server");
-        try {
-            server.start();
-        }
-        catch (IOException e) {
-            getLogger().severe("Could not start web server: " + e.toString());
+        if (isServerEnabled()) {
+            getLogger().info("Starting web server");
+            try {
+                server.start();
+            }
+            catch (IOException e) {
+                getLogger().severe("Could not start web server: " + e.toString());
+            }
         }
         
         // Start Metrics
@@ -66,8 +70,10 @@ public class KMail extends JavaPlugin {
         getLogger().info("Stopping mail dispatcher");
         dispatcher.stop();
         
-        getLogger().info("Stopping web server");
-        server.stop();
+        if (isServerEnabled()) {
+            getLogger().info("Stopping web server");
+            server.stop();
+        }
         
         // Save mailboxes
         saveMailboxes();
@@ -93,12 +99,20 @@ public class KMail extends JavaPlugin {
         return getConfig().getInt("remote.client.retries", 3);
     }
     
+    public boolean isServerEnabled() {
+        return getConfig().getBoolean("remote.server.enabled", true);
+    }
+    
     public String getServerIP() {
         return getConfig().getString("remote.server.ip", getDefaultServerIP());
     }
     
     public int getServerPort() {
         return getConfig().getInt("remote.server.port", 4880);
+    }
+    
+    public List<String> getQueues() {
+        return getConfig().getStringList("remote.queues");
     }
     
     public Mailbox getMailbox(String username, boolean create) {
@@ -285,6 +299,23 @@ public class KMail extends JavaPlugin {
         if (sender != null) {
             sender.sendMessage(ChatColor.YELLOW + "Incoming mail from " + ChatColor.GREEN + "" + msg.getSrcAddress().toString() + ChatColor.YELLOW + ".");
             sender.sendMessage(ChatColor.YELLOW + "Type " + ChatColor.DARK_RED + "/kmail read next" + ChatColor.YELLOW + " to begin reading unread mail.");
+        }
+    }
+    
+    public void pollQueues() {
+        List<String> queues = getQueues();
+        for (int i = 0; i < queues.size(); i++) {
+            pollQueue(queues.get(i));
+        }
+    }
+    
+    public void pollQueue(String addr) {
+        List<Message> msgs = client.pollQueue(addr);
+        
+        if (msgs != null) {
+            for (int i = 0; i < msgs.size(); i++) {
+                receiveMessage(msgs.get(i));
+            }
         }
     }
 }

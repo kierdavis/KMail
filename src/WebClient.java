@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -59,7 +60,7 @@ public class WebClient {
             conn.setRequestProperty("Content-Length", Integer.toString(requestBytes.length));
             conn.setUseCaches(false);
             conn.setDoOutput(true);
-            conn.setDoInput(true);
+            conn.setDoInput(false);
             
             OutputStream os = conn.getOutputStream();
             os.write(requestBytes);
@@ -70,16 +71,16 @@ public class WebClient {
                 throw new IOException("Bad HTTP response from server: " + conn.getResponseMessage());
             }
             
-            InputStream is = conn.getInputStream();
-            InputStreamReader isr = new InputStreamReader(is);
-            BufferedReader br = new BufferedReader(isr);
-            
-            String line = br.readLine();
-            while (line != null) {
-                line = br.readLine();
-            }
-            
-            br.close();
+            //InputStream is = conn.getInputStream();
+            //InputStreamReader isr = new InputStreamReader(is);
+            //BufferedReader br = new BufferedReader(isr);
+            //
+            //String line = br.readLine();
+            //while (line != null) {
+            //    line = br.readLine();
+            //}
+            //
+            //br.close();
             success = true;
         }
         
@@ -112,5 +113,48 @@ public class WebClient {
         }
         
         plugin.sendMessage(msg);
+    }
+    
+    public List<Message> pollQueue(String addr) {
+        plugin.getLogger().info("Polling queue at " + addr + " for new messages");
+        
+        String hostname = URLEncoder.encode(plugin.getLocalHostname(), "UTF-8");
+        HttpURLConnection conn = null;
+        List<Message> messages = null;
+        
+        try {
+            URL url = new URL("http://" + addr + "/fetch?hostname=" + hostname);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setReadTimeout(plugin.getClientTimeout() * 1000);
+            conn.setRequestMethod("POST");
+            conn.setUseCaches(false);
+            conn.setDoOutput(false);
+            conn.setDoInput(true);
+            
+            if (conn.getResponseCode() >= 300) {
+                throw new IOException("Bad HTTP response from server: " + conn.getResponseMessage());
+            }
+            
+            InputStream is = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            XMLMessageParser parser = new XMLMessageParser();
+            messages = parser.parse(is);
+            is.close();
+        }
+        
+        catch (XMLMessageParseException e) {
+            plugin.getLogger().severe("Could not parse response: " + e.toString());
+        }
+        
+        catch (IOException e) {
+            plugin.getLogger().severe("Could not fetch messages: " + e.toString());
+        }
+        
+        finally {
+            if (conn != null) {
+                conn.disconnect();
+            }
+        }
+        
+        return messages;
     }
 }
