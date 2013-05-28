@@ -21,6 +21,7 @@ public class KMail extends JavaPlugin {
     private WebServer server;
     private WebClient client;
     private MailDispatcher dispatcher;
+    private QueuePoller poller;
     
     public void onEnable() {
         // Ensure config.yml exists
@@ -32,6 +33,7 @@ public class KMail extends JavaPlugin {
         server = new WebServer(this);
         client = new WebClient(this);
         dispatcher = new MailDispatcher(this, client);
+        poller = null;
         
         // Preload mailboxes of all online players
         loadMailboxes();
@@ -45,6 +47,13 @@ public class KMail extends JavaPlugin {
         // Start our threads
         getLogger().info("Starting mail dispatcher");
         dispatcher.start();
+        
+        if (getQueues().size() > 0) {
+            poller = new QueuePoller(this);
+            
+            getLogger().info("Starting queue poller");
+            poller.start();
+        }
         
         if (isServerEnabled()) {
             getLogger().info("Starting web server");
@@ -70,6 +79,11 @@ public class KMail extends JavaPlugin {
         // Stop our threads
         getLogger().info("Stopping mail dispatcher");
         dispatcher.stop();
+        
+        if (poller != null) {
+            getLogger().info("Stopping queue poller");
+            poller.stop();
+        }
         
         if (isServerEnabled()) {
             getLogger().info("Stopping web server");

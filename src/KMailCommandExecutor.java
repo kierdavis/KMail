@@ -84,12 +84,6 @@ public class KMailCommandExecutor implements CommandExecutor {
             return doImport(sender, args);
         }
         
-        
-        if (subcmd.equalsIgnoreCase("poll")) {
-            plugin.pollQueues();
-        }
-        
-        
         sender.sendMessage("Invalid subcommand: " + subcmd);
         return false;
     }
