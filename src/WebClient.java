@@ -1,9 +1,7 @@
 package com.kierdavis.kmail;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -137,7 +135,8 @@ public class WebClient {
             }
             
             XMLMessageParser parser = new XMLMessageParser();
-            messages = parser.parse(conn.getInputStream());
+            InputStream is = conn.getInputStream();
+            messages = parser.parse(is);
             is.close();
         }
         
