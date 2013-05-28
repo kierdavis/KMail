@@ -130,6 +130,15 @@ public class WebClient {
             conn.setDoOutput(false);
             conn.setDoInput(true);
             
+            if (conn.getResponseCode() == 404) {
+                if (!registerQueue(addr)) {
+                    return null;
+                }
+                
+                //return pollQueue(addr;
+                return null;
+            }
+            
             if (conn.getResponseCode() >= 300) {
                 throw new IOException("Bad HTTP response from server: " + conn.getResponseMessage());
             }
@@ -138,6 +147,44 @@ public class WebClient {
             InputStream is = conn.getInputStream();
             messages = parser.parse(is);
             is.close();
+        }
+        
+        catch (XMLMessageParseException e) {
+            plugin.getLogger().severe("Could not parse response: " + e.toString());
+        }
+        
+        catch (IOException e) {
+            plugin.getLogger().severe("Could not fetch messages: " + e.toString());
+        }
+        
+        finally {
+            if (conn != null) {
+                conn.disconnect();
+            }
+        }
+        
+        return messages;
+    }
+    
+    public boolean registerQueue(String addr) {
+        plugin.getLogger().info("Registering a new queue at " + addr);
+        
+        HttpURLConnection conn = null;
+        List<Message> messages = null;
+        
+        try {
+            String hostname = URLEncoder.encode(plugin.getLocalHostname(), "UTF-8");
+            URL url = new URL("http://" + addr + "/register?hostname=" + hostname);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setReadTimeout(plugin.getClientTimeout() * 1000);
+            conn.setRequestMethod("POST");
+            conn.setUseCaches(false);
+            conn.setDoOutput(false);
+            conn.setDoInput(true);
+            
+            if (conn.getResponseCode() >= 300) {
+                throw new IOException("Bad HTTP response from server: " + conn.getResponseMessage());
+            }
         }
         
         catch (XMLMessageParseException e) {
