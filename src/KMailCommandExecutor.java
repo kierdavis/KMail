@@ -802,7 +802,12 @@ public class KMailCommandExecutor implements CommandExecutor {
             sender.sendMessage(ChatColor.YELLOW + "Reply via: " + ChatColor.GREEN + msg.getReplyVia().toString());
         sender.sendMessage(ChatColor.YELLOW + "Tags: " + tagStr);
         sender.sendMessage("");
-        sender.sendMessage(msg.getBody());
+        
+        String[] lines = msg.getBody().split("\n");
+        for (int i = 0; i < lines.length; i++) {
+            sender.sendMessage(lines[i]);
+        }
+        
         sender.sendMessage(ChatColor.YELLOW + "================================");
     }
     
