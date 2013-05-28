@@ -182,10 +182,6 @@ public class WebClient {
             }
         }
         
-        catch (XMLMessageParseException e) {
-            plugin.getLogger().severe("Could not parse response: " + e.toString());
-        }
-        
         catch (IOException e) {
             plugin.getLogger().severe("Could not fetch messages: " + e.toString());
         }
