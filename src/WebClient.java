@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -142,6 +143,10 @@ public class WebClient {
         
         catch (XMLMessageParseException e) {
             plugin.getLogger().severe("Could not parse response: " + e.toString());
+        }
+        
+        catch (UnsupportedEncodingException e) {
+            plugin.getLogger().severe("This shouldn't happen: " + e.toString());
         }
         
         catch (IOException e) {
