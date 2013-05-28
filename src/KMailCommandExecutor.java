@@ -84,6 +84,10 @@ public class KMailCommandExecutor implements CommandExecutor {
             return doImport(sender, args);
         }
         
+        if (subcmd.equalsIgnoreCase("poll")) {
+            return doPoll(sender, args);
+        }
+        
         sender.sendMessage("Invalid subcommand: " + subcmd);
         return false;
     }
@@ -108,7 +112,10 @@ public class KMailCommandExecutor implements CommandExecutor {
             if (sender.hasPermission("kmail.forward")) sender.sendMessage(ChatColor.DARK_RED + "  /kmail forward " + ChatColor.RED + "[id] <address>");
             if (sender.hasPermission("kmail.reply"))   sender.sendMessage(ChatColor.DARK_RED + "  /kmail reply " + ChatColor.RED + "[id] [message]");
             
+            if (sender.hasPermission("kmail.admin.reload")) sender.sendMessage(ChatColor.DARK_RED + "  /kmail reload");
+            if (sender.hasPermission("kmail.admin.prune"))  sender.sendMessage(ChatColor.DARK_RED + "  /kmail prune");
             if (sender.hasPermission("kmail.admin.import")) sender.sendMessage(ChatColor.DARK_RED + "  /kmail import " + ChatColor.RED + "<plugin>");
+            if (sender.hasPermission("kmail.admin.poll"))   sender.sendMessage(ChatColor.DARK_RED + "  /kmail poll");
             
             sender.sendMessage("");
             sender.sendMessage(ChatColor.YELLOW + "Do " + ChatColor.DARK_RED + "/kmail help " + ChatColor.RED + "<command>" + ChatColor.YELLOW + " for help on any subcommand.");
@@ -194,6 +201,12 @@ public class KMailCommandExecutor implements CommandExecutor {
             sender.sendMessage(ChatColor.DARK_RED + "/kmail import " + ChatColor.RED + "<plugin>");
             sender.sendMessage(ChatColor.YELLOW + "Imports local mailboxes from another plugin.");
             sender.sendMessage(ChatColor.YELLOW + "Supported plugins: Essentials.");
+            return true;
+        }
+        
+        if (topic.equalsIgnoreCase("poll")) {
+            sender.sendMessage(ChatColor.DARK_RED + "/kmail poll");
+            sender.sendMessage(ChatColor.YELLOW + "Polls queues for new mail.");
             return true;
         }
         
@@ -772,6 +785,17 @@ public class KMailCommandExecutor implements CommandExecutor {
         }
         
         importer.importMail(plugin, sender, remainingArgs);
+        return true;
+    }
+    
+    private boolean doPoll(CommandSender sender, String[] args) {
+        if (!sender.hasPermission("kmail.admin.poll")) {
+            sender.sendMessage(ChatColor.YELLOW + "You don't have the required permission (kmail.admin.poll)");
+            return false;
+        }
+        
+        plugin.triggerQueuePoller();
+        sender.sendMessage(ChatColor.YELLOW + "Queues polling started in background.");
         return true;
     }
     

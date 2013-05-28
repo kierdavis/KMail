@@ -1,5 +1,5 @@
 name: KMail
-version: 1.4.8
+version: 1.4.9
 author: Kier Davis <kierdavis@gmail.com>
 
 main: com.kierdavis.kmail.KMail
@@ -69,6 +69,7 @@ permissions:
             kmail.admin.reload: true
             kmail.admin.prune: true
             kmail.admin.import: true
+            kmail.admin.poll: true
             kmail.send.all: true
     
     kmail.admin.reload:
@@ -81,6 +82,10 @@ permissions:
     
     kmail.admin.import:
         description: Gives access to import mail from other plugins.
+        default: op
+    
+    kmail.admin.poll:
+        description: Gives access to manually poll queues.
         default: op
     
     kmail.send.all:
