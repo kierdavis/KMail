@@ -794,8 +794,9 @@ public class KMailCommandExecutor implements CommandExecutor {
             return false;
         }
         
-        plugin.triggerQueuePoller();
-        sender.sendMessage(ChatColor.YELLOW + "Queues polling started in background.");
+        sender.sendMessage(ChatColor.YELLOW + "Queue polling started.");
+        plugin.pollQueues();
+        sender.sendMessage(ChatColor.YELLOW + "Queue polling complete.");
         return true;
     }
     

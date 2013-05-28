@@ -16,7 +16,7 @@ public class QueuePoller extends BukkitRunnable {
     }
     
     public void start() {
-        task = runTaskTimer(plugin, 1 * 60 * 20, 15 * 60 * 20);
+        task = runTaskTimer(plugin, 10 * 20, 15 * 60 * 20);
     }
     
     public void stop() {

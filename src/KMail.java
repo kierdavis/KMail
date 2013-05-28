@@ -357,8 +357,4 @@ public class KMail extends JavaPlugin {
             }
         }
     }
-    
-    public void triggerQueuePoller() {
-        poller.runTask(this);
-    }
 }
