@@ -130,6 +130,10 @@ public class KMail extends JavaPlugin {
         return getConfig().getStringList("remote.queues");
     }
     
+    public ConfigurationSection getHostConfig(String name) {
+        return getConfig().getConfigurationSection("hosts." + name);
+    }
+    
     public Mailbox getMailbox(String username, boolean create) {
         Mailbox mb = mailboxes.get(username.toLowerCase());
         
@@ -217,6 +221,7 @@ public class KMail extends JavaPlugin {
     }
     
     public synchronized void sendMessage(Message msg) {
+        // Replace "local" with local hostname
         if (msg.getSrcAddress().getHostname().equals("local")) {
             msg.getSrcAddress().setHostname(getLocalHostname());
         }
@@ -224,16 +229,34 @@ public class KMail extends JavaPlugin {
             msg.getDestAddress().setHostname(getLocalHostname());
         }
         
+        // Update sent date
         if (msg.getSentDate() == null) {
             msg.setSentDate(new Date());
         }
         
+        // Update reply-via
+        if (getQueues().size() > 0) {
+            msg.setReplyVia(getQueues().get(0));
+        }
+        
+        // Apply host config
+        if (!msg.getDestAddress().getHostname().equals(getLocalHostname())) {
+            ConfigurationSection cfg = getHostConfig(msg.getDestAddress().getHostname());
+            if (cfg != null) {
+                if (cfg.contains("via")) {
+                    msg.setSendVia(cfg.getString("via"));
+                }
+            }
+        }
+        
+        // Dispatch event
         MailSendEvent event = new MailSendEvent(msg);
         getServer().getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             return;
         }
         
+        // Queue message
         if (!dispatcher.queueMessage(msg)) {
             getLogger().severe("Failed to queue message from " + msg.getSrcAddress().toString());
         }

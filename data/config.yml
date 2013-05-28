@@ -31,3 +31,9 @@ remote:
     
     # Queues to poll for messages (if the KMail server cannot be run).
     queues: []
+
+# Host-specific data
+hosts:
+    kmail.example.net:
+        # A server to indirectly send mail destined for this host to.
+        via: q.kierdavis.com:4890
