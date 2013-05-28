@@ -120,7 +120,7 @@ public class Mailbox {
             if (m.containsKey("body"))
                 msg.setBody((String) m.get("body"));
             if (m.containsKey("reply-via"))
-                msg.setBody((String) m.get("reply-via"));
+                msg.setReplyVia((String) m.get("reply-via"));
             if (m.containsKey("sent"))
                 msg.setSentDate(new Date((long) m.get("sent")));
             if (m.containsKey("received"))
