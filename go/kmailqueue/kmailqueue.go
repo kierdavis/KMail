@@ -137,6 +137,14 @@ func HandleRegister(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	
+	_, ok := GetQueue(hostname)
+	if ok {
+		Logger.Info("%s %s -> 400 Bad Request: Hostname '%s' already registered.", r.Method, r.RequestURI, hostname)
+		w.WriteHeader(400)
+		fmt.Fprintf(w, "Hostname '%s' already registered.\r\n", hostname)
+		return
+	}
+	
 	NewQueue(hostname, GetIP(r))
 	Logger.Info("%s %s -> 200 OK: Queue '%s' created.", r.Method, r.RequestURI, hostname)
 	w.WriteHeader(200)
