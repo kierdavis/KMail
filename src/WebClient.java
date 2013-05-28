@@ -135,7 +135,7 @@ public class WebClient {
                 throw new IOException("Bad HTTP response from server: " + conn.getResponseMessage());
             }
             
-            InputStream is = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            BufferedReader is = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             XMLMessageParser parser = new XMLMessageParser();
             messages = parser.parse(is);
             is.close();

@@ -66,7 +66,7 @@ public class MailDispatcher implements Runnable {
             plugin.receiveMessage(msg);
         }
         else {
-            plugin.client.send(msg);
+            client.send(msg);
         }
     }
 }
