@@ -101,8 +101,6 @@ func SendMessageTo(msg *Message, host string) (err error) {
 		Host: host,
 		Path: "/",
 	}
-    
-    fmt.Println(reqURL.String())
 	
 	req, err := http.NewRequest("POST", reqURL.String(), buffer)
 	if err != nil {

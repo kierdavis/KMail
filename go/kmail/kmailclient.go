@@ -12,7 +12,7 @@ import (
 )
 
 type Args struct {
-	Address string
+	Addresses []string
 	SrcUser string
 	SrcHost string
 	SendVia string
@@ -43,7 +43,7 @@ func GetHost() (s string) {
 
 func main() {
 	p := argparse.New("KMail client")
-	p.Argument("Address", 1, argparse.Store, "ADDRESS", "The destination address.")
+	p.Argument("Addresses", argparse.OneOrMore, argparse.Store, "ADDRESSES", "The destination address(es).")
 	p.Option('U', "user", "SrcUser", 1, argparse.Store, "HOSTNAME", "The source username (defaults to the $HOSTNAME environment variable).")
 	p.Option('H', "host", "SrcHost", 1, argparse.Store, "HOSTNAME", "The source hostname (defaults to the $USERNAME or $USER environment variables).")
 	p.Option('v', "via", "SendVia", 1, argparse.Store, "HOSTNAME", "The server to send the mail via (defaults to the hostname of the destination address).")
@@ -56,7 +56,6 @@ func main() {
 	}
 	
 	var src kmail.Address
-	var dest kmail.Address
 	
 	if args.SrcUser != "" {
 		src.Username = args.SrcUser
@@ -70,15 +69,6 @@ func main() {
 		src.Hostname = GetHost()
 	}
 	
-	pos := strings.Index(args.Address, "@")
-	if pos < 0 {
-		dest.Username = args.Address
-		dest.Hostname = "localhost"
-	} else {
-		dest.Username = args.Address[:pos]
-		dest.Hostname = args.Address[pos+1:]
-	}
-	
 	buffer := new(bytes.Buffer)
 	_, err = io.Copy(buffer, os.Stdin)
 	if err != nil {
@@ -86,23 +76,36 @@ func main() {
 		return
 	}
 	
-	msg := &kmail.Message{
-		Src: src,
-		Dest: dest,
-		Body: string(buffer.Bytes()),
-		Sent: time.Now().Unix(),
-	}
-    
-    host := args.SendVia
-    if host == "" {
-        host = msg.Dest.Hostname
-    }
+	for _, address := range args.Addresses {
+		var dest kmail.Address
+		
+		pos := strings.Index(address, "@")
+		if pos < 0 {
+			dest.Username = address
+			dest.Hostname = "localhost"
+		} else {
+			dest.Username = address[:pos]
+			dest.Hostname = address[pos+1:]
+		}
 	
-	err = kmail.SendMessageTo(msg, host)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error: %s\n", err.Error())
-		return
+		msg := &kmail.Message{
+			Src: src,
+			Dest: dest,
+			Body: string(buffer.Bytes()),
+			Sent: time.Now().Unix(),
+		}
+	    
+	    host := args.SendVia
+	    if host == "" {
+	        host = msg.Dest.Hostname
+	    }
+		
+		err = kmail.SendMessageTo(msg, host)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error: %s\n", err.Error())
+			return
+		}
 	}
 	
-	fmt.Fprintf(os.Stderr, "Message sent.\n")
+	fmt.Fprintf(os.Stderr, "%d messages sent.\n", len(args.Addresses))
 }
