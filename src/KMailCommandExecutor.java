@@ -459,6 +459,7 @@ public class KMailCommandExecutor implements CommandExecutor {
         }
         
         displayMessage(sender, msg);
+        sender.sendMessage(ChatColor.YELLOW + "Reply with " + ChatColor.DARK_RED + "/kmail reply");
         
         if (tailStr != null) {
             sender.sendMessage(tailStr);
