@@ -14,10 +14,12 @@ import java.util.List;
 public class WebClient {
     private KMail plugin;
     private XMLMessageSerializer serializer;
+    private XMLMessageParser parser;
     
     public WebClient(KMail plugin_) {
         plugin = plugin_;
         serializer = new XMLMessageSerializer(false, false);
+        parser = new XMLMessageParser(false);
     }
     
     public void send(Message msg) {
@@ -139,7 +141,6 @@ public class WebClient {
                 throw new IOException("Bad HTTP response from server: " + conn.getResponseMessage());
             }
             
-            XMLMessageParser parser = new XMLMessageParser();
             InputStream is = conn.getInputStream();
             messages = parser.parse(is);
             is.close();

@@ -97,7 +97,7 @@ public class XMLMessageParser {
             long receivedTime;
             
             try {
-                receivedTime = Long.parseLong(receivedTime);
+                receivedTime = Long.parseLong(receivedStr);
             }
             catch (NumberFormatException e) {
                 throw new XMLMessageParseException("Invalid or missing value for <received> element in <message>", e);
