@@ -169,7 +169,7 @@ public class Mailbox {
             return null;
         }
         
-        Mailbox mb = new Mailbox()
+        Mailbox mb = new Mailbox();
         mb.messages = msgs;
         return mb;
     }
