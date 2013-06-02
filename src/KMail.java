@@ -140,7 +140,18 @@ public class KMail extends JavaPlugin {
         Mailbox mb = mailboxes.get(username.toLowerCase());
         
         if (mb == null) {
-            mb = Mailbox.load(this, username);
+            try {
+                mb = Mailbox.load(this, username);
+            }
+            catch (IOException e) {
+                getLogger().error("Could not load mailbox for '" + username + "': " + e.toString());
+                return null;
+            }
+            catch (XMLMessageParseException e) {
+                getLogger().error("Could not load mailbox for '" + username + "': " + e.toString());
+                return null;
+            }
+            
             if (mb == null) {
                 if (create) {
                     mb = new Mailbox();
@@ -161,7 +172,10 @@ public class KMail extends JavaPlugin {
             getMailbox(username, true).save(this, username);
         }
         catch (IOException e) {
-            getLogger().info("Could not save mailbox: " + e.toString());
+            getLogger().info("Could not save mailbox for '" + username + "': " + e.toString());
+        }
+        catch (XMLMessageSerializationException e) {
+            getLogger().info("Could not save mailbox for '" + username + "': " + e.toString());
         }
     }
     

@@ -1,13 +1,9 @@
 package com.kierdavis.kmail;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.InputStreamReader;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -99,11 +95,11 @@ public class Mailbox {
         File xmlfile = new File(dir, player.toLowerCase() + ".xml");
         
         if (xmlfile.exists()) {
-            return Mailbox.loadXML(file);
+            return Mailbox.loadXML(xmlfile);
         }
         
         if (ymlfile.exists()) {
-            mb = Mailbox.loadYML(file);
+            Mailbox mb = Mailbox.loadYML(ymlfile);
             mb.save(); // Force a save in the XML format.
             return mb;
         }
@@ -156,10 +152,11 @@ public class Mailbox {
     
     public static Mailbox loadXML(File file) throws IOException, XMLMessageParseException {
         XMLMessageParser parser = new XMLMessageParser();
-        InputStream is = new BufferedInputStream(new InputStreamReader(new FileInputStream(file)));
+        FileInputStream is = new FileInputStream(file);
+        List<Message> msgs = null;
         
         try {
-            List<Message> msgs = parser.parse(is);
+            msgs = parser.parse(is);
         }
         finally {
             is.close();
@@ -212,7 +209,7 @@ public class Mailbox {
     
     public void saveXML(File file) throws IOException, XMLMessageSerializationException {
         XMLMessageSerializer serializer = new XMLMessageSerializer();
-        OutputStream os = new BufferedOutputStream(new OutputStreamWriter(new FileOutputStream(file)));
+        FileOutputStream os = new FileOutputStream(file);
         
         try {
             serializer.serialize(os, messages);
