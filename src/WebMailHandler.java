@@ -14,7 +14,7 @@ public class WebMailHandler implements HttpHandler {
     
     public WebMailHandler(KMail plugin_) {
         plugin = plugin_;
-        parser = new XMLMessageParser();
+        parser = new XMLMessageParser(false);
     }
     
     public void handle(HttpExchange t) throws IOException {

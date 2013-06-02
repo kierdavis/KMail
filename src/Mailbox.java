@@ -152,7 +152,7 @@ public class Mailbox {
     }
     
     public static Mailbox loadXML(File file) throws IOException, XMLMessageParseException {
-        XMLMessageParser parser = new XMLMessageParser();
+        XMLMessageParser parser = new XMLMessageParser(true);
         FileInputStream is = new FileInputStream(file);
         List<Message> msgs = null;
         
@@ -209,7 +209,7 @@ public class Mailbox {
     */
     
     public void saveXML(File file) throws IOException, XMLMessageSerializationException {
-        XMLMessageSerializer serializer = new XMLMessageSerializer(true);
+        XMLMessageSerializer serializer = new XMLMessageSerializer(true, true);
         FileOutputStream os = new FileOutputStream(file);
         
         try {

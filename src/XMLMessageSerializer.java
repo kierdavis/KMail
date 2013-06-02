@@ -11,9 +11,11 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 
 public class XMLMessageSerializer {
+    private boolean isMailbox;
     private OutputFormat fmt;
     
-    public XMLMessageSerializer(boolean pretty) {
+    public XMLMessageSerializer(boolean isMailbox_, boolean pretty) {
+        isMailbox = isMailbox_;
         fmt = new OutputFormat();
         fmt.setIndent(pretty);
         fmt.setNewlines(pretty);
@@ -53,7 +55,18 @@ public class XMLMessageSerializer {
         el.addElement("body").setText(msg.getBody());
         el.addElement("sent").setText(Long.toString(msg.getSentDate().getTime()));
         
-        if (msg.getReplyVia() != null) el.addElement("reply-via").setText(msg.getReplyVia());
+        if (msg.hasReplyVia()) el.addElement("reply-via").setText(msg.getReplyVia());
+        
+        if (isMailbox) {
+            el.addElement("received").setText(Long.toString(msg.getReceivedDate().getTime()));
+            Element tagsEl = el.addElement("tags");
+            Iterator<String> tagsIt = msg.getTags().iterator();
+            
+            while (tagsIt.hasNext()) {
+                String tag = (String) tagsIt.next();
+                tagsEl.addElement("tag").setText(tag);
+            }
+        }
     }
     
     public void populateAddressElement(Element el, Address addr) throws XMLMessageSerializationException {

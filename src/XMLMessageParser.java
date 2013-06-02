@@ -12,8 +12,10 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 public class XMLMessageParser {
-    public XMLMessageParser() {
-        
+    private boolean isMailbox;
+    
+    public XMLMessageParser(boolean isMailbox_) {
+        isMailbox = isMailbox_;
     }
     
     public List<Message> parse(InputStream is) throws XMLMessageParseException {
@@ -86,9 +88,33 @@ public class XMLMessageParser {
             throw new XMLMessageParseException("Invalid or missing value for <sent> element in <message>", e);
         }
         
-        msg.setBody(el.elementTextTrim("body"));
+        msg.setBody(el.elementText("body"));
         msg.setReplyVia(el.elementTextTrim("reply-via"));
         msg.setSentDate(new Date(sentTime));
+        
+        if (isMailbox) {
+            String receivedStr = el.elementTextTrim("received");
+            long receivedTime;
+            
+            try {
+                receivedTime = Long.parseLong(receivedTime);
+            }
+            catch (NumberFormatException e) {
+                throw new XMLMessageParseException("Invalid or missing value for <received> element in <message>", e);
+            }
+            
+            msg.setReceivedDate(new Date(receivedTime));
+            
+            Element tagsEl = el.element("tags");
+            if (tagsEl != null) {
+                List<Element> tagEls = tagsEl.elements("tag");
+                
+                for (int i = 0; i < tagEls.size(); i++) {
+                    Element tagEl = tagEls.get(i);
+                    msg.addTag(tagEl.getTextTrim());
+                }
+            }
+        }
         
         return msg;
     }
