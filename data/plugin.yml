@@ -1,5 +1,5 @@
 name: KMail
-version: 1.4.12
+version: 1.5.0
 author: Kier Davis <kierdavis@gmail.com>
 
 main: com.kierdavis.kmail.KMail

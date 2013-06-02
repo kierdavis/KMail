@@ -1,7 +1,13 @@
 package com.kierdavis.kmail;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -87,18 +93,25 @@ public class Mailbox {
         return n;
     }
     
-    public static Mailbox load(KMail plugin, String player) {
+    public static Mailbox load(KMail plugin, String player) throws IOException, XMLMessageParseException {
         File dir = new File(plugin.getDataFolder(), "mailboxes");
-        File file = new File(dir, player.toLowerCase() + ".yml");
+        File ymlfile = new File(dir, player.toLowerCase() + ".yml");
+        File xmlfile = new File(dir, player.toLowerCase() + ".xml");
         
-        return Mailbox.load(file);
-    }
-    
-    public static Mailbox load(File file) {
-        if (!file.exists()) {
-            return null;
+        if (xmlfile.exists()) {
+            return Mailbox.loadXML(file);
         }
         
+        if (ymlfile.exists()) {
+            mb = Mailbox.loadYML(file);
+            mb.save(); // Force a save in the XML format.
+            return mb;
+        }
+        
+        return null;
+    }
+    
+    public static Mailbox loadYML(File file) {
         Mailbox mb = new Mailbox();
         
         FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
@@ -141,18 +154,39 @@ public class Mailbox {
         return mb;
     }
     
-    public void save(KMail plugin, String player) throws IOException {
-        File dir = new File(plugin.getDataFolder(), "mailboxes");
-        File file = new File(dir, player.toLowerCase() + ".yml");
+    public static Mailbox loadXML(File file) throws IOException, XMLMessageParseException {
+        XMLMessageParser parser = new XMLMessageParser();
+        InputStream is = new BufferedInputStream(new InputStreamReader(new FileInputStream(file)));
         
-        save(file);
-    }
-    
-    public void save(File file) throws IOException {
-        if (!file.getParentFile().exists()) {
-            file.getParentFile().mkdirs();
+        try {
+            List<Message> msgs = parser.parse(is);
+        }
+        finally {
+            is.close();
         }
         
+        if (msgs == null) {
+            return null;
+        }
+        
+        Mailbox mb = new Mailbox()
+        mb.messages = msgs;
+        return mb;
+    }
+    
+    public void save(KMail plugin, String player) throws IOException, XMLMessageSerializationException {
+        File dir = new File(plugin.getDataFolder(), "mailboxes");
+        File file = new File(dir, player.toLowerCase() + ".xml");
+        
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        
+        saveXML(file);
+    }
+    
+    /*
+    public void saveYML(File file) throws IOException {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         Iterator<Message> it = iterator();
         
@@ -173,5 +207,18 @@ public class Mailbox {
         FileConfiguration cfg = new YamlConfiguration();
         cfg.set("mail", list);
         cfg.save(file);
+    }
+    */
+    
+    public void saveXML(File file) throws IOException, XMLMessageSerializationException {
+        XMLMessageSerializer serializer = new XMLMessageSerializer();
+        OutputStream os = new BufferedOutputStream(new OutputStreamWriter(new FileOutputStream(file)));
+        
+        try {
+            serializer.serialize(os, messages);
+        }
+        finally {
+            os.close();
+        }
     }
 }
