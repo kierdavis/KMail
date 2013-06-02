@@ -140,16 +140,20 @@ public class KMail extends JavaPlugin {
         Mailbox mb = mailboxes.get(username.toLowerCase());
         
         if (mb == null) {
+            // Return an empty mailbox if loading fails, but don't store it in
+            // the cache.
+            boolean store = true;
+            
             try {
                 mb = Mailbox.load(this, username);
             }
             catch (IOException e) {
                 getLogger().warning("Could not load mailbox for '" + username + "': " + e.toString());
-                return null;
+                store = false;
             }
             catch (XMLMessageParseException e) {
                 getLogger().warning("Could not load mailbox for '" + username + "': " + e.toString());
-                return null;
+                store = false;
             }
             
             if (mb == null) {
@@ -161,7 +165,9 @@ public class KMail extends JavaPlugin {
                 }
             }
             
-            mailboxes.put(username.toLowerCase(), mb);
+            if (store) {
+                mailboxes.put(username.toLowerCase(), mb);
+            }
         }
         
         return mb;
