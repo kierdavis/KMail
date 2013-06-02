@@ -7,18 +7,23 @@ import java.util.Iterator;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 
 public class XMLMessageSerializer {
-    public XMLMessageSerializer() {
-        
+    private OutputFormat fmt;
+    
+    public XMLMessageSerializer(boolean pretty) {
+        fmt = new OutputFormat();
+        fmt.setIndent(pretty);
+        fmt.setNewlines(pretty);
     }
     
     public void serialize(OutputStream os, Collection<Message> msgs) throws XMLMessageSerializationException {
         Document doc = buildDocument(msgs);
         
         try {
-            XMLWriter w = new XMLWriter(os);
+            XMLWriter w = new XMLWriter(os, fmt);
             w.write(doc);
         }
         

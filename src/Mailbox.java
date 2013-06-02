@@ -209,7 +209,7 @@ public class Mailbox {
     */
     
     public void saveXML(File file) throws IOException, XMLMessageSerializationException {
-        XMLMessageSerializer serializer = new XMLMessageSerializer();
+        XMLMessageSerializer serializer = new XMLMessageSerializer(true);
         FileOutputStream os = new FileOutputStream(file);
         
         try {

@@ -17,7 +17,7 @@ public class WebClient {
     
     public WebClient(KMail plugin_) {
         plugin = plugin_;
-        serializer = new XMLMessageSerializer();
+        serializer = new XMLMessageSerializer(false);
     }
     
     public void send(Message msg) {
