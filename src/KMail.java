@@ -144,11 +144,11 @@ public class KMail extends JavaPlugin {
                 mb = Mailbox.load(this, username);
             }
             catch (IOException e) {
-                getLogger().error("Could not load mailbox for '" + username + "': " + e.toString());
+                getLogger().warning("Could not load mailbox for '" + username + "': " + e.toString());
                 return null;
             }
             catch (XMLMessageParseException e) {
-                getLogger().error("Could not load mailbox for '" + username + "': " + e.toString());
+                getLogger().warning("Could not load mailbox for '" + username + "': " + e.toString());
                 return null;
             }
             
