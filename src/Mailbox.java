@@ -99,9 +99,10 @@ public class Mailbox {
         }
         
         if (ymlfile.exists()) {
-            Mailbox mb = Mailbox.loadYML(ymlfile);
-            mb.saveXML(xmlfile); // Force a save in the XML format.
-            return mb;
+            //Mailbox mb = Mailbox.loadYML(ymlfile);
+            //mb.saveXML(xmlfile); // Force a save in the XML format.
+            //return mb;
+            return Mailbox.loadYML(ymlfile);
         }
         
         return null;
