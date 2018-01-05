@@ -1,3 +1,5 @@
+**PLEASE NOTE: I no longer actively maintain this project. Pull requests are welcome, but development has halted and issues are unlikely to gain a response.**
+
 KMail is a plugin that allows text messages to be sent to other player, regardless of whether they are online. Messages can also be sent between servers. It is inspired by real-life e-mail and by turt2live's [xMail][xmail] plugin.
 
 [xmail]: http://dev.bukkit.org/server-mods/xmail
